@@ -4,7 +4,17 @@ Qué es la app, para quién y qué debe hacer. Técnica: [ARCHITECTURE.md](ARCHI
 
 ## 1. Qué es
 
-App de escritorio para generar el **Proyecto Curricular de Ciclo Formativo (PCCF)** de los ciclos de FP del departamento de Electricidad y Electrónica de EPLA (centro concertado, Comunitat Valenciana), en Word con la plantilla del centro.
+App de escritorio para generar el **Proyecto Curricular de Ciclo Formativo (PCCF)** de **todos los ciclos de FP de EPLA y de todos sus departamentos** (centro concertado, Comunitat Valenciana): grado básico, medio y superior, en Word con la plantilla del centro.
+
+Ciclos del centro (los del catálogo de Programaciones, comprobado el 2026-10-21):
+
+| Familia | GB | GM | GS |
+| --- | --- | --- | --- |
+| Administración y Gestión | SA | GA | ADM |
+| Electricidad y Electrónica | EE | IEA, IT | ARI, SEA, STI |
+| Informática y Comunicaciones | IC | — | — |
+| Servicios Socioculturales y a la Comunidad | — | — | ISO |
+| Transporte y Mantenimiento de Vehículos | MV | CAR, EMV | AUT |
 
 **Idea clave:** la fuente de verdad son los **datos estructurados**, no los documentos. El PCCF se genera desde datos (módulos, RA, horas, competencias, contribución de cada módulo, empresas de FE…) y textos en bloques, para que sea coherente por construcción con las programaciones didácticas, que genera la app hermana **Programaciones** con el mismo catálogo.
 
@@ -12,6 +22,7 @@ App de escritorio para generar el **Proyecto Curricular de Ciclo Formativo (PCCF
 
 | Norma | Para qué |
 | --- | --- |
+| Decreto 117/2025, de 5 de agosto (DOGV-C-2025-32763), grado básico | Art. 8: el PCCF de GB, con 17 apartados (sin «Digitalización y Sostenibilidad»; el proyecto es el «Proyecto intermodular de aprendizaje colaborativo»). Art. 7.3: los requisitos para iniciar la FE, reflejados en el PCCF |
 | Decreto 114/2025, de 29 de julio (DOGV-C-2025-29742); anexos de horarios en la redacción del Decreto 95/2026 (DOGV-C-2026-21170) y su corrección (DOGV-C-2026-22324) | Art. 8: el PCCF y sus 18 apartados mínimos; art. 8.2: dos años desde la implantación del título. Art. 9: programación didáctica (la hace Programaciones) |
 | RD 659/2023 (BOE-A-2023-16889), consolidado, modificado por el RD 658/2024 | Ordenación del sistema de FP |
 | RD de cada título (SEA: RD 1127/2010, BOE-A-2010-15355, modificado por los RD 401/2023 y 500/2024) | Identificación, perfil, competencias, módulos y orientaciones pedagógicas |
@@ -25,9 +36,9 @@ El vigía (§6) mantiene esta tabla al día; la vigencia comprobada y los enlace
 
 | Quién | Qué hace |
 | --- | --- |
-| **CarlosFB** (profesor del departamento y desarrollador; no es jefe de departamento) | Mantiene la app y la carpeta de datos del PCCF con git; mete lo que acuerda el equipo |
+| **CarlosFB** (profesor de Electricidad y Electrónica y desarrollador; no es jefe de departamento) | Mantiene la app; de momento, también la carpeta de datos con git (quién la mantiene para los demás departamentos: pendiente) |
 | Equipo docente del ciclo (incluido el profesorado de materias no profesionales) | Redacta y aporta sus bloques: desde la app (exportar e importar un bloque) o en reunión |
-| Jefatura de departamento | Coordina y lidera la elaboración; revisa el borrador en Word y aprueba. No usa la app ni git |
+| Jefatura de cada departamento | Coordina y lidera el PCCF de los ciclos de su departamento; revisa el borrador en Word y aprueba. No usa la app ni git |
 | Jefatura de estudios de FP | Incorpora el PCCF aprobado a la Programación General Anual |
 
 ## 4. Tipos de contenido
@@ -42,7 +53,9 @@ Cada bloque de texto lleva su tipo como metadato:
 | `normativo` | Referencias a normas con identificador, artículo citado y estado de vigencia; cada referencia sabe en qué bloques aparece | Marco normativo |
 | `derivado` | Tablas y textos calculados desde los datos; nunca se escriben a mano | Matriz módulo × competencia, distribución horaria, RA en FE, criterios del Proyecto intermodular |
 
-## 5. Los 18 apartados (art. 8.4) y su automatización
+## 5. Los apartados (art. 8.4) y su automatización
+
+GM y GS: los 18 del Decreto 114/2025, art. 8.4. **GB: 17** (Decreto 117/2025, art. 8.4): los mismos menos el 11 (Digitalización y Sostenibilidad), con el 18 como «Proyecto intermodular de aprendizaje colaborativo», y los requisitos de inicio de la FE (art. 7.3) dentro del 9 o del 10. La app guarda la lista de cada grado; nada la da por supuesta.
 
 | # | Apartado (literal) | Tipo | Automatizable |
 | --- | --- | --- | --- |
@@ -70,7 +83,7 @@ Cada bloque de texto lleva su tipo como metadato:
 
 | Id | Requisito |
 | --- | --- |
-| RF-1 | Generar el PCCF de un ciclo y un curso en `.docx` con la plantilla de las programaciones del centro, con los 18 apartados (los que no tengan contenido, con su título y «pendiente») |
+| RF-1 | Generar el PCCF de cualquier ciclo del centro (GB, GM o GS) y un curso en `.docx` con la plantilla de las programaciones del centro, con los apartados de su grado (los que no tengan contenido, con su título y «pendiente») |
 | RF-2 | Editar los bloques de texto (Markdown) con su tipo, estado (borrador o confirmado) y autoría; lo oficial se ve, no se edita |
 | RF-3 | Leer del catálogo firmado de Programaciones ciclos, módulos, RA, horas y competencias, y calcular los derivados |
 | RF-4 | «Nuevo curso»: clonar el curso anterior; los bloques anuales pasan a borrador y hay que confirmarlos |
@@ -97,5 +110,5 @@ Cada bloque de texto lleva su tipo como metadato:
 | F1 | Repositorio con barrera de secretos, maqueta de la interfaz para aprobar y entorno | Pendiente |
 | F2 | **MVP**: SEA, curso 2026-2027, apartados 1, 2, 4 y 16 (los cinco tipos de contenido), Word, vigía, «Nuevo curso» y «Comparar» | Pendiente |
 | F3 | Resto de apartados de SEA | Pendiente |
-| F4 | Resto de ciclos del departamento | Pendiente |
+| F4 | Resto de ciclos del centro, de todos los departamentos (GM y GS; después GB con sus 17 apartados) | Pendiente |
 | F5 | Programaciones lee del PCCF los acuerdos comunes | Pendiente |

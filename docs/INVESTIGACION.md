@@ -32,6 +32,10 @@ PDF: https://dogv.gva.es/datos/2025/08/04/pdf/2025_29742_es.pdf (DOGV núm. 1016
 > – Criterios para la planificación de actividades complementarias y extraescolares.
 > – Criterios para la organización del módulo profesional de Proyecto intermodular.
 
+### Decreto 117/2025 (grado básico), art. 8 (comprobado en el PDF del DOGV, págs. 6-7)
+
+PDF: https://dogv.gva.es/datos/2025/08/13/pdf/2025_32763_es.pdf (DOGV núm. 10172, 13.08.2025, CVE DOGV-C-2025-32763). Mismo texto que el art. 8 del Decreto 114/2025, con **17 apartados**: no tiene «Criterios para adaptar los módulos de Digitalización y Sostenibilidad…», y el último es «Criterios para la organización del módulo profesional de Proyecto intermodular de aprendizaje colaborativo». El **art. 7.3** pide que los requisitos para iniciar la FE (16 años cumplidos, competencias de prevención de riesgos laborales adquiridas…) estén «debidamente reflejados en el proyecto curricular de ciclo».
+
 ### Decreto 114/2025, art. 9.2 (programación didáctica; la hace Programaciones)
 
 > – Datos identificativos, marco normativo y contextualización del módulo. – Relación entre los estándares de competencia y los módulos del ciclo formativo. – Contribución de los RA a las competencias generales. – Esquema general y secuenciación de las unidades de programación. – Metodología del proceso de enseñanza-aprendizaje. – Recursos. – Uso de espacios y equipamientos. – Medidas de atención a la diversidad. – Evaluación del aprendizaje. – Actividades complementarias y extraescolares. – Criterios y procedimientos para la evaluación del desarrollo de la programación y de la práctica docente, así como los criterios de calificación. – Cualquier otro apartado considerado relevante por el equipo educativo en el PCCF.

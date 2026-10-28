@@ -10,4 +10,5 @@ Lo que falta por decidir o por recibir. Se pregunta a CarlosFB **de una en una**
 | 2026-10-28 | Fuente de las competencias para la empleabilidad | CarlosFB | Apartado 5 |
 | 2026-10-28 | Si el vigía resume los cambios con un modelo de lenguaje local, y cuál | CarlosFB | Vigía |
 | 2026-10-28 | Ponderación de las competencias profesionales de SEA (la guía de la DGFP la pide en %) | Equipo docente | Apartado 3 |
-| 2026-10-28 | Ciclos del departamento que entran después de SEA | CarlosFB | F4 |
+| 2026-10-28 | Quién mantiene la carpeta de datos de los demás departamentos (ADR-009) | CarlosFB | F4 |
+| 2026-10-28 | Qué departamento lleva cada ciclo (para `centro/departamentos.yaml`) y orden de entrada de los ciclos después de SEA | CarlosFB | F4 |

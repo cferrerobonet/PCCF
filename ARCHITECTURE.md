@@ -54,10 +54,11 @@ erDiagram
 
 | Entidad | Origen | Notas |
 | --- | --- | --- |
-| Ciclo, Módulo, RA, Criterio, Competencia, horas | Catálogo de Programaciones, solo lectura | Llevan su fuente; un cambio llega por el vigía |
+| Ciclo, Módulo, RA, Criterio, Competencia, horas | Catálogo de Programaciones, solo lectura: los 15 ciclos del centro (GB, GM y GS) de todas las familias | Llevan su fuente; un cambio llega por el vigía |
+| Familia o departamento | Del catálogo (familia profesional) y `centro/departamentos.yaml` de la carpeta de datos (qué departamento lleva cada ciclo) | Para agrupar los ciclos y saber qué jefatura aprueba |
 | Curso académico | `cursos/AAAA-AAAA/` en la carpeta de datos | |
 | PCCF | Ciclo × curso | Estado: borrador, revisado, aprobado (fecha y órgano) |
-| Apartado | Lista fija: los 18 del art. 8.4 (títulos literales) y los de la Resolución del curso | Cada uno dice qué bloques admite y de qué tipo |
+| Apartado | Lista fija **por grado** en `src/pccf/recursos/apartados/` (GM-GS: los 18 del Decreto 114/2025, art. 8.4; GB: los 17 del Decreto 117/2025, art. 8.4; títulos literales) y los de la Resolución del curso | Cada uno dice qué bloques admite y de qué tipo |
 | **Bloque** | Markdown con cabecera YAML | `tipo` (`centro`, `ciclo`, `anual`, `normativo`, `derivado`), `apartado`, `origen` (catálogo, equipo, heredado del curso X), `estado` (borrador o confirmado), `aportado_por`, `fecha`, `citas` (norma y artículo) |
 | Norma | `normativa.yaml` del catálogo + normas propias del centro (`normativa.yaml` de la carpeta de datos) | Id BOE o DOGV, título, enlace, vigencia, fecha de comprobación |
 | Cita | Calculada al cargar | Índice inverso para el vigía |
@@ -73,7 +74,8 @@ erDiagram
   PCCF - DATOS/              carpeta de datos con su propio git (de CarlosFB; nunca en GitHub público)
     centro/                  bloques de centro (atencion-diversidad.md, plan-tutoria.md, ideario.md…)
     normativa.yaml           normas propias del centro
-    ciclos/SEA/
+    centro/departamentos.yaml  qué departamento lleva cada ciclo
+    ciclos/SEA/              una carpeta por ciclo (los 15 del centro)
       ajustes.yaml
       bloques/               bloques de ciclo redactados por el equipo
     cursos/2026-2027/

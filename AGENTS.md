@@ -1,6 +1,6 @@
 # PCCF — instrucciones para agentes
 
-App de escritorio (Python 3.11 + PyQt6) para generar el **Proyecto Curricular de Ciclo Formativo** (Decreto 114/2025, art. 8.4: 18 apartados) de los ciclos del departamento de Electricidad y Electrónica de EPLA, desde datos estructurados (YAML y Markdown) y con la plantilla Word del centro. **App hermana de Programaciones**: lee su catálogo curricular firmado y amplía su vigía normativo.
+App de escritorio (Python 3.11 + PyQt6) para generar el **Proyecto Curricular de Ciclo Formativo** (Decreto 114/2025, art. 8.4: 18 apartados) de **todos los ciclos de FP de EPLA y de todos sus departamentos** (GB, GM y GS; ADR-009), desde datos estructurados (YAML y Markdown) y con la plantilla Word del centro. **App hermana de Programaciones**: lee su catálogo curricular firmado y amplía su vigía normativo.
 
 **Estado (2026-10-28):** diseño validado por CarlosFB y documentación de partida escrita; **sin código ni repositorio todavía**.
 

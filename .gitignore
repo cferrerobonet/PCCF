@@ -1,0 +1,43 @@
+# El repositorio es público: aquí nunca entran PCCF reales, datos del equipo docente,
+# de empresas ni del alumnado (van en la carpeta de datos, fuera del repositorio: ADR-002 y ADR-008),
+# ni contraseñas o claves.
+
+# Documentos y volcados (los de prueba van en tests/datos/ y son ficticios; la plantilla, en recursos/)
+*.docx
+*.pdf
+*.xlsx
+*.xls
+*.csv
+!tests/datos/*.docx
+!src/pccf/recursos/plantilla/*.docx
+*.zip
+*.sql
+*.db
+*.sqlite
+*.log
+COPIAS DE SEGURIDAD/
+PCCF - DATOS/
+salidas/
+
+# Claves y secretos
+.env
+.env.*
+*.pem
+*.key
+*ajustes*.json
+*configuracion*.json
+
+# Entorno y compilación
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+build/
+dist/
+*.egg-info/
+
+# Sistema e iCloud
+.DS_Store
+* 2.*

@@ -22,7 +22,7 @@
 
 | Pantalla | Qué tiene |
 | --- | --- |
-| Principal (tres zonas) | Izquierda: ciclo y curso, y los 18 apartados con su número, título corto, chips de tipo e icono de estado (pendiente, en borrador, confirmado). Centro: los bloques del apartado elegido. Derecha: progreso (apartados confirmados de 18), avisos del vigía, vista previa y «Exportar» |
+| Principal (tres zonas) | Izquierda: ciclo (agrupado por familia o departamento y grado, con buscador: son 15 ciclos) y curso, y los apartados de su grado (18 en GM y GS, 17 en GB) con su número, título corto, chips de tipo e icono de estado (pendiente, en borrador, confirmado). Centro: los bloques del apartado elegido. Derecha: progreso (apartados confirmados de 18), avisos del vigía, vista previa y «Exportar» |
 | Apartado con texto | Bloques Markdown con su chip de tipo, autoría y estado; «Confirmar bloque»; «Importar bloque…» |
 | Apartado derivado | Tabla calculada de solo lectura (p. ej. módulo × competencia) con su fuente, y debajo los ajustes del equipo con su motivo |
 | Marco normativo | Lista de normas con su estado (vigente, modificada, derogada) y, en cada una, los bloques que la citan |

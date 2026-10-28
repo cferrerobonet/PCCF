@@ -1,6 +1,6 @@
 # PCCF
 
-App de escritorio para generar el **Proyecto Curricular de Ciclo Formativo** de FP (Decreto 114/2025, art. 8.4) desde datos estructurados, en Word con la plantilla del centro. Departamento de Electricidad y Electrónica de EPLA. App hermana de [Programaciones](https://github.com/cferrerobonet/programaciones_fp), cuyo catálogo curricular lee.
+App de escritorio para generar el **Proyecto Curricular de Ciclo Formativo** de FP (Decreto 114/2025, art. 8.4) desde datos estructurados, en Word con la plantilla del centro. Para todos los ciclos y departamentos de EPLA (grado básico, medio y superior). App hermana de [Programaciones](https://github.com/cferrerobonet/programaciones_fp), cuyo catálogo curricular lee.
 
 **Estado:** diseño validado (2026-10-28); todavía sin código. Licencia MIT.
 

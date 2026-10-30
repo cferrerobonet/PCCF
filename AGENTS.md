@@ -14,7 +14,7 @@ App de escritorio (Python 3.11 + PyQt6) para generar el **Proyecto Curricular de
 | Maqueta v0 de la interfaz (HTML y capturas), para aprobar | `../Maqueta v0 (2026-10-28)/` |
 | Lo investigado: textos literales (art. 8 y 9 del Decreto 114/2025, Resolución 2026-2027), guía de la DGFP, API del BOE, DOGV, qué se reutiliza de Programaciones | [docs/INVESTIGACION.md](docs/INVESTIGACION.md) |
 | App de la que se copia (catálogo, vigía, motor del documento, interfaz, empaquetado) | `../../PROGRAMACIONES/PROGRAMACIONES - CÓDIGO FUENTE/` (su `AGENTS.md` manda allí) |
-| Ficha de la app en la bóveda | `../PCCF — Índice.md` |
+| Ficha de la app en las notas | `../PCCF — Índice.md` |
 
 ## Forma de trabajar
 
@@ -28,7 +28,7 @@ App de escritorio (Python 3.11 + PyQt6) para generar el **Proyecto Curricular de
 - **Repositorio público** (`github.com/cferrerobonet/PCCF`): secretos y datos personales, barrera común (`scripts/comprobar_secretos.sh`, gancho y CI «Secretos»); reglas en la skill de usuario `barrera-secretos`. Commits en castellano, sin coautoría; `git add` de archivos concretos.
 - **Versiones:** cada versión, con su entrada en `CHANGELOG.md` (son las novedades que ve el profesorado al actualizar), etiqueta `vX.Y.Z` y compilación en GitHub, nunca en local.
 - Un cambio en el Word generado se comprueba en PDF mirando todas las páginas.
-- Documentación al día en la misma tarea: estado actual en `PRD.md`, `ARCHITECTURE.md` y `DESIGN.md` (sin historia); decisiones fechadas en `docs/DECISIONES.md`; cada cambio en `CHANGELOG.md`; la ficha de la bóveda (`../PCCF — Índice.md`), con su historial.
+- Documentación al día en la misma tarea: estado actual en `PRD.md`, `ARCHITECTURE.md` y `DESIGN.md` (sin historia); decisiones fechadas en `docs/DECISIONES.md`; cada cambio en `CHANGELOG.md`; la ficha de la app (`../PCCF — Índice.md`), con su historial.
 
 ## Próximos pasos (en este orden)
 

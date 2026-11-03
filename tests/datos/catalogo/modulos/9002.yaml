@@ -1,0 +1,12 @@
+formato: catalogo/4
+id: '9002'
+codigo: '9002'
+nombre: {es: Módulo ficticio 9002}
+tipo: propio
+competencias_modulo: {PRU: [c]}
+ra:
+- n: 1
+  texto: {es: Resultado ficticio.}
+  criterios:
+  - {letra: a, texto: {es: Criterio ficticio.}}
+fuente: {norma: BOE-A-2000-1}

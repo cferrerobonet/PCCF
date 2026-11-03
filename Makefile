@@ -2,12 +2,18 @@
 VENV := $(HOME)/.venvs/pccf
 PY := $(VENV)/bin/python
 
-.PHONY: venv comprobar
+.PHONY: venv comprobar test lint
 
 venv:
 	@test -x "$(PY)" || python3.11 -m venv "$(VENV)"
 	$(PY) -m pip install --upgrade pip setuptools
 	$(PY) -m pip install -r requirements-dev.txt
+
+test:
+	$(VENV)/bin/pytest
+
+lint:
+	$(VENV)/bin/ruff check src tests
 
 comprobar:
 	$(PY) --version

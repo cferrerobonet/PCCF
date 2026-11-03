@@ -1,0 +1,4 @@
+# Datos ficticios para las pruebas.
+fecha: 2030-01-01
+departamentos:
+  - {id: PRB, nombre: Departamento de Pruebas, jefatura: Jefa Ficticia, orden: 1, ciclos: [PRU]}

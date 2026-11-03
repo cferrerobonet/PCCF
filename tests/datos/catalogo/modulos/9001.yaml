@@ -1,0 +1,12 @@
+formato: catalogo/4
+id: '9001'
+codigo: '9001'
+nombre: {es: Módulo ficticio 9001}
+tipo: propio
+competencias_modulo: {PRU: [a, b]}
+ra:
+- n: 1
+  texto: {es: Resultado ficticio.}
+  criterios:
+  - {letra: a, texto: {es: Criterio ficticio.}}
+fuente: {norma: BOE-A-2000-1}

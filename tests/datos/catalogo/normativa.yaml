@@ -1,0 +1,45 @@
+# Catálogo ficticio para las pruebas (mismo formato que el de Programaciones).
+formato: catalogo/4
+normas:
+- id: BOE-A-2000-1
+  ambito: estatal
+  titulo:
+    es: Real Decreto 1/2000, de 3 de enero, por el que se establece el título ficticio de Técnico Superior en Pruebas.
+  fecha: '2000-01-10'
+  diario: BOE
+  enlace: https://www.boe.es/buscar/doc.php?id=BOE-A-2000-1
+  aplica: [PRU]
+- id: BOE-A-1999-9
+  ambito: estatal
+  titulo:
+    es: Ley Orgánica 9/1999, de 1 de febrero, ficticia de Formación Profesional.
+  fecha: '1999-02-02'
+  diario: BOE
+  enlace: https://www.boe.es/buscar/act.php?id=BOE-A-1999-9
+  aplica: todos
+- id: DOGV-C-2001-5
+  ambito: autonomico
+  titulo:
+    es: DECRETO 5/2001, de 4 de mayo, del Consell, ficticio de currículos.
+  fecha: '2001-05-08'
+  diario: DOGV
+  enlace: https://dogv.gva.es/es/eli/es-vc/d/2001/05/04/5
+  aplica: [GM, GS]
+- id: DOGV-C-2030-7
+  ambito: autonomico
+  titulo:
+    es: RESOLUCIÓN de 1 de julio de 2030, ficticia, de instrucciones del curso 2030-2031.
+  fecha: '2030-07-02'
+  diario: DOGV
+  enlace: https://dogv.gva.es/
+  aplica: todos
+  curso_escolar: 2030-2031
+- id: DOGV-C-2029-7
+  ambito: autonomico
+  titulo:
+    es: RESOLUCIÓN de 1 de julio de 2029, ficticia, de instrucciones del curso 2029-2030.
+  fecha: '2029-07-02'
+  diario: DOGV
+  enlace: https://dogv.gva.es/
+  aplica: todos
+  curso_escolar: 2029-2030

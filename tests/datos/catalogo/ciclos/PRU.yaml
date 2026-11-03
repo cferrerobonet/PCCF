@@ -1,0 +1,20 @@
+formato: catalogo/4
+sigla: PRU
+grado: GS
+familia: {es: Familia de pruebas}
+nombre: {es: Pruebas automatizadas}
+titulo: {es: Técnico Superior en Pruebas Automatizadas}
+rd: {id: BOE-A-2000-1}
+competencias:
+- {letra: a, texto: {es: Primera competencia ficticia.}}
+- {letra: b, texto: {es: Segunda competencia ficticia.}}
+- {letra: c, texto: {es: Tercera competencia ficticia.}}
+modulos:
+- {codigo: '9001', modulo: '9001', nombre: {es: Módulo uno}, curso: 1, h_sem: 4, h_anuales: 133, tipo: propio}
+- {codigo: '9002', modulo: '9002', nombre: {es: Módulo dos}, curso: 2, h_sem: 3, h_anuales: 100, tipo: propio}
+- {codigo: CVOPS999, nombre: {es: Módulo optativo}, curso: 2, h_sem: 3, h_anuales: 100, tipo: optativo}
+optativos_ofertados:
+- {codigo: CVOPS999, modulo: OPT-PRU-A, nombre: {es: Optativa A}, curso: 2, fuente: ficticia}
+- {codigo: CVOPS999, modulo: OPT-PRU-B, nombre: {es: Optativa B}, curso: 2, fuente: ficticia}
+fuentes: {competencias: BOE-A-2000-1}
+comprobado: '2030-01-01'

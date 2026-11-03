@@ -1,0 +1,14 @@
+# Equipo ficticio para las pruebas.
+ciclo: PRU
+curso: 2030-2031
+fecha: 2030-01-01
+estado: confirmado
+docentes:
+  - {codigo: DUNO, nombre: Docente Uno}
+  - {codigo: DDOS, nombre: Docente Dos}
+tutorias:
+  - {curso: 1, grupo: 1PRU, docente: DUNO}
+modulos:
+  - {modulo: '9001', docentes: [DUNO, DDOS]}
+  - {modulo: '9002', docentes: [DDOS]}
+  - {modulo: OPT-PRU-A, docentes: [DUNO]}

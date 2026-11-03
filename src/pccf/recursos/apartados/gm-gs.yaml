@@ -1,0 +1,60 @@
+# Apartados del PCCF de grado medio y superior: Decreto 114/2025, art. 8.4 (títulos literales, comprobados en el DOGV:
+# docs/INVESTIGACION.md §1). «tipos»: de qué clase son sus bloques (PRD.md §5). El de grado básico (Decreto 117/2025,
+# 17 apartados) se añade con la F4.
+norma: DOGV-C-2025-29742
+articulo: "8.4"
+apartados:
+  - n: 1
+    titulo: Identificación del ciclo formativo
+    tipos: [ciclo, anual]
+  - n: 2
+    titulo: Marco normativo para el desarrollo del proyecto curricular
+    tipos: [normativo]
+  - n: 3
+    titulo: Adecuación y arreglo de las competencias profesionales del título al contexto socioeconómico y cultural del centro
+    tipos: [ciclo, derivado]
+  - n: 4
+    titulo: Contribución de cada módulo a las competencias profesionales del ciclo
+    tipos: [derivado]
+  - n: 5
+    titulo: Contribución de cada módulo a las competencias para la empleabilidad del ciclo
+    tipos: [derivado, ciclo]
+  - n: 6
+    titulo: Enfoques didácticos y metodológicos
+    tipos: [ciclo]
+  - n: 7
+    titulo: La organización y distribución de los módulos profesionales
+    tipos: [derivado]
+  - n: 8
+    titulo: Criterios de organización, comunicación y desarrollo de la evaluación del aprendizaje
+    tipos: [normativo, ciclo]
+  - n: 9
+    titulo: Base de datos de empresas u organismos equiparados para la formación en empresa, y criterios de asignación del alumnado
+    tipos: [anual, ciclo]
+  - n: 10
+    titulo: Criterios para la realización de los planes formativos individuales
+    tipos: [ciclo, derivado]
+  - n: 11
+    titulo: Criterios para adaptar los módulos de Digitalización y Sostenibilidad a las características específicas del perfil profesional del ciclo formativo
+    tipos: [ciclo]
+  - n: 12
+    titulo: El plan de tutoría y orientación profesional
+    tipos: [centro]
+  - n: 13
+    titulo: Concreción de los planes y programas del centro vinculados al currículo
+    tipos: [anual]
+  - n: 14
+    titulo: Orientaciones para el uso de espacios, medios y equipamientos disponibles
+    tipos: [ciclo]
+  - n: 15
+    titulo: Criterios y procedimientos para la evaluación y revisión de la práctica docente
+    tipos: [centro]
+  - n: 16
+    titulo: Atención a la Diversidad
+    tipos: [centro]
+  - n: 17
+    titulo: Criterios para la planificación de actividades complementarias y extraescolares
+    tipos: [ciclo, anual]
+  - n: 18
+    titulo: Criterios para la organización del módulo profesional de Proyecto intermodular
+    tipos: [ciclo, derivado]

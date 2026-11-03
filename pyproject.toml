@@ -1,0 +1,33 @@
+# Versión de la app (SemVer): aquí y en src/pccf/__init__.py, que un test compara.
+[project]
+name = "pccf"
+version = "0.0.0"
+description = "Proyecto Curricular de Ciclo Formativo de FP desde datos, con la plantilla del centro, en Word"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "Carlos Ferrero Bonet" }]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+src = ["src", "tests"]
+extend-exclude = ["build", "dist"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "BLE", "N"]
+# N802/N806: nombres en castellano; E501: las líneas largas de texto oficial
+ignore = ["E501", "E731", "SIM105", "SIM117", "N802", "N806", "N818", "UP031", "UP037"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B", "BLE", "N"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "."]
+addopts = "-q -p no:cacheprovider"
+timeout = 120
+qt_api = "pyqt6"
+markers = [
+    "real: lee el catálogo de Programaciones del equipo de desarrollo (se salta si no está)",
+]

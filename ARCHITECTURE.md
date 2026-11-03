@@ -22,18 +22,22 @@ Cómo está hecha la app. Producto: [PRD.md](PRD.md) · diseño: [DESIGN.md](DES
 
 ```
 src/pccf/
-  catalogo.py      lee y verifica el catálogo de Programaciones (copia de su lector)
-  datos.py         carga la carpeta de datos, valida con los esquemas y da el modelo en memoria
+  catalogo.py      lee el catálogo de Programaciones (copia de su lector); en desarrollo, el de su repositorio, al lado
+                   (`PCCF_CATALOGO` lo cambia); la descarga del publicado y firmado llega con el empaquetado
+  apartados.py     apartados por grado, con títulos literales (`recursos/apartados/gm-gs.yaml`)
+  datos.py         carga la carpeta de datos (`PCCF_DATOS`; en desarrollo, `../PCCF - DATOS/`), la valida con los
+                   esquemas y da el modelo en memoria; lo que falta llega como None («pendiente»)
   bloques.py       bloques Markdown con cabecera: tipo, apartado, estado, autoría, citas
-  derivados.py     tablas calculadas (módulo × competencia, distribución horaria, RA en FE…)
+  derivados.py     lo calculado: identificación (1), marco normativo (2), módulo × competencia (4); después,
+                   distribución horaria, RA en FE…
   citas.py         índice inverso norma → bloques que la citan
   documento.py     rellena la plantilla con marcas (copia adaptada de Programaciones)
   cursos.py        «Nuevo curso» (clonar) y «Comparar» (diferencias por apartado)
   vigia.py         consulta BOE, DOGV y Conselleria; informe de bloques afectados
   ui/              interfaz PyQt6 (copiada de Programaciones)
-  recursos/plantilla/
-esquemas/          JSON Schema de cada archivo de datos
-tests/             pytest con datos ficticios
+  esquemas/        JSON Schema de cada archivo de datos (bloque, equipo, departamentos)
+  recursos/apartados/ · recursos/plantilla/
+tests/             pytest con un catálogo y una carpeta de datos ficticios (`tests/datos/`)
 ```
 
 ## 3. Modelo de datos
@@ -63,7 +67,7 @@ erDiagram
 | Norma | `normativa.yaml` del catálogo + normas propias del centro (`normativa.yaml` de la carpeta de datos) | Id BOE o DOGV, título, enlace, vigencia, fecha de comprobación |
 | Cita | Calculada al cargar | Índice inverso para el vigía |
 | Ajustes del equipo | `ciclos/<SIGLA>/ajustes.yaml` | Ponderación de competencias (%) y cambios a la tabla de contribución, cada uno con su motivo |
-| Docente, Empresa | `cursos/<curso>/<SIGLA>/` | Datos personales: solo en la carpeta de datos |
+| Docente, Empresa | `cursos/<curso>/<SIGLA>/equipo.yaml` (docentes con código, tutorías y docentes de cada módulo por su clave del catálogo; las optativas, por su identificador, «OPT-EE-IA») y, después, `empresas.yaml` | Datos personales: solo en la carpeta de datos |
 | Derivado | Nunca se guarda | Se calcula al generar |
 
 ## 4. Carpetas

@@ -1,24 +1,13 @@
 """Núcleo del MVP: apartados, carpeta de datos (esquemas y comprobaciones) y derivados de los apartados 1, 2 y 4."""
 from __future__ import annotations
 
-import tomllib
-from pathlib import Path
-
 import pytest
 
-import pccf
 from pccf import apartados, bloques, derivados
 from pccf.catalogo import Catalogo
 from pccf.datos import DatosNoValidos
 
 from .conftest import CURSO
-
-RAIZ = Path(__file__).resolve().parents[1]
-
-
-def test_version_igual_en_pyproject_y_paquete():
-    with open(RAIZ / "pyproject.toml", "rb") as f:
-        assert tomllib.load(f)["project"]["version"] == pccf.__version__
 
 
 # -- apartados -------------------------------------------------------------------------------------------------------

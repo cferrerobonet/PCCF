@@ -2,6 +2,13 @@
 
 Registro fechado de decisiones (ADR). Lo más reciente, arriba. El estado actual está en `PRD.md`, `ARCHITECTURE.md` y `DESIGN.md`.
 
+## ADR-013 · Plantilla derivada de la de Programaciones y cuerpo escrito en código (2026-11-03)
+
+- **Decisión:** `scripts/plantilla.py crear` saca la plantilla del PCCF de la de Programaciones: conserva estilos, numeración, tema, encabezados, pies y la sección de la portada; cambia la portada (departamento, horas del ciclo, jefatura y curso) y la franja del encabezado («Proyecto curricular»), y deja dos marcas de párrafo, `{{indice}}` y `{{cuerpo}}`. `documento.py` escribe el cuerpo apartado por apartado con los estilos de la plantilla y el índice con hipervínculos y campos de página, que Word actualiza al abrir.
+- **Motivo:** el cuerpo depende de los datos (18 apartados, cada uno con tablas calculadas o bloques de texto de longitud variable). Las marcas de repetición de Programaciones están pensadas para un documento fijo y aquí no aportarían nada.
+- **Consecuencia:** un cambio de identidad del centro en la plantilla de Programaciones llega volviendo a pasar `crear`. Los bloques admiten un Markdown sencillo (párrafos, «###», viñetas, negrita y enlaces). Las citas «>» son notas internas y no van al documento. Si queda algo pendiente o en borrador, el documento lleva la marca de agua «BORRADOR».
+- **Descartado:** copiar el motor de marcas completo de Programaciones (`Motor`), porque obligaría a tener una plantilla con los 18 apartados escritos a mano.
+
 ## ADR-012 · Departamentos y orden de entrada de los ciclos (2026-11-03)
 
 - **Decisión de CarlosFB:** un departamento por familia profesional para GM y GS (Electricidad y Electrónica, Automoción, Administración y Servicios Sociales), y un departamento propio de **Grado Básico** que lleva los cuatro ciclos de GB. Quién es la jefatura de cada uno está en `centro/departamentos.yaml` de la carpeta de datos (son datos personales).

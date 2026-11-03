@@ -11,7 +11,7 @@ authors = [{ name = "Carlos Ferrero Bonet" }]
 [tool.ruff]
 line-length = 120
 target-version = "py311"
-src = ["src", "tests"]
+src = ["src", "scripts", "tests"]
 extend-exclude = ["build", "dist"]
 
 [tool.ruff.lint]
@@ -24,7 +24,7 @@ ignore = ["E501", "E731", "SIM105", "SIM117", "N802", "N806", "N818", "UP031", "
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["src", "."]
+pythonpath = ["src", "scripts", "."]
 addopts = "-q -p no:cacheprovider"
 timeout = 120
 qt_api = "pyqt6"

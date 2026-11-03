@@ -9,7 +9,7 @@ Cómo está hecha la app. Producto: [PRD.md](PRD.md) · diseño: [DESIGN.md](DES
 | Lenguaje | Python 3.11 | El de Programaciones y Partes de salida |
 | Interfaz | PyQt6 6.7 (mismas versiones que Programaciones) | Se copian sus componentes (`ui/`), su diseño y su empaquetado; `QTextEdit` edita Markdown |
 | Datos | YAML (datos) + Markdown con cabecera YAML (textos), validados con JSON Schema (`jsonschema`) | Legibles y editables a mano; git da versionado y comparación |
-| Documento | Plantilla `.docx` con marcas y motor propio con `lxml`, copiados de Programaciones (`documento.py`, ADR-019 de allí) | Conserva encabezado, pie, estilos e índice; resuelve hipervínculos de normativa y tablas |
+| Documento | Plantilla sacada de la de Programaciones (`scripts/plantilla.py`) y cuerpo escrito con `lxml` (ADR-013) | Conserva la identidad del centro (encabezado, pie, estilos); el cuerpo sale de los datos |
 | PDF | Word del equipo (AppleScript en macOS, COM en Windows), como Programaciones | Sin dependencias nuevas |
 | Catálogo | El publicado y firmado por Programaciones (rama `catalogo-publicado`, firma Ed25519 que la app verifica con `cryptography`) | Un solo dato oficial para las dos apps |
 | Red | Solo BOE, DOGV, página de normativa de FP de la Conselleria y catálogo publicado | RNF-1 |
@@ -31,12 +31,16 @@ src/pccf/
   derivados.py     lo calculado: identificación (1), marco normativo (2), módulo × competencia (4); después,
                    distribución horaria, RA en FE…
   citas.py         índice inverso norma → bloques que la citan
-  documento.py     rellena la plantilla con marcas (copia adaptada de Programaciones)
+  documento.py     el Word: portada por marcas, índice enlazado y cuerpo escrito con los estilos de la plantilla
+                   (ADR-013); marca «BORRADOR» si queda algo pendiente o en borrador
+  ooxml.py         paquete .docx en memoria, relaciones y utilidades de párrafo (copia de Programaciones)
+  __main__.py      sin interfaz: `python -m pccf generar|comprobar <SIGLA> <curso>`
   cursos.py        «Nuevo curso» (clonar) y «Comparar» (diferencias por apartado)
   vigia.py         consulta BOE, DOGV y Conselleria; informe de bloques afectados
   ui/              interfaz PyQt6 (copiada de Programaciones)
   esquemas/        JSON Schema de cada archivo de datos (bloque, equipo, departamentos)
   recursos/apartados/ · recursos/plantilla/
+scripts/plantilla.py  crea la plantilla desde la de Programaciones y la comprueba (ADR-013)
 tests/             pytest con un catálogo y una carpeta de datos ficticios (`tests/datos/`)
 ```
 

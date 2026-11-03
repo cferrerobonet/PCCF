@@ -13,7 +13,7 @@ test:
 	$(VENV)/bin/pytest
 
 lint:
-	$(VENV)/bin/ruff check src tests
+	$(VENV)/bin/ruff check src scripts tests
 
 comprobar:
 	$(PY) --version

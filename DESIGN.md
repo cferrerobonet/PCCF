@@ -41,4 +41,15 @@
 
 ## Documento
 
-El `.docx` usa la plantilla de las programaciones del centro (encabezado, pie, tipografías, índice automático y legislación con hipervínculo), con los 18 apartados del art. 8.4 con sus títulos literales.
+El `.docx` usa la plantilla de las programaciones del centro (encabezado, pie, tipografías, índice automático y legislación con hipervínculo), con los 18 apartados del art. 8.4 con sus títulos literales (ADR-013).
+
+| Parte | Contenido |
+| --- | --- |
+| Portada | «PROYECTO CURRICULAR / DE CICLO FORMATIVO»; familia, ciclo (grado y nombre), departamento, horas del ciclo, jefatura de departamento y curso académico |
+| Índice | Títulos de nivel 1 y 2, enlazados; Word pone los números de página al abrir |
+| Apartados | «N. Título literal» (estilo Título 2); subapartados «N.M. …» (Título 3) |
+| 1 | Tabla de identificación (ciclo, título, grado, familia, real decreto enlazado, duración, departamento, jefatura, curso, tutorías) y 1.1 Equipo docente (curso, código, módulo, horas y profesorado; las optativas, una por fila) |
+| 2 | 2.1 Normativa estatal y 2.2 Normativa autonómica: viñetas con el título completo enlazado, por fecha |
+| 4 | Tabla de módulos por competencias (X), con la cabecera repetida en cada página, y 4.1 con el texto de cada competencia |
+| Resto | Sus bloques de texto o «Pendiente.» |
+| Borrador | Marca de agua «BORRADOR» si queda algo pendiente o en borrador |

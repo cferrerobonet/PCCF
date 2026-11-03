@@ -1,0 +1,7 @@
+# Generado por scripts/plantilla.py crear: no se edita a mano.
+version: '2026-11-03'
+origen: Plantilla de Programaciones (src/programaciones/recursos/plantilla/es), portada
+  del PCCF
+idiomas:
+- es
+vinetas: '8'

@@ -36,7 +36,7 @@ El vigía (§6) mantiene esta tabla al día; la vigencia comprobada y los enlace
 
 | Quién | Qué hace |
 | --- | --- |
-| **CarlosFB** (profesor de Electricidad y Electrónica y desarrollador; no es jefe de departamento) | Mantiene la app; de momento, también la carpeta de datos con git (quién la mantiene para los demás departamentos: pendiente) |
+| **CarlosFB** (profesor de Electricidad y Electrónica y desarrollador; no es jefe de departamento) | Mantiene la app y la carpeta de datos con git de todos los ciclos y departamentos (ADR-012) |
 | Equipo docente del ciclo (incluido el profesorado de materias no profesionales) | Redacta y aporta sus bloques: desde la app (exportar e importar un bloque) o en reunión |
 | Jefatura de cada departamento | Coordina y lidera el PCCF de los ciclos de su departamento; revisa el borrador en Word y aprueba. No usa la app ni git |
 | Jefatura de estudios de FP | Incorpora el PCCF aprobado a la Programación General Anual |
@@ -63,7 +63,7 @@ GM y GS: los 18 del Decreto 114/2025, art. 8.4. **GB: 17** (Decreto 117/2025, ar
 | 2 | Marco normativo para el desarrollo del proyecto curricular | normativo | Alta |
 | 3 | Adecuación y arreglo de las competencias profesionales del título al contexto socioeconómico y cultural del centro | ciclo + derivado | Media: lista del RD; ponderación (%) y motivo, del equipo |
 | 4 | Contribución de cada módulo a las competencias profesionales del ciclo | derivado | Alta: orientaciones pedagógicas del RD, ajustable |
-| 5 | Contribución de cada módulo a las competencias para la empleabilidad del ciclo | derivado + ciclo | Media (falta la fuente estructurada) |
+| 5 | Contribución de cada módulo a las competencias para la empleabilidad del ciclo | derivado + ciclo | Media: competencias personales y sociales del RD del título, del catálogo, sin ponderar (ADR-011) |
 | 6 | Enfoques didácticos y metodológicos | ciclo | Baja |
 | 7 | La organización y distribución de los módulos profesionales | derivado | Alta: horas del Decreto 95/2026 |
 | 8 | Criterios de organización, comunicación y desarrollo de la evaluación del aprendizaje | normativo + ciclo | Media |
@@ -88,7 +88,7 @@ GM y GS: los 18 del Decreto 114/2025, art. 8.4. **GB: 17** (Decreto 117/2025, ar
 | RF-3 | Leer del catálogo firmado de Programaciones ciclos, módulos, RA, horas y competencias, y calcular los derivados |
 | RF-4 | «Nuevo curso»: clonar el curso anterior; los bloques anuales pasan a borrador y hay que confirmarlos |
 | RF-5 | «Comparar» dos cursos o dos versiones aprobadas, por apartado |
-| RF-6 | **Vigía normativo**, a mano o programado: detectar modificaciones y derogaciones de las normas citadas (BOE y lo disponible del DOGV) e informar de los bloques afectados. **Nunca reescribe texto**: solo avisa. Opcional: resumen del cambio con un modelo de lenguaje local |
+| RF-6 | **Vigía normativo**, a mano o programado: detectar modificaciones y derogaciones de las normas citadas (BOE y lo disponible del DOGV) e informar de los bloques afectados. **Nunca reescribe texto**: solo avisa. Sin resumen con un modelo de lenguaje (ADR-010) |
 | RF-7 | Exportar e importar un bloque suelto, para que el equipo aporte textos sin la carpeta entera |
 | RF-8 | Actualizaciones desde la app, como Programaciones: al arrancar y desde «Acerca de», aviso «↑ Actualizar a X.Y.Z» con las novedades de esa versión (`CHANGELOG.md`) e instalación sin pasos manuales |
 | RNF-1 | Todo en local; sin bases de datos en servidor ni nube. La única red permitida: BOE y DOGV (vigía) y la descarga del catálogo publicado de Programaciones |
@@ -110,5 +110,5 @@ GM y GS: los 18 del Decreto 114/2025, art. 8.4. **GB: 17** (Decreto 117/2025, ar
 | F1 | Repositorio con barrera de secretos, maqueta de la interfaz aprobada y entorno | Hecha (2026-11-03) |
 | F2 | **MVP**: SEA, curso 2026-2027, apartados 1, 2, 4 y 16 (los cinco tipos de contenido), Word, vigía, «Nuevo curso» y «Comparar» | Pendiente |
 | F3 | Resto de apartados de SEA | Pendiente |
-| F4 | Resto de ciclos del centro, de todos los departamentos (GM y GS; después GB con sus 17 apartados) | Pendiente |
+| F4 | Resto de ciclos del centro (ADR-012): STI, ARI, IEA e IT; después Automoción, Administración y Servicios Sociales; al final, Grado Básico con sus 17 apartados | Pendiente |
 | F5 | Programaciones lee del PCCF los acuerdos comunes | Pendiente |

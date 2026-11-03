@@ -74,7 +74,7 @@ erDiagram
   PCCF - DATOS/              carpeta de datos con su propio git (de CarlosFB; nunca en GitHub público)
     centro/                  bloques de centro (atencion-diversidad.md, plan-tutoria.md, ideario.md…)
     normativa.yaml           normas propias del centro
-    centro/departamentos.yaml  qué departamento lleva cada ciclo
+    centro/departamentos.yaml  qué departamento lleva cada ciclo y su jefatura (uno por familia en GM y GS, y uno de Grado Básico: ADR-012)
     ciclos/SEA/              una carpeta por ciclo (los 15 del centro)
       ajustes.yaml
       bloques/               bloques de ciclo redactados por el equipo
@@ -96,7 +96,7 @@ Amplía el de Programaciones, que ya consulta el BOE, el DOGV y la página de no
 | Reales decretos de título (sin consolidar) | XML del diario, `/diario_boe/xml.php?id=…`, `<analisis><referencias><posteriores>` |
 | Normas del DOGV | Sin API ni RSS: huella SHA-256 del PDF de cada norma registrada y comparación de la página de normativa de FP de la Conselleria entre ejecuciones |
 
-Salida: informe en Markdown con cada norma cambiada (qué cambia, enlace) y los bloques que la citan (índice de `citas.py`). **No toca ningún texto.** El resumen con un modelo de lenguaje, si se hace, solo con un modelo local.
+Salida: informe en Markdown con cada norma cambiada (qué cambia, enlace) y los bloques que la citan (índice de `citas.py`). **No toca ningún texto** ni lleva resumen generado con un modelo de lenguaje (ADR-010).
 
 ## 6. Versiones, compilación y actualizaciones
 

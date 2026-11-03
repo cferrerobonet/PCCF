@@ -2,11 +2,29 @@
 
 Registro fechado de decisiones (ADR). Lo más reciente, arriba. El estado actual está en `PRD.md`, `ARCHITECTURE.md` y `DESIGN.md`.
 
+## ADR-012 · Departamentos y orden de entrada de los ciclos (2026-11-03)
+
+- **Decisión de CarlosFB:** un departamento por familia profesional para GM y GS (Electricidad y Electrónica, Automoción, Administración y Servicios Sociales), y un departamento propio de **Grado Básico** que lleva los cuatro ciclos de GB. Quién es la jefatura de cada uno está en `centro/departamentos.yaml` de la carpeta de datos (son datos personales).
+- **Orden después de SEA:** primero el resto de Electricidad y Electrónica (STI, ARI, IEA e IT); después Automoción, Administración y Servicios Sociales; y al final Grado Básico, que tiene 17 apartados.
+- **Cierra el abierto de ADR-009:** CarlosFB mantiene una sola carpeta de datos con todos los ciclos y departamentos; cada departamento le pasa sus bloques con «exportar bloque».
+- **Descartado:** una carpeta de datos por departamento con su propio responsable (habría que formar a una persona por departamento en la app y en git).
+
+## ADR-011 · Competencias para la empleabilidad: las personales y sociales del título (2026-11-03)
+
+- **Decisión de CarlosFB:** el apartado 5 usa las **competencias personales y sociales** del real decreto del título, que ya están en el catálogo de Programaciones. Siguiendo la guía de la DGFP (2.3.4), no se ponderan.
+- **Descartado:** los RA de los módulos comunes (IPE I y II, Digitalización, Sostenibilidad e Inglés), porque mezclan módulos con competencias, y una lista propia del centro, que alguien tendría que redactar y aprobar.
+
+## ADR-010 · Vigía sin resumen con un modelo de lenguaje (2026-11-03)
+
+- **Decisión de CarlosFB:** el informe del vigía da, para cada norma, el tipo de cambio según el BOE (modifica, deroga o corrige) o la huella del DOGV, el enlace y los apartados que la citan. **No incluye ningún resumen** generado.
+- **Motivo:** no hay que instalar nada, el resultado es igual en todos los equipos y no hay riesgo de un resumen equivocado. Se puede añadir más adelante.
+- **Descartado:** resumen con un modelo local (Ollama).
+
 ## ADR-009 · Para todos los ciclos y departamentos del centro (2026-10-28)
 
 - **Decisión de CarlosFB:** la app sirve para todos los departamentos y todos los ciclos de EPLA (15: 4 de GB, 5 de GM y 6 de GS, de cinco familias profesionales), no solo para Electricidad y Electrónica.
 - **Consecuencias:** los apartados se guardan por grado (GB tiene 17: Decreto 117/2025, art. 8.4); los ciclos salen del catálogo de Programaciones, que ya los tiene todos; cada ciclo tiene su carpeta de datos y su jefatura de departamento; la interfaz agrupa los ciclos por familia o departamento y grado. El MVP sigue siendo SEA.
-- **Abierto:** quién mantiene la carpeta de datos de los demás departamentos (ADR-003 se pensó para uno solo).
+- **Cerrado (ADR-012):** quién mantiene la carpeta de datos de los demás departamentos.
 
 ## ADR-008 · Repositorio público, con versiones y actualizaciones como Programaciones (2026-10-28)
 

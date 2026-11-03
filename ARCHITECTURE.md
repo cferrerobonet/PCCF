@@ -59,7 +59,7 @@ erDiagram
 | Curso académico | `cursos/AAAA-AAAA/` en la carpeta de datos | |
 | PCCF | Ciclo × curso | Estado: borrador, revisado, aprobado (fecha y órgano) |
 | Apartado | Lista fija **por grado** en `src/pccf/recursos/apartados/` (GM-GS: los 18 del Decreto 114/2025, art. 8.4; GB: los 17 del Decreto 117/2025, art. 8.4; títulos literales) y los de la Resolución del curso | Cada uno dice qué bloques admite y de qué tipo |
-| **Bloque** | Markdown con cabecera YAML | `tipo` (`centro`, `ciclo`, `anual`, `normativo`, `derivado`), `apartado`, `origen` (catálogo, equipo, heredado del curso X), `estado` (borrador o confirmado), `aportado_por`, `fecha`, `citas` (norma y artículo) |
+| **Bloque** | Markdown con cabecera YAML | `tipo` (`centro`, `ciclo`, `anual`, `normativo`, `derivado`), `apartado`, `origen` (catálogo, equipo, heredado del curso X, o propuesta: texto sugerido que el equipo revisa), `estado` (borrador o confirmado), `aportado_por`, `fecha`, `citas` (norma y artículo) |
 | Norma | `normativa.yaml` del catálogo + normas propias del centro (`normativa.yaml` de la carpeta de datos) | Id BOE o DOGV, título, enlace, vigencia, fecha de comprobación |
 | Cita | Calculada al cargar | Índice inverso para el vigía |
 | Ajustes del equipo | `ciclos/<SIGLA>/ajustes.yaml` | Ponderación de competencias (%) y cambios a la tabla de contribución, cada uno con su motivo |

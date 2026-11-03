@@ -1,0 +1,17 @@
+# Dependencias de ejecución de la app, fijadas: las mismas versiones que Programaciones (ADR-004).
+# Las de desarrollo van en requirements-dev.txt. Para actualizar una: cambiar la versión aquí y `make venv`.
+
+# Interfaz y vista previa (QtPdf)
+PyQt6==6.7.0
+PyQt6-Qt6==6.7.3
+
+# Carpeta de datos (YAML validado con JSON Schema) y documento Word (motor de plantilla con lxml)
+PyYAML==6.0.3
+jsonschema==4.26.0
+lxml==6.1.3
+
+# TLS de las actualizaciones y del vigía (el OpenSSL empaquetado no ve los certificados del sistema)
+certifi==2026.7.22
+
+# Firma Ed25519 del catálogo publicado por Programaciones (la app solo verifica)
+cryptography==50.0.2

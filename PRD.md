@@ -107,7 +107,7 @@ GM y GS: los 18 del Decreto 114/2025, art. 8.4. **GB: 17** (Decreto 117/2025, ar
 | Fase | Contenido | Estado |
 | --- | --- | --- |
 | F0 | Diseño, documentación de partida e investigación | Hecha (2026-10-28) |
-| F1 | Repositorio con barrera de secretos, maqueta de la interfaz para aprobar y entorno | Pendiente |
+| F1 | Repositorio con barrera de secretos, maqueta de la interfaz aprobada y entorno | Hecha (2026-11-03) |
 | F2 | **MVP**: SEA, curso 2026-2027, apartados 1, 2, 4 y 16 (los cinco tipos de contenido), Word, vigía, «Nuevo curso» y «Comparar» | Pendiente |
 | F3 | Resto de apartados de SEA | Pendiente |
 | F4 | Resto de ciclos del centro, de todos los departamentos (GM y GS; después GB con sus 17 apartados) | Pendiente |

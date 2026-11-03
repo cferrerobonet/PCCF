@@ -1,0 +1,10 @@
+-r requirements.txt
+
+# Pruebas: unitarias, de interfaz sin pantalla (pytest-qt) y con tiempo máximo
+pytest==9.1.1
+pytest-qt==4.5.0
+pytest-timeout==2.4.0
+
+# Calidad
+ruff==0.17.1
+# PyInstaller no va aquí: solo lo instala la CI de compilación (no se compila en local).

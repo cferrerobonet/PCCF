@@ -2,7 +2,7 @@
 
 App de escritorio para generar el **Proyecto Curricular de Ciclo Formativo** de FP (Decreto 114/2025, art. 8.4) desde datos estructurados, en Word con la plantilla del centro. Para todos los ciclos y departamentos de EPLA (grado básico, medio y superior). App hermana de [Programaciones](https://github.com/cferrerobonet/programaciones_fp), cuyo catálogo curricular lee.
 
-**Estado:** diseño validado (2026-10-28); todavía sin código. Licencia MIT.
+**Estado:** diseño y maqueta aprobados y entorno preparado (2026-11-03); todavía sin código de la app. Licencia MIT.
 
 | Documento | Qué cuenta |
 | --- | --- |

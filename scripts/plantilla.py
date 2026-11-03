@@ -106,6 +106,8 @@ def crear(origen: Path) -> None:
     for e in core.iter():
         if e.text and "Programación didáctica" in e.text:
             e.text = "Proyecto curricular de ciclo formativo"
+        elif e.text == "Programaciones":   # autor y última modificación
+            e.text = "PCCF"
 
     if DESTINO.exists():
         import shutil

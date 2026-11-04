@@ -4,7 +4,19 @@ Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones 
 
 ## [Sin publicar]
 
+## [0.1.0] - 2026-11-04
+
+Primera versión del PCCF: el proyecto curricular de un ciclo y un curso, desde los datos del catálogo y los textos del equipo, en Word con el diseño del centro. Sirve ya para el ciclo de Sistemas Electrotécnicos y Automatizados (SEA) en 2026-2027, con los apartados 1, 2, 4 y 16; los demás salen «Pendiente» con lo que pide la guía de la DGFP.
+
+- Ventana con los apartados y su estado, lo que pide la guía, lo que se calcula del catálogo y los textos del equipo, que se escriben y se guardan solos.
+- Vista previa y exportación a Word y PDF.
+- Vigía normativo: avisa si cambia una norma en la que se apoya el PCCF y dice qué apartados toca. No cambia ningún texto.
+- «Nuevo curso» (el curso siguiente, con lo del curso como heredado hasta confirmarlo) y «Comparar» dos cursos o una versión aprobada.
+- La app lleva el catálogo curricular publicado por Programaciones, busca uno más nuevo al arrancar (como mucho una vez al día) y avisa de las versiones nuevas de la app.
+
 ### Añadido
+
+- 2026-11-04 · Compilación en GitHub para macOS, Windows y Linux, con la prueba de arranque de la app compilada; actualizaciones desde la app; catálogo publicado y firmado por Programaciones dentro de la app y descarga de uno más nuevo; registro de la app; icono propio.
 
 - 2026-11-04 · Interfaz (ADR-018), con el diseño de la maqueta v0: `python -m pccf` abre la ventana. A la izquierda, el ciclo (los del catálogo, por familia y con buscador) y los 20 apartados con su estado; en el centro, el apartado con lo que pide la guía, lo calculado del catálogo y los bloques de texto, que se editan en Markdown y se guardan solos; a la derecha, el progreso, los avisos, la vista previa y «Exportar» a Word y PDF.
 - 2026-11-04 · Bloques desde la interfaz: confirmar (también los heredados), añadir, importar y exportar un bloque suelto; un texto cambiado vuelve a borrador. Confirmar el equipo docente heredado.

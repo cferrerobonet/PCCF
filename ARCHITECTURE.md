@@ -23,7 +23,11 @@ Cómo está hecha la app. Producto: [PRD.md](PRD.md) · diseño: [DESIGN.md](DES
 ```
 src/pccf/
   catalogo.py      lee el catálogo de Programaciones (copia de su lector); en desarrollo, el de su repositorio, al lado
-                   (`PCCF_CATALOGO` lo cambia); la descarga del publicado y firmado llega con el empaquetado
+                   (`PCCF_CATALOGO` o Ajustes lo cambian); en la app instalada, el más nuevo del equipo
+  catalogo_remoto.py · firma.py  el catálogo publicado y firmado por Programaciones: bajarlo, verificar la firma
+                   Ed25519, el sha256 y la huella, y guardarlo (copia de los suyos, sin publicar)
+  actualizaciones.py  versión nueva en las releases de GitHub, descarga verificada por su sha256 e instalación
+  diagnostico.py · sistema.py  lo que comprueba la prueba de arranque de la app compilada · registro de la app
   apartados.py     apartados por grado, con títulos literales y su punto de la guía de la DGFP
                    (`recursos/apartados/gm-gs.yaml`: los 18 del art. 8.4 y el 19 y el 20 de la guía, ADR-014)
   datos.py         carga la carpeta de datos (`PCCF_DATOS`; en desarrollo, `../PCCF - DATOS/`), la valida con los
@@ -133,7 +137,11 @@ Uso: `python -m pccf vigia <SIGLA> <curso>` escribe el informe en Markdown en `s
 
 ## 6. Versiones, compilación y actualizaciones
 
-Como Programaciones (su `TRD.md` §6 y sus flujos de `.github/workflows/`), con el mismo código:
+Como Programaciones (su `TRD.md` §6 y sus flujos de `.github/workflows/`), con el mismo código (ADR-019):
+- **Piezas:** `PCCF.spec` (PyInstaller, un spec para las tres), `scripts/build/build_dmg.sh` y `build_linux.sh`, `scripts/build_windows.ps1` (UTF-8 con BOM) e `installer_windows.iss` (Inno Setup, `AppId` fijo que no se cambia nunca), `scripts/comprobar_paquete.sh` y `scripts/prueba_arranque_windows.ps1`, `scripts/crear_icono.sh` (el `.icns` en la compilación; el `.png` y el `.ico`, de `imagenes/icono.svg`, van en el repositorio). `src/main.py` es el punto de entrada.
+- **Catálogo dentro de la app:** cada compilación baja el último publicado por Programaciones con `scripts/catalogo.py bajar` (firma, sha256 y huella; si algo no cuadra, no se compila) a `catalogo/`, que no se versiona. La app instalada busca al arrancar, como mucho una vez al día, uno publicado más nuevo y lo guarda en su carpeta (`~/Library/Application Support/PCCF/catalogo/versiones/` en macOS); usa el más nuevo que tenga, salvo que Ajustes o `PCCF_CATALOGO` fijen otro (CarlosFB, con el de desarrollo de Programaciones, que trae el estado del vigía).
+- **Prueba de arranque** (`PCCF_PRUEBA_DE_ARRANQUE=ventana`): la app compilada abre la ventana con una carpeta de datos vacía, comprueba lo que lleva dentro y genera un PCCF (`diagnostico.py`), abre un PDF con QtPdf y sale; la CI busca sus marcas en el registro.
+- **Flujos:** `comprobar.yml` en cada push (ruff, plantilla, suite y el catálogo publicado), `compilar.yml` con cada etiqueta (y a mano desde Actions, sin publicar) y `secretos.yml`.
 - **Repositorio público** `github.com/cferrerobonet/PCCF`, rama `main`; licencia MIT.
 - **Versión:** en `pyproject.toml`, SemVer. Cerrar una versión = entrada en `CHANGELOG.md`, commit, etiqueta `vX.Y.Z` y push de la etiqueta.
 - **Compilación:** la etiqueta lanza `compilar.yml` (PyInstaller e Inno Setup, nunca en local), que publica la release con el DMG de macOS, el instalador y el portable de Windows y el portable de Linux; las notas de la release son la entrada del `CHANGELOG.md`.

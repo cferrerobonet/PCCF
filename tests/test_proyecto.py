@@ -12,7 +12,7 @@ RAIZ = Path(__file__).resolve().parents[1]
 # Huella SHA-256 de los términos vetados, para no escribirlos aquí.
 VETADOS = {"0615570f9ea136946c5dc08a250010320707646f57f72cedab1dfb73d95eade6"}
 TEXTO = {".py", ".md", ".toml", ".txt", ".yml", ".yaml", ".json", ".sh", ".ps1", ".iss", ".spec", ".xml", ""}
-FUERA = {".git", ".ruff_cache", ".pytest_cache", "build", "dist"}
+FUERA = {".git", ".ruff_cache", ".pytest_cache", "build", "dist", "Output", "catalogo"}
 
 
 def test_version_igual_en_pyproject_y_paquete():

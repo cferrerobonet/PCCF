@@ -1,0 +1,2 @@
+# Clave pública Ed25519 del catálogo publicado (base64 de los 32 bytes). La privada solo está en el secreto CATALOGO_CLAVE de GitHub.
+KH2XsbCt/XkUVdONIE6izJdmU5/+0c08AdZUah2EYs4=

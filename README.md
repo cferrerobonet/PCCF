@@ -2,7 +2,7 @@
 
 App de escritorio para generar el **Proyecto Curricular de Ciclo Formativo** de FP (Decreto 114/2025, art. 8.4) desde datos estructurados, en Word con diseño propio del centro. El contenido sigue la guía práctica del PCCF de la Dirección General de FP de la Generalitat Valenciana. Para todos los ciclos y departamentos de EPLA (grado básico, medio y superior). App hermana de [Programaciones](https://github.com/cferrerobonet/programaciones_fp), cuyo catálogo curricular lee.
 
-**Estado:** MVP en curso (2026-11-04): interfaz, Word con diseño propio y los apartados 1, 2, 4 y 16, vigía normativo, «Nuevo curso» y «Comparar»; falta la primera versión instalable. Licencia MIT.
+**Estado:** MVP en curso (2026-11-04): interfaz, Word con diseño propio y los apartados 1, 2, 4 y 16, vigía normativo, «Nuevo curso» y «Comparar»; primera versión instalable, la 0.1.0. Licencia MIT.
 
 | Documento | Qué cuenta |
 | --- | --- |
@@ -14,4 +14,4 @@ App de escritorio para generar el **Proyecto Curricular de Ciclo Formativo** de 
 | [docs/INVESTIGACION.md](docs/INVESTIGACION.md) | Fuentes, textos literales y pruebas de las API del BOE y el DOGV |
 | [CHANGELOG.md](CHANGELOG.md) | Cambios por versión |
 
-Instalación: cuando exista la primera versión. En desarrollo: `make venv` y `PYTHONPATH=src ~/.venvs/pccf/bin/python -m pccf` (sin argumentos abre la interfaz; `python -m pccf generar <SIGLA> <curso>` y las demás órdenes, sin ella).
+Instalación: el DMG de macOS, el instalador o el portable de Windows y el portable de Linux de la [última versión](https://github.com/cferrerobonet/PCCF/releases/latest); la app avisa sola de las siguientes. Al abrirla por primera vez, se elige en Ajustes la carpeta de datos del PCCF. En desarrollo: `make venv` y `PYTHONPATH=src ~/.venvs/pccf/bin/python -m pccf` (sin argumentos abre la interfaz; `python -m pccf generar <SIGLA> <curso>` y las demás órdenes, sin ella).

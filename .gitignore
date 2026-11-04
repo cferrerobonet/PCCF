@@ -34,9 +34,15 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .ruff_cache/
-build/
-dist/
+/build/
+/dist/
+/Output/
 *.egg-info/
+# Lo que genera la compilación en GitHub: el catálogo publicado que va dentro de la app y los instaladores
+/catalogo/
+*.dmg
+*.tar.gz
+imagenes/icono.icns
 
 # Sistema e iCloud
 .DS_Store

@@ -19,6 +19,7 @@ from pccf.catalogo import Catalogo, texto
 from pccf.catalogo import carpeta_por_defecto as catalogo_por_defecto
 from pccf.datos import CarpetaDatos, DatosNoValidos
 from pccf.datos import carpeta_por_defecto as datos_por_defecto
+from pccf.rutas import carpeta_app, congelada
 
 logger = logging.getLogger(__name__)
 
@@ -34,11 +35,27 @@ def carpeta_datos() -> Path:
     return Path(valor) if valor else datos_por_defecto()
 
 
+def catalogo_elegido() -> bool:
+    """¿El catálogo lo fija alguien (variable o Ajustes)? Entonces la app no baja el publicado."""
+    return bool(os.environ.get("PCCF_CATALOGO") or ajustes().value("catalogo", "", str))
+
+
 def carpeta_catalogo() -> Path:
+    """`PCCF_CATALOGO`, el de Ajustes o, en la app instalada, el más nuevo del equipo: el que lleva dentro o uno
+    publicado que se bajó después (`catalogo_remoto`). En desarrollo, el del repositorio de Programaciones."""
     if os.environ.get("PCCF_CATALOGO"):
         return Path(os.environ["PCCF_CATALOGO"])
     valor = ajustes().value("catalogo", "", str)
-    return Path(valor) if valor else catalogo_por_defecto()
+    if valor:
+        return Path(valor)
+    if congelada():
+        from pccf import catalogo_remoto
+
+        try:
+            return catalogo_remoto.mas_nuevo(catalogo_remoto.disponibles(carpeta_app(), Catalogo())).carpeta
+        except Exception:  # noqa: BLE001 - con lo bajado ilegible, el que lleva la app
+            logger.exception("Catálogos del equipo")
+    return catalogo_por_defecto()
 
 
 def curso_de_hoy(hoy: dt.date | None = None) -> str:

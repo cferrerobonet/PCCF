@@ -114,7 +114,7 @@ Además, como pide la guía (2.2), el documento abre con el **control del docume
 | --- | --- | --- |
 | F0 | Diseño, documentación de partida e investigación | Hecha (2026-10-28) |
 | F1 | Repositorio con barrera de secretos, maqueta de la interfaz aprobada y entorno | Hecha (2026-11-03) |
-| F2 | **MVP** (en curso: núcleo de datos y Word con los apartados 1, 2, 4 y 16, 2026-11-03; estructura de la guía y maqueta del documento v1, 2026-11-04; Word con el diseño propio, índice de citas, vigía, «Nuevo curso», «Comparar» e interfaz, 2026-11-04; falta la primera versión con su compilación y las actualizaciones): SEA, curso 2026-2027, apartados 1, 2, 4 y 16 (los cinco tipos de contenido), Word con el diseño propio, vigía, «Nuevo curso» y «Comparar» | En curso |
+| F2 | **MVP** (núcleo de datos y Word con los apartados 1, 2, 4 y 16, 2026-11-03; estructura de la guía y maqueta del documento v1, 2026-11-04; Word con el diseño propio, índice de citas, vigía, «Nuevo curso», «Comparar» e interfaz, 2026-11-04; primera versión 0.1.0 con su compilación en GitHub y las actualizaciones, 2026-11-04): SEA, curso 2026-2027, apartados 1, 2, 4 y 16 (los cinco tipos de contenido), Word con el diseño propio, vigía, «Nuevo curso» y «Comparar» | Hecha (2026-11-04); queda la revisión del apartado 16 |
 | F3 | Resto de apartados de SEA | Pendiente |
 | F4 | Resto de ciclos del centro (ADR-012): STI, ARI, IEA e IT; después Automoción, Administración y Servicios Sociales; al final, Grado Básico con sus 17 apartados | Pendiente |
 | F5 | Programaciones lee del PCCF los acuerdos comunes | Pendiente |

@@ -16,6 +16,7 @@ from PyQt6.QtPdf import QPdfDocument
 from PyQt6.QtWidgets import QFileDialog, QHBoxLayout, QLabel, QMainWindow, QMenu, QMessageBox, QVBoxLayout, QWidget
 
 from pccf import __version__, documento, pdf
+from pccf.rutas import carpeta_app, congelada
 
 from . import estilo
 from .apartado import VistaApartado
@@ -34,6 +35,7 @@ class VentanaPrincipal(QMainWindow):
     def __init__(self, ctx):
         super().__init__()
         self.ctx = ctx
+        self._actualizacion: tuple[str, str, str] | None = None
         self._tarea: Tarea | None = None
         self._espera: DialogoEspera | None = None
         self.setWindowTitle(NOMBRE_APP)
@@ -94,6 +96,10 @@ class VentanaPrincipal(QMainWindow):
                                  "del DOGV (solo lectura)")
         fila.addWidget(self.catalogo)
         fila.addSpacing(4)
+        self.boton_actualizar = boton("", pequeno=True, dorado=True)
+        self.boton_actualizar.hide()
+        self.boton_actualizar.clicked.connect(self._ofrecer_actualizacion)
+        fila.addWidget(self.boton_actualizar)
         self.boton_vigia = boton("", pequeno=True)
         self.boton_vigia.clicked.connect(self.abrir_vigia)
         fila.addWidget(self.boton_vigia)
@@ -134,6 +140,9 @@ class VentanaPrincipal(QMainWindow):
             QUrl.fromLocalFile(str(self.ctx.datos.carpeta))))
         accion(archivo, "Ajustes…", self.abrir_ajustes, "Ctrl+,", QAction.MenuRole.PreferencesRole)
         ayuda = barra.addMenu("Ayuda")
+        accion(ayuda, "Buscar actualizaciones", lambda: self.buscar_actualizaciones(avisar_si_al_dia=True))
+        accion(ayuda, "Abrir el registro de la app", lambda: QDesktopServices.openUrl(
+            QUrl.fromLocalFile(str(carpeta_app() / "logs"))))
         accion(ayuda, f"Acerca de {NOMBRE_APP}", self.acerca_de, rol=QAction.MenuRole.AboutRole)
 
     # -- datos -------------------------------------------------------------------------------------------------------
@@ -257,9 +266,57 @@ class VentanaPrincipal(QMainWindow):
 
     def acerca_de(self) -> None:
         QMessageBox.about(self, f"Acerca de {NOMBRE_APP}",
-                          f"<b>{NOMBRE_APP} {__version__}</b><br>Proyecto curricular de ciclo formativo (Decreto "
+                          f"<b>{NOMBRE_APP} {__version__}</b> · catálogo {self.ctx.cat.version}<br>Proyecto curricular de ciclo formativo (Decreto "
                           "114/2025, art. 8.4, y guía práctica de la DGFP).<br><br>Catálogo: "
                           f"{self.ctx.cat.carpeta}<br>Carpeta de datos: {self.ctx.datos.carpeta}")
+
+    # -- actualizaciones y catálogo publicado ------------------------------------------------------------------------
+    def buscar_actualizaciones(self, avisar_si_al_dia: bool = False) -> None:
+        from .actualizar import buscar_actualizaciones
+
+        buscar_actualizaciones(self, avisar_si_al_dia, al_encontrar=self.actualizacion_disponible)
+
+    def actualizacion_disponible(self, version: str, url: str, notas: str) -> None:
+        """Hay versión nueva: botón dorado fijo y, la primera vez, el diálogo por encima."""
+        nueva = self._actualizacion is None or self._actualizacion[0] != version
+        self._actualizacion = (version, url, notas)
+        self.boton_actualizar.setText(f"↑  Actualizar a {version}")
+        self.boton_actualizar.setToolTip("Hay una versión nueva de la aplicación")
+        self.boton_actualizar.show()
+        if nueva and self.isVisible():
+            self._ofrecer_actualizacion()
+
+    def _ofrecer_actualizacion(self) -> None:
+        from .actualizar import ofrecer
+
+        if self._actualizacion:
+            self.centro.guardar_pendiente()
+            self.mostrar_al_frente()
+            ofrecer(self, *self._actualizacion)
+
+    def comprobar_catalogo(self) -> None:
+        """En la app instalada, al arrancar y como mucho una vez al día: si hay un catálogo publicado más nuevo y
+        verificado, se pasa a él y el vigía dice qué ha cambiado. Con el catálogo fijado en Ajustes, nada."""
+        from .actualizar import buscar_catalogo
+        from .contexto import catalogo_elegido
+
+        if not congelada() or catalogo_elegido():
+            return
+
+        def listo(res):
+            if not res.nuevas:
+                return
+            from pccf import catalogo_remoto
+            from pccf.catalogo import Catalogo
+
+            nuevo = catalogo_remoto.mas_nuevo(catalogo_remoto.disponibles(carpeta_app(), Catalogo()))
+            if nuevo.version != self.ctx.cat.version:
+                self.centro.guardar_pendiente()
+                self.ctx.cat = nuevo
+                self.ctx.recalcular()
+                self.aviso.mostrar(f"Catálogo {nuevo.version} verificado: el vigía dice qué ha cambiado", 6000)
+
+        buscar_catalogo(carpeta_app(), self.ctx.cat.version, listo)
 
     # -- documento ---------------------------------------------------------------------------------------------------
     def _opciones(self) -> documento.Opciones:

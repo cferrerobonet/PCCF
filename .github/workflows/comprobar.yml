@@ -1,0 +1,45 @@
+# Calidad en cada push y PR (copia del de Programaciones): ruff, la plantilla, la suite (también la interfaz con
+# pytest-qt, sin pantalla) y el catálogo publicado que irá dentro de la app. Las pruebas marcadas «real», que leen el
+# catálogo del repositorio de Programaciones junto a este, se saltan aquí.
+name: Comprobar
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  calidad:
+    name: Lint, catálogo y tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+      - name: Las bibliotecas que Qt necesita sin pantalla
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends \
+            libegl1 libgl1 libxkbcommon-x11-0 libdbus-1-3 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
+            libxcb-randr0 libxcb-render-util0 libxcb-shape0 libxcb-xinerama0 libxcb-cursor0 fonts-dejavu-core
+      - name: ruff
+        run: ruff check scripts src tests
+      - name: Plantilla
+        run: python scripts/plantilla.py comprobar
+      - name: Suite
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: pytest
+      - name: Catálogo publicado (firma, sha256 y huella)
+        run: python scripts/catalogo.py bajar

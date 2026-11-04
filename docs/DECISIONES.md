@@ -2,6 +2,15 @@
 
 Registro fechado de decisiones (ADR). Lo más reciente, arriba. El estado actual está en `PRD.md`, `ARCHITECTURE.md` y `DESIGN.md`.
 
+## ADR-019 · Primera versión: compilación, actualizaciones y catálogo publicado dentro de la app (2026-11-04)
+
+- **Decisión de CarlosFB:** primera versión (0.1.0) con su compilación en GitHub, como Programaciones: DMG de macOS (arm64), instalador y portable de Windows y portable de Linux; la app avisa de las versiones nuevas con su entrada del `CHANGELOG.md` y las instala.
+- **Catálogo:** la app instalada lleva el último catálogo **publicado y firmado** por Programaciones, que la compilación baja y verifica (`scripts/catalogo.py bajar`), y busca al arrancar uno más nuevo, como mucho una vez al día, con las mismas comprobaciones que Programaciones (firma Ed25519 con su clave pública, sha256 y huella del contenido). Así el vigía del PCCF ve los cambios de normativa sin esperar a una versión nueva de la app.
+- **Límite que se mantiene (ADR-016):** el catálogo publicado no lleva el estado del vigía de Programaciones (consolidados y disposiciones nuevas). Quien mantiene la carpeta de datos puede fijar en Ajustes el catálogo de desarrollo, y entonces la app no baja el publicado.
+- **Icono propio:** un expediente en los colores del documento (verde EPLA, portada con filete de oro y apartados numerados), del mismo estilo que el de Programaciones; nunca el escudo del centro, que solo va en el documento.
+- **Sin firma de Apple:** como Programaciones, el DMG va firmado ad hoc (la notarización queda preparada por si un día hay cuenta de desarrollador).
+- **Descartado:** compilar en local y meter en el repositorio una copia del catálogo (dos copias que se separan).
+
 ## ADR-018 · Interfaz mínima: la maqueta v0, con lo que tiene datos (2026-11-04)
 
 - **Decisión:** la interfaz sigue la maqueta v0 aprobada (tres zonas, barra superior, vigía, «Nuevo curso» y «Comparar», selector de los 15 ciclos) y el diseño de Programaciones, de la que se copian el estilo, los componentes y la vista previa. `python -m pccf` sin argumentos la abre.

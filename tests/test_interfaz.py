@@ -1,0 +1,161 @@
+"""La interfaz sin pantalla (pytest-qt), con el catálogo y la carpeta de datos ficticios: ventana, los 20 apartados,
+bloques (guardar y confirmar), vigía, «Nuevo curso» y QtPdf. Los ajustes de Qt van a un archivo temporal."""
+from __future__ import annotations
+
+import os
+
+os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+
+import pytest  # noqa: E402
+from PyQt6.QtCore import QSettings  # noqa: E402
+from PyQt6.QtWidgets import QLabel, QMessageBox  # noqa: E402
+
+from pccf import bloques, cursos  # noqa: E402
+
+from .conftest import CURSO  # noqa: E402
+
+
+@pytest.fixture
+def ventana(qtbot, cat, datos, tmp_path, monkeypatch):
+    from pccf.ui import contexto, estilo, ventana
+
+    ini = str(tmp_path / "ajustes.ini")
+    monkeypatch.setattr(contexto, "ajustes", lambda: QSettings(ini, QSettings.Format.IniFormat))
+    monkeypatch.setattr(ventana, "ajustes", lambda: QSettings(ini, QSettings.Format.IniFormat))
+    from PyQt6.QtWidgets import QApplication
+
+    estilo.cargar_fuentes()
+    estilo.aplicar(QApplication.instance())
+    ctx = contexto.Contexto(cat, datos)
+    v = ventana.VentanaPrincipal(ctx)
+    v.resize(1100, 700)
+    qtbot.addWidget(v)
+    v.show()
+    return v
+
+
+def _textos(w) -> str:
+    return " ".join(x.text() for x in w.findChildren(QLabel) if x.isVisible())
+
+
+def test_abre_con_el_ciclo_y_sus_20_apartados(ventana):
+    assert ventana.ctx.sigla == "PRU" and ventana.ctx.curso == CURSO
+    assert ventana.izquierda.lista.count() == 20
+    assert ventana.boton_curso.text() == f"PRU · {CURSO}"
+    assert ventana.derecha.progreso.value() == 4 and ventana.derecha.progreso.maximum() == 20
+
+
+def test_todos_los_apartados_se_ven_y_caben(ventana, qtbot):
+    for n in range(1, 21):
+        ventana.izquierda.ir(n)
+        qtbot.wait(5)
+        assert ventana.centro.n == n
+        assert "No se puede enseñar" not in _textos(ventana.centro)
+        zona = ventana.centro.zona
+        assert zona.widget().minimumSizeHint().width() <= zona.viewport().width(), f"el apartado {n} no cabe"
+
+
+def test_editar_y_confirmar_un_bloque(ventana, qtbot, datos):
+    ventana.izquierda.ir(16)
+    qtbot.wait(5)
+    [tarjeta] = ventana.centro.tarjetas
+    tarjeta.editor.setPlainText("Texto cambiado desde la interfaz.")
+    tarjeta.guardar()
+    b = datos.bloques("PRU", CURSO, 16)[0]
+    assert b.cuerpo == "Texto cambiado desde la interfaz." and b.estado == "borrador"
+    tarjeta.boton_confirmar.click()
+    qtbot.wait(5)
+    assert datos.bloques("PRU", CURSO, 16)[0].confirmado
+    assert ventana.ctx.estado.de(16).estado == "confirmado"
+    assert ventana.centro.n == 16 and not hasattr(ventana.centro.tarjetas[0], "boton_confirmar")
+
+
+def test_cambiar_de_apartado_guarda_lo_escrito(ventana, qtbot, datos):
+    ventana.izquierda.ir(16)
+    qtbot.wait(5)
+    ventana.centro.tarjetas[0].editor.setPlainText("Escrito y sin esperar.")
+    ventana.izquierda.ir(2)
+    qtbot.wait(5)
+    assert datos.bloques("PRU", CURSO, 16)[0].cuerpo == "Escrito y sin esperar."
+
+
+def test_anadir_un_bloque(ventana, qtbot, datos, monkeypatch):
+    from pccf.ui import dialogos
+
+    def aceptar(self):
+        self.nombre.setText("metodologia")
+        self.autor.setText("Equipo ficticio")
+        self.crear()
+        return 1
+
+    monkeypatch.setattr(dialogos.DialogoNuevoBloque, "exec", aceptar)
+    ventana.izquierda.ir(6)
+    ventana.nuevo_bloque(6)
+    qtbot.wait(5)
+    assert [b.ruta.name for b in datos.bloques("PRU", CURSO, 6)] == ["metodologia.md"]
+    assert ventana.ctx.estado.de(6).estado == "borrador"
+    assert len(ventana.centro.tarjetas) == 1
+
+
+def test_vigia_y_marcar_como_revisado(ventana, qtbot, datos, monkeypatch):
+    from pccf.ui.dialogos import DialogoVigia
+
+    d = DialogoVigia(ventana.ctx, ventana)
+    qtbot.addWidget(d)
+    assert "primera revisión" in _textos(d) or "Sin revisión" in _textos(d) or d.isHidden()
+    monkeypatch.setattr(QMessageBox, "question", lambda *a, **k: QMessageBox.StandardButton.Yes)
+    d.marcar()
+    assert d.revisado
+    assert (datos.carpeta / "cursos" / CURSO / "PRU" / "vigia.yaml").is_file()
+    ventana.ctx.recalcular()
+    assert ventana.ctx.informe.anterior is not None
+    assert ventana.boton_vigia.text() == "§ Vigía · al día"
+
+
+def test_nuevo_curso_desde_la_ventana(ventana, qtbot, datos, monkeypatch):
+    from pccf.ui.dialogos import DialogoNuevoCurso
+
+    monkeypatch.setattr(QMessageBox, "information", lambda *a, **k: None)
+    d = DialogoNuevoCurso(ventana.ctx, ventana)
+    qtbot.addWidget(d)
+    nuevo = cursos.siguiente(CURSO)
+    assert d.destino.text() == nuevo and d.crear.text() == f"Crear {nuevo}"
+    d.crear_curso()
+    assert d.creado == nuevo
+    ventana.ctx.elegir("PRU", nuevo)
+    assert ventana.boton_curso.text() == f"PRU · {nuevo}"
+    assert ventana.ctx.estado.de(1).estado == "heredado"
+    # y ahora se pueden comparar los dos cursos
+    d = DialogoNuevoCurso(ventana.ctx, ventana)
+    qtbot.addWidget(d)
+    d.comparar()
+    assert d.tabla.rowCount() == 20
+
+
+def test_selector_de_ciclo_busca(ventana, qtbot):
+    ventana.izquierda.abrir_selector()
+    s = ventana.izquierda._selector
+    s.buscar.setText("pru")
+    elegibles = [s.lista.item(i) for i in range(s.lista.count()) if s.lista.item(i).data(256)]
+    assert len(elegibles) == 1
+    s.buscar.setText("nada que case")
+    assert not any(s.lista.item(i).data(256) for i in range(s.lista.count()))
+    s.close()
+
+
+def test_bloque_mal_escrito_no_tumba_la_ventana(cat, datos, carpeta, qtbot, tmp_path, monkeypatch):
+    from pccf.ui import contexto
+
+    monkeypatch.setattr(contexto, "ajustes",
+                        lambda: QSettings(str(tmp_path / "a.ini"), QSettings.Format.IniFormat))
+    (carpeta / "centro" / "roto.md").write_text("---\ntipo: nada\n---\n", encoding="utf-8")
+    ctx = contexto.Contexto(cat, datos)
+    assert ctx.estado is None and "roto.md" in ctx.error
+    with pytest.raises(bloques.BloqueNoValido):
+        datos.bloques("PRU", CURSO)
+
+
+def test_qtpdf_disponible():
+    from pccf.ui.vista_previa import comprobar_qtpdf
+
+    assert "1 página" in comprobar_qtpdf()

@@ -30,6 +30,15 @@
 | Vigía | Informe de la última revisión: normas con cambios, qué cambia, enlace y bloques afectados; «Marcar como revisado» |
 | Nuevo curso y Comparar | Ventana modal: curso de origen y destino; comparación por apartado con lo añadido y lo quitado |
 
+### Cómo está hecha (ADR-018)
+
+- **Lista de apartados:** número en su cuadro dorado, título cortado al ancho (entero en la ayuda), chips de tipo e icono de estado: anillo (pendiente), punto dorado (borrador o heredado), «!» (revisar: el vigía ha visto cambiar una norma suya) y visto bueno (confirmado).
+- **Apartado:** cabecera con el número «de 20», el título, los chips, la base (norma · punto de la guía) y el estado; debajo, la caja plegable de la guía y, si toca, el aviso dorado del vigía con «Ver informe ›». Lo calculado va en cajas grises «Del catálogo» con su fuente; el 1 añade «Del centro» (departamento, jefatura, tutorías) y el equipo docente con «Confirmar equipo» si está heredado o en borrador y «Abrir equipo.yaml»; el 2, sus normas con lo que dice el vigía y cuántos usos tiene cada una, y las citas sin vigilar; el 3, las competencias con el peso pendiente; el 4, la matriz con puntos verdes y «sin orient.» en oro; el 7 y el 20, sus tablas.
+- **Bloque:** banda dorada «Heredado de … · revisa y confirma» o «En borrador · revisa y confirma» con «Confirmar bloque»; chip de tipo, nombre del archivo y autoría; barra de formato (negrita, viñeta, subtítulo, enlace) y el Markdown, que se guarda solo; citas como chips azules (en ámbar las que el catálogo no conoce); «Exportar bloque…». Al final de cada apartado que admite texto, la caja discontinua con «Añadir bloque» e «Importar bloque…».
+- **Derecha:** progreso, lo que necesita atención (revisar, heredado, borrador; se pulsa para ir), avisos dorados con «Ir ›», miniatura de la portada tras la vista previa, formatos Word y PDF y «Exportar» abajo.
+- **Barra:** «§ Vigía · N normas cambiadas» en dorado si hay cambios; «al día» o «sin revisar» en verde si no. El botón del ciclo y el curso abre la lista de cursos de la carpeta de datos.
+- Ninguna zona se ensancha por su contenido: los textos y los chips se parten y las tablas ajustan sus columnas (lo comprueban las pruebas en los 20 apartados).
+
 ## Colores de los tipos de contenido
 
 | Tipo | Chip |
@@ -37,7 +46,7 @@
 | `centro` | `surface2` con texto `muted` |
 | `ciclo` | `accent_soft` con texto `accent` |
 | `anual` | `gold_soft` con texto `gold` |
-| `normativo` | azul suave (token nuevo, a proponer a la familia) |
+| `normativo` | `azul_soft` con texto `azul` (tokens nuevos de la familia: `#e4edf6` / `#2f5d8a` en claro, `#1c2a38` / `#8fb6de` en oscuro); también las citas |
 | `derivado` | blanco con borde `line` y texto `fg` en mono |
 
 ## Documento

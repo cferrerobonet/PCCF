@@ -6,6 +6,10 @@ Solo lee. Lo que falta (un archivo que aún no existe) llega como None o lista v
 from __future__ import annotations
 
 import os
+import re
+import shutil
+import subprocess
+import unicodedata
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -18,6 +22,10 @@ RAIZ = Path(__file__).resolve().parents[2]
 
 class DatosNoValidos(ValueError):
     pass
+
+
+def _sin_tildes(t: str) -> str:
+    return "".join(c for c in unicodedata.normalize("NFKD", t) if not unicodedata.combining(c))
 
 
 def carpeta_por_defecto() -> Path:
@@ -120,6 +128,74 @@ class CarpetaDatos:
                 if apartado is None or b.apartado == apartado:
                     out.append(b)
         return out
+
+    def carpeta_de_tipo(self, tipo: str, sigla: str, curso: str) -> Path:
+        """Dónde vive un bloque según su tipo: de centro (común a todos los ciclos), de ciclo y normativo (de todos
+        los cursos del ciclo) o anual (del curso)."""
+        if tipo == "centro":
+            return self.carpeta / "centro"
+        if tipo in ("ciclo", "normativo"):
+            return self.carpeta / "ciclos" / sigla / "bloques"
+        if tipo == "anual":
+            return self.carpeta / "cursos" / curso / sigla / "bloques"
+        raise DatosNoValidos(f"Un bloque no puede ser de tipo «{tipo}» (lo derivado se calcula, no se escribe)")
+
+    def nuevo_bloque(self, sigla: str, curso: str, apartado: int, tipo: str, nombre: str, aportado_por: str,
+                     hoy: str) -> bloques.Bloque:
+        """Un bloque vacío en borrador, en la carpeta de su tipo. Nunca sobrescribe."""
+        nombre = re.sub(r"[^a-z0-9-]+", "-", _sin_tildes(nombre).lower()).strip("-")
+        if not nombre:
+            raise DatosNoValidos("El bloque necesita un nombre de archivo")
+        destino = self.carpeta_de_tipo(tipo, sigla, curso) / f"{nombre}.md"
+        if destino.exists():
+            raise FileExistsError(f"Ya hay un bloque {destino.relative_to(self.carpeta).as_posix()}")
+        cab = {"tipo": tipo, "apartado": apartado, "origen": "equipo", "estado": "borrador",
+               "aportado_por": aportado_por.strip(), "fecha": hoy}
+        errs = esquemas.errores("bloque", cab, destino.name)
+        if errs:
+            raise DatosNoValidos("\n".join(errs))
+        destino.parent.mkdir(parents=True, exist_ok=True)
+        destino.write_text("---\n" + yaml.safe_dump(cab, allow_unicode=True, sort_keys=False) + "---\n\n",
+                           encoding="utf-8")
+        return bloques.leer(destino)
+
+    def importar_bloque(self, origen: Path, sigla: str, curso: str, sustituir: bool = False) -> bloques.Bloque:
+        """Un bloque suelto que aporta alguien del equipo (RF-7): se valida y se copia en la carpeta de su tipo."""
+        b = bloques.leer(origen)
+        destino = self.carpeta_de_tipo(b.tipo, sigla, curso) / Path(origen).name
+        if destino.exists() and not sustituir:
+            raise FileExistsError(f"Ya hay un bloque {destino.relative_to(self.carpeta).as_posix()}")
+        destino.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(origen, destino)
+        return bloques.leer(destino)
+
+    def confirmar_equipo(self, curso: str, sigla: str) -> Equipo:
+        """El equipo docente del curso, confirmado. Quita la línea que deja «Nuevo curso» y se queda el origen."""
+        p = self.carpeta / "cursos" / curso / sigla / "equipo.yaml"
+        texto = p.read_text(encoding="utf-8")
+        texto = re.sub(r"\A# Heredado de .*«Nuevo curso».*\n", "", texto)
+        p.write_text(bloques.poner(texto, "estado", "confirmado", "fecha"), encoding="utf-8")
+        eq = self.equipo(curso, sigla)
+        assert eq is not None
+        return eq
+
+    def cursos(self, sigla: str | None = None) -> list[str]:
+        """Los cursos de la carpeta de datos (con datos del ciclo, si se dice), del más reciente al más antiguo."""
+        base = self.carpeta / "cursos"
+        if not base.is_dir():
+            return []
+        return sorted((c.name for c in base.iterdir() if c.is_dir() and re.fullmatch(r"\d{4}-\d{4}", c.name)
+                       and (sigla is None or (c / sigla).is_dir())), reverse=True)
+
+    def etiquetas(self, sigla: str) -> list[str]:
+        """Las versiones aprobadas del ciclo (etiquetas de git «SIGLA-AAAA-AAAA-vN»), de la más reciente a la más
+        antigua. Sin git o sin etiquetas, ninguna."""
+        try:
+            r = subprocess.run(["git", "-C", str(self.carpeta), "tag", "--list", f"{sigla}-*", "--sort=-creatordate"],
+                               capture_output=True, text=True, timeout=10)
+        except (OSError, subprocess.TimeoutExpired):
+            return []
+        return [x for x in r.stdout.split() if x] if r.returncode == 0 else []
 
     def comprobar(self, sigla: str, curso: str) -> list[str]:
         """Todos los errores de la carpeta para un ciclo y un curso (vacía si está bien)."""

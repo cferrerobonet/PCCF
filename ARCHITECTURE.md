@@ -37,12 +37,22 @@ src/pccf/
                    lo que pide la guía si están pendientes, matriz apaisada y anexos A y B; borrador en portada y
                    encabezado si queda algo pendiente o en borrador
   ooxml.py         paquete .docx en memoria, relaciones y utilidades de párrafo (copia de Programaciones)
-  __main__.py      sin interfaz: `python -m pccf generar|comprobar|vigia|nuevo-curso|comparar …`
+  __main__.py      `python -m pccf` abre la interfaz; con orden, sin interfaz: `generar|comprobar|vigia|nuevo-curso|comparar …`
+  app.py           arranque de la interfaz (si faltan los datos o el catálogo, se dice cuál y se eligen en Ajustes)
+  estado.py        estado de cada apartado (pendiente, heredado, borrador, confirmado o «revisar» si el vigía ha visto
+                   cambiar una norma suya), con las reglas del documento: la lista, el progreso y los avisos (ADR-018)
+  pdf.py           PDF con el Word del equipo (AppleScript o COM, campos del contenido actualizados) o LibreOffice
+                   (copia de Programaciones, sin ONLYOFFICE)
+  rutas.py         recursos de la app (también congelada) y su carpeta de trabajo en el equipo
   cursos.py        «Nuevo curso» (copia lo anual del ciclo como heredado) y «Comparar» (dos cursos o un curso
                    en una versión aprobada, líneas añadidas y quitadas por apartado)
   vigia.py         compara el catálogo con la última revisión del PCCF (ADR-016); informe de apartados y bloques
                    afectados
-  ui/              interfaz PyQt6 (copiada de Programaciones)
+  ui/              interfaz PyQt6 (ADR-018; estilo, componentes y vista previa copiados de Programaciones):
+                   contexto.py (catálogo, datos, ciclo, curso, estado y vigía; ajustes en QSettings), ventana.py
+                   (barra, tres zonas, menú, vista previa y exportar en segundo plano), apartados.py (ciclo y lista
+                   de apartados), apartado.py (el apartado elegido y sus bloques), resumen.py (estado, vista previa
+                   y exportar) y dialogos.py (vigía, nuevo curso y comparar, nuevo bloque, ajustes)
   esquemas/        JSON Schema de cada archivo de datos (bloque, equipo, departamentos)
   recursos/apartados/ · recursos/plantilla/
 scripts/plantilla.py  crea la plantilla desde cero, con las fuentes incrustadas, y la comprueba (ADR-015)
@@ -136,3 +146,5 @@ Como Programaciones (su `TRD.md` §6 y sus flujos de `.github/workflows/`), con 
 - El Word generado se comprueba convertido a PDF, mirando todas las páginas.
 - «Nuevo curso» y «Comparar», con la carpeta de datos ficticia (y un git temporal para comparar con una etiqueta).
 - El índice de citas y el vigía, con un catálogo ficticio que las pruebas cambian (huellas, referencias posteriores, consolidados, normas que entran y salen): sin red.
+- El estado de los apartados y lo que la interfaz escribe (guardar, confirmar, añadir e importar bloques, confirmar el equipo).
+- La interfaz sin pantalla (`pytest-qt`, `QT_QPA_PLATFORM=offscreen`) con los datos ficticios: los 20 apartados se ven y caben en su zona, editar y confirmar un bloque, añadir uno, vigía, «Nuevo curso» y «Comparar», el buscador de ciclos y QtPdf. Los ajustes de Qt van a un archivo temporal.

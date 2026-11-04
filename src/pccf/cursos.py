@@ -30,6 +30,7 @@ from pathlib import Path
 import yaml
 
 from pccf import apartados, derivados, vigia
+from pccf.bloques import poner as poner_clave
 from pccf.catalogo import Catalogo
 from pccf.datos import CarpetaDatos, DatosNoValidos
 
@@ -64,18 +65,10 @@ class NuevoCurso:
     avisos: list[str] = field(default_factory=list)
 
 
-def _poner(texto: str, clave: str, valor: str, despues_de: str) -> str:
-    """Cambia `clave: …` en un YAML (o lo añade tras `despues_de`) sin tocar comentarios ni el resto."""
-    rx = re.compile(rf"^{clave}:.*$", re.M)
-    if rx.search(texto):
-        return rx.sub(lambda _: f"{clave}: {valor}", texto, count=1)
-    return re.sub(rf"^({despues_de}:.*)$", lambda m: f"{m.group(1)}\n{clave}: {valor}", texto, count=1, flags=re.M)
-
-
 def heredar_equipo(texto: str, origen: str, destino: str) -> str:
-    texto = _poner(texto, "curso", destino, "ciclo")
-    texto = _poner(texto, "estado", "borrador", "fecha")
-    texto = _poner(texto, "origen", f"heredado del curso {origen}", "estado")
+    texto = poner_clave(texto, "curso", destino, "ciclo")
+    texto = poner_clave(texto, "estado", "borrador", "fecha")
+    texto = poner_clave(texto, "origen", f"heredado del curso {origen}", "estado")
     return f"# Heredado de {origen} con «Nuevo curso»: revisar y, al confirmarlo, «estado: confirmado».\n" + texto
 
 
@@ -83,8 +76,8 @@ def heredar_bloque(texto: str, origen: str) -> str:
     m = RE_CABECERA.match(texto)
     if not m:
         raise DatosNoValidos("bloque sin cabecera YAML entre «---»")
-    cab = _poner(m.group(2), "origen", f"heredado del curso {origen}", "apartado")
-    cab = _poner(cab, "estado", "borrador", "origen")
+    cab = poner_clave(m.group(2), "origen", f"heredado del curso {origen}", "apartado")
+    cab = poner_clave(cab, "estado", "borrador", "origen")
     return m.group(1) + cab + m.group(3) + texto[m.end():]
 
 

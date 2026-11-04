@@ -1,4 +1,4 @@
-"""Uso sin interfaz:
+"""Sin argumentos, abre la interfaz. Uso sin interfaz:
   python -m pccf generar <SIGLA> <curso> [salida.docx]
   python -m pccf comprobar <SIGLA> <curso>
   python -m pccf vigia <SIGLA> <curso> [--revisado]
@@ -21,6 +21,10 @@ from pccf.datos import CarpetaDatos, DatosNoValidos
 
 
 def main(args: list[str]) -> int:
+    if not args:
+        from pccf.app import main as interfaz
+
+        return interfaz()
     if len(args) < 3 or args[0] not in ("generar", "comprobar", "vigia", "nuevo-curso", "comparar") \
             or (args[0] == "comparar" and len(args) < 4):
         print(__doc__)

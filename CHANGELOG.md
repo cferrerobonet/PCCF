@@ -6,6 +6,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones 
 
 ### Añadido
 
+- 2026-11-04 · Interfaz (ADR-018), con el diseño de la maqueta v0: `python -m pccf` abre la ventana. A la izquierda, el ciclo (los del catálogo, por familia y con buscador) y los 20 apartados con su estado; en el centro, el apartado con lo que pide la guía, lo calculado del catálogo y los bloques de texto, que se editan en Markdown y se guardan solos; a la derecha, el progreso, los avisos, la vista previa y «Exportar» a Word y PDF.
+- 2026-11-04 · Bloques desde la interfaz: confirmar (también los heredados), añadir, importar y exportar un bloque suelto; un texto cambiado vuelve a borrador. Confirmar el equipo docente heredado.
+- 2026-11-04 · Vigía, «Nuevo curso» y «Comparar» en la interfaz: el informe con «Marcar como revisado» y «Guardar informe»; crear el curso siguiente y comparar dos cursos o una versión aprobada, apartado por apartado.
+- 2026-11-04 · PDF con el Word del equipo o con LibreOffice, con las páginas del contenido puestas.
+- 2026-11-04 · Ajustes: carpeta de datos, catálogo, programa del PDF y correo del pie de la portada.
 - 2026-11-04 · «Nuevo curso» (ADR-017): `python -m pccf nuevo-curso <SIGLA> <curso> [curso nuevo]` crea el curso siguiente del ciclo con el equipo docente y los bloques del curso como heredados (en borrador hasta confirmarlos; el Word los marca «Heredado»), copia lo revisado por el vigía y pasa el vigía. Nunca sobrescribe.
 - 2026-11-04 · «Comparar»: `python -m pccf comparar <SIGLA> <curso>[@etiqueta] <curso>[@etiqueta]` compara dos cursos, o un curso con una versión aprobada, apartado por apartado (lo añadido y lo quitado).
 - 2026-11-04 · El vigía también avisa de las normas en que el PCCF deja de apoyarse (p. ej., la resolución de instrucciones del curso anterior).

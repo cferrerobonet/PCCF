@@ -2,6 +2,16 @@
 
 Registro fechado de decisiones (ADR). Lo más reciente, arriba. El estado actual está en `PRD.md`, `ARCHITECTURE.md` y `DESIGN.md`.
 
+## ADR-018 · Interfaz mínima: la maqueta v0, con lo que tiene datos (2026-11-04)
+
+- **Decisión:** la interfaz sigue la maqueta v0 aprobada (tres zonas, barra superior, vigía, «Nuevo curso» y «Comparar», selector de los 15 ciclos) y el diseño de Programaciones, de la que se copian el estilo, los componentes y la vista previa. `python -m pccf` sin argumentos la abre.
+- **Estado de los apartados** (`estado.py`), con las reglas del documento: pendiente (sin contenido o sin el equipo docente), heredado, borrador, confirmado y «revisar» cuando el vigía ha visto cambiar una norma en la que se apoya. Lo usan la lista, el progreso y los avisos.
+- **Bloques:** se editan en Markdown y se guardan solos al dejar de escribir y al cambiar de apartado; **un texto cambiado vuelve a borrador** y hay que confirmarlo otra vez, para que no salga como aprobado algo que nadie ha revisado. La cabecera se cambia línea a línea, sin tocar comentarios ni el resto de campos, y el archivo solo se sustituye si el bloque resultante es válido. «Añadir bloque» lo crea vacío y en borrador en la carpeta de su tipo: de centro en `centro/`, de ciclo y normativo en `ciclos/<SIGLA>/bloques/`, anual en el curso. «Importar bloque» comprueba el archivo y pregunta antes de sustituir uno con el mismo nombre.
+- **Equipo docente:** la app lo enseña y lo confirma; se edita en `equipo.yaml` (botón «Abrir equipo.yaml»), porque son datos personales que mantiene CarlosFB en la carpeta de datos. Un editor de la tabla, si hace falta, después.
+- **PDF:** con el Word del equipo (actualizando los campos del contenido antes de guardar) o con LibreOffice; sin ONLYOFFICE, que Programaciones añadió para equipos sin ninguno de los dos.
+- **Lo que la maqueta enseñaba y aún no tiene datos**, que no se programa (sin datos no se implementa): «Añadir norma del centro» (`normativa.yaml` de la carpeta de datos), «Añadir ajuste» de la matriz del apartado 4 (`ajustes.yaml`), el ejemplo del anexo I en la caja de la guía y las actualizaciones (llegan con el empaquetado, ARCHITECTURE.md §6).
+- **Descartado:** guardar con un botón (se olvida y se pierde texto al cambiar de apartado) y dejar confirmado un bloque que se edita (daría por aprobado un texto nuevo).
+
 ## ADR-017 · «Nuevo curso» hereda lo anual y «Comparar» lee el catálogo de hoy (2026-11-04)
 
 - **Decisión:** «Nuevo curso» copia solo la carpeta del ciclo en el curso (`cursos/<curso>/<SIGLA>/`): lo de centro y de ciclo es común a todos los cursos y no se duplica. El equipo docente y los bloques del curso pasan como heredados (`estado: borrador` y `origen: heredado del curso …`; el esquema del equipo admite ahora `origen`); el Word los marca «Heredado» y sale en borrador hasta confirmarlos (DESIGN.md: «heredado hasta que se confirma»). Se copia lo que el vigía dio por revisado, para que su primer informe del curso nuevo diga qué ha cambiado (la resolución de instrucciones, sobre todo). Nunca sobrescribe ni deja un curso a medias.

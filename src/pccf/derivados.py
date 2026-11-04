@@ -36,6 +36,8 @@ class Identificacion:
     tutorias: list[tuple[str, str]] | None   # (grupo, nombre)
     modulos: list[FilaModulo] = field(default_factory=list)
     horas_total: int = 0
+    equipo_confirmado: bool = True   # sin equipo, lo pendiente ya se ve en cada módulo
+    equipo_origen: str = ""          # «heredado del curso AAAA-AAAA»
 
     @property
     def grado_largo(self) -> str:
@@ -68,6 +70,8 @@ def identificacion(cat: Catalogo, datos: CarpetaDatos, sigla: str, curso: str) -
     return Identificacion(sigla=sigla, nombre=texto(c["nombre"]), titulo=texto(c["titulo"]), grado=c["grado"],
                           familia=texto(c["familia"]), rd=rd, curso=curso, departamento=datos.departamento_de(sigla),
                           tutorias=tutorias, modulos=filas,
+                          equipo_confirmado=equipo.confirmado if equipo else True,
+                          equipo_origen=equipo.origen if equipo else "",
                           # las optativas son alternativas: cuenta su casilla, no cada una
                           horas_total=sum(m["h_anuales"] for m in c["modulos"]))
 

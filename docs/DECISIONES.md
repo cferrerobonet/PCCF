@@ -2,6 +2,12 @@
 
 Registro fechado de decisiones (ADR). Lo más reciente, arriba. El estado actual está en `PRD.md`, `ARCHITECTURE.md` y `DESIGN.md`.
 
+## ADR-017 · «Nuevo curso» hereda lo anual y «Comparar» lee el catálogo de hoy (2026-11-04)
+
+- **Decisión:** «Nuevo curso» copia solo la carpeta del ciclo en el curso (`cursos/<curso>/<SIGLA>/`): lo de centro y de ciclo es común a todos los cursos y no se duplica. El equipo docente y los bloques del curso pasan como heredados (`estado: borrador` y `origen: heredado del curso …`; el esquema del equipo admite ahora `origen`); el Word los marca «Heredado» y sale en borrador hasta confirmarlos (DESIGN.md: «heredado hasta que se confirma»). Se copia lo que el vigía dio por revisado, para que su primer informe del curso nuevo diga qué ha cambiado (la resolución de instrucciones, sobre todo). Nunca sobrescribe ni deja un curso a medias.
+- **«Comparar»:** cada lado es un curso de la carpeta de datos o un curso en una etiqueta de git de esa carpeta (sin red). Lo calculado se rehace con el catálogo de hoy en los dos lados, porque la carpeta de datos no guarda el catálogo con el que se generó cada versión: las diferencias de un apartado calculado entre dos versiones solo salen si cambian los datos (equipo, departamento), y las del catálogo las da el vigía.
+- **Descartado:** copiar también los bloques de centro y de ciclo a cada curso (dos copias del mismo texto que pueden separarse) y guardar el catálogo con cada versión aprobada (pesa y lo resuelve el vigía).
+
 ## ADR-016 · El vigía del PCCF lee el catálogo, no la red (2026-11-04)
 
 - **Decisión:** el vigía del PCCF no consulta el BOE ni el DOGV. Compara lo que el vigía semanal de Programaciones deja en el catálogo (huellas de los documentos, referencias posteriores de cada real decreto, normativa y, en el catálogo de desarrollo, textos consolidados y disposiciones nuevas) con lo que se dio por revisado del PCCF de cada ciclo y curso (`cursos/<curso>/<SIGLA>/vigia.yaml` de la carpeta de datos), y dice qué apartados y bloques se apoyan en cada norma que cambia. Precisa ADR-007 («consulta BOE y DOGV»).

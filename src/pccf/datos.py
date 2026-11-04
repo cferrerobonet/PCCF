@@ -48,6 +48,11 @@ class Equipo:
     docentes: dict[str, str]                      # código → nombre
     tutorias: list[dict] = field(default_factory=list)
     modulos: list[dict] = field(default_factory=list)
+    origen: str = ""                              # «heredado del curso AAAA-AAAA» hasta que se confirma
+
+    @property
+    def confirmado(self) -> bool:
+        return self.estado == "confirmado"
 
     def nombres(self, codigos: list[str]) -> list[str]:
         return [self.docentes[c] for c in codigos]
@@ -99,7 +104,7 @@ class CarpetaDatos:
         if desconocidos:
             raise DatosNoValidos(f"{p}: docentes sin ficha en «docentes»: {', '.join(desconocidos)}")
         return Equipo(ciclo=sigla, curso=curso, estado=d["estado"], docentes=docentes,
-                      tutorias=list(d.get("tutorias", [])), modulos=list(d["modulos"]))
+                      tutorias=list(d.get("tutorias", [])), modulos=list(d["modulos"]), origen=d.get("origen", ""))
 
     # -- bloques ------------------------------------------------------------------------------------------------------
     def carpetas_de_bloques(self, sigla: str, curso: str) -> list[Path]:

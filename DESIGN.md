@@ -102,7 +102,7 @@ Evitan el aspecto de documento genérico o de documento generado por IA (anti-pa
 | Apertura de apartado | Número en la columna de margen con filete de oro debajo; título; debajo, la **base**: norma y artículo · punto de la guía · origen de los datos («Se calcula del RD…», «Bloque de centro · borrador», «Vigía: comprobado el…») |
 | Texto | Párrafos y viñetas (marcador verde) en la columna de texto; negrita en `verde-900` |
 | Cita literal de una norma | Sangrada 6 mm, cursiva, con la norma y el artículo debajo en versalitas verdes; **sin barra lateral** |
-| Pendiente / Por revisar | Filetes de oro arriba y abajo (sin caja ni barra lateral): etiqueta en oro a la izquierda y, a la derecha, qué pide la guía y qué falta |
+| Pendiente / Borrador / Heredado | Filetes de oro arriba y abajo (sin caja ni barra lateral): etiqueta en oro a la izquierda y, a la derecha, qué pide la guía y qué falta, o qué queda por revisar y confirmar (un texto en borrador; el equipo docente o un bloque heredado del curso anterior) |
 | Tabla | Sin líneas verticales ni fondos: cabecera en versalitas `verde-900` con filete `verde-700` de 1,3 pt; filas con filete `línea` de 0,5 pt; números a la derecha; filas de grupo («1.º curso») en versalitas verdes; fila de total con filete superior; **fuente** debajo en 7,4 pt |
 | Ficha (etiqueta · valor) | Etiqueta en la columna de margen y valor a la derecha, con filetes entre filas (apartado 1, control del documento) |
 | Matriz módulo × competencia | Celda rellena `verde-700` = contribuye; `línea-2` = no contribuye; vacía y «sin orientación» en oro = el RD no le asigna ninguna (módulos nuevos de la LO 3/2022, que decide el equipo). Columna final con el número de competencias |

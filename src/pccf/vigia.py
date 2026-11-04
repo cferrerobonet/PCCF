@@ -160,8 +160,9 @@ def revisar(cat: Catalogo, datos: CarpetaDatos, sigla: str, curso: str, hoy: dt.
     for ident in sorted(set(idx.usos) | set(vistas)):
         antes, ahora = vistas.get(ident), f.normas.get(ident)
         if ident not in idx.usos and ahora is not None:
-            continue                    # ya no se usa en este PCCF y sigue en el catálogo: nada que avisar
-        que = diferencias(antes, ahora)
+            que = ["Este PCCF ya no se apoya en ella: sale del marco normativo del ciclo o de las citas de los bloques"]
+        else:
+            que = diferencias(antes, ahora)
         if que:
             usos = idx.usos.get(ident) or idx.sin_vigilar.get(ident, [])   # la que sale del catálogo, por su id
             inf.cambios.append(_cambio(cat, ident, que, usos, ahora, antes))
@@ -187,11 +188,15 @@ def marcar_revisado(cat: Catalogo, datos: CarpetaDatos, sigla: str, curso: str, 
         estado["boe"] = sorted(f.boe)
         estado["ceice"] = sorted(f.ceice or [])
     p = ruta_estado(datos, sigla, curso)
+    escribir_estado(p, sigla, curso, estado)
+    return p
+
+
+def escribir_estado(p: Path, sigla: str, curso: str, estado: dict) -> None:
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(f"# Lo que el vigía del PCCF dio por revisado de {sigla} {curso}. No se edita a mano: "
                  f"python -m pccf vigia {sigla} {curso} --revisado\n"
                  + yaml.safe_dump(estado, allow_unicode=True, sort_keys=False, width=10_000), encoding="utf-8")
-    return p
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -207,13 +212,13 @@ def _uso(u: citas.Uso) -> str:
 
 def _usos(usos: list[citas.Uso]) -> list[str]:
     orden = sorted(usos, key=lambda u: (-1 if u.apartado is None else u.apartado, u.origen, u.detalle))
-    return [f"  - {_uso(u)}" for u in orden] or ["  - Ningún apartado la usa ya"]
+    return [f"  - {_uso(u)}" for u in orden]
 
 
 def _norma(c: Cambio) -> list[str]:
     nombre = f"[{c.cita}]({c.enlace})" if c.enlace else c.cita
-    return [f"- **{nombre}** · `{c.norma}`", *[f"  - {q}" for q in c.que], "  - Dónde se usa:",
-            *[f"  {x}" for x in _usos(c.usos)]]
+    donde = ["  - Dónde se usa:", *[f"  {x}" for x in _usos(c.usos)]] if c.usos else []
+    return [f"- **{nombre}** · `{c.norma}`", *[f"  - {q}" for q in c.que], *donde]
 
 
 def markdown(inf: Informe) -> str:

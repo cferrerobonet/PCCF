@@ -30,6 +30,11 @@
         "confirmado"
       ]
     },
+    "origen": {
+      "type": "string",
+      "description": "Solo si se ha heredado del curso anterior («Nuevo curso»): hasta confirmarlo, el estado es borrador",
+      "pattern": "^heredado del curso \\d{4}-\\d{4}$"
+    },
     "docentes": {
       "type": "array",
       "minItems": 1,

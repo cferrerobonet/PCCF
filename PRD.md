@@ -91,7 +91,7 @@ Además, como pide la guía (2.2), el documento abre con el **control del docume
 | RF-1 | Generar el PCCF de cualquier ciclo del centro (GB, GM o GS) y un curso en `.docx` con el diseño del documento (`DESIGN.md`), con los apartados de su grado (los que no tengan contenido, con su título y «pendiente» con lo que pide la guía) |
 | RF-2 | Editar los bloques de texto (Markdown) con su tipo, estado (borrador o confirmado) y autoría; lo oficial se ve, no se edita |
 | RF-3 | Leer del catálogo firmado de Programaciones ciclos, módulos, RA, horas y competencias, y calcular los derivados |
-| RF-4 | «Nuevo curso»: clonar el curso anterior; los bloques anuales pasan a borrador y hay que confirmarlos |
+| RF-4 | «Nuevo curso»: clonar el curso anterior; el equipo docente y los bloques anuales pasan como heredados, en borrador, y hay que confirmarlos |
 | RF-5 | «Comparar» dos cursos o dos versiones aprobadas, por apartado |
 | RF-6 | **Vigía normativo**: con lo que el vigía semanal de Programaciones ve en el BOE y el DOGV (ADR-016), detectar modificaciones y derogaciones de las normas en que se apoya el PCCF desde su última revisión e informar de los apartados y bloques afectados; las citas que el catálogo no conoce, «sin vigilar». **Nunca reescribe texto**: solo avisa. Sin resumen con un modelo de lenguaje (ADR-010) |
 | RF-7 | Exportar e importar un bloque suelto, para que el equipo aporte textos sin la carpeta entera |
@@ -114,7 +114,7 @@ Además, como pide la guía (2.2), el documento abre con el **control del docume
 | --- | --- | --- |
 | F0 | Diseño, documentación de partida e investigación | Hecha (2026-10-28) |
 | F1 | Repositorio con barrera de secretos, maqueta de la interfaz aprobada y entorno | Hecha (2026-11-03) |
-| F2 | **MVP** (en curso: núcleo de datos y Word con los apartados 1, 2, 4 y 16, 2026-11-03; estructura de la guía y maqueta del documento v1, 2026-11-04; Word con el diseño propio, índice de citas y vigía, 2026-11-04): SEA, curso 2026-2027, apartados 1, 2, 4 y 16 (los cinco tipos de contenido), Word con el diseño propio, vigía, «Nuevo curso» y «Comparar» | Pendiente |
+| F2 | **MVP** (en curso: núcleo de datos y Word con los apartados 1, 2, 4 y 16, 2026-11-03; estructura de la guía y maqueta del documento v1, 2026-11-04; Word con el diseño propio, índice de citas, vigía, «Nuevo curso» y «Comparar», 2026-11-04; falta la interfaz): SEA, curso 2026-2027, apartados 1, 2, 4 y 16 (los cinco tipos de contenido), Word con el diseño propio, vigía, «Nuevo curso» y «Comparar» | Pendiente |
 | F3 | Resto de apartados de SEA | Pendiente |
 | F4 | Resto de ciclos del centro (ADR-012): STI, ARI, IEA e IT; después Automoción, Administración y Servicios Sociales; al final, Grado Básico con sus 17 apartados | Pendiente |
 | F5 | Programaciones lee del PCCF los acuerdos comunes | Pendiente |

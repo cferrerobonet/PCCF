@@ -37,8 +37,9 @@ src/pccf/
                    lo que pide la guía si están pendientes, matriz apaisada y anexos A y B; borrador en portada y
                    encabezado si queda algo pendiente o en borrador
   ooxml.py         paquete .docx en memoria, relaciones y utilidades de párrafo (copia de Programaciones)
-  __main__.py      sin interfaz: `python -m pccf generar|comprobar|vigia <SIGLA> <curso>`
-  cursos.py        «Nuevo curso» (clonar) y «Comparar» (diferencias por apartado)
+  __main__.py      sin interfaz: `python -m pccf generar|comprobar|vigia|nuevo-curso|comparar …`
+  cursos.py        «Nuevo curso» (copia lo anual del ciclo como heredado) y «Comparar» (dos cursos o un curso
+                   en una versión aprobada, líneas añadidas y quitadas por apartado)
   vigia.py         compara el catálogo con la última revisión del PCCF (ADR-016); informe de apartados y bloques
                    afectados
   ui/              interfaz PyQt6 (copiada de Programaciones)
@@ -96,10 +97,14 @@ erDiagram
     cursos/2026-2027/
       curso.yaml             calendario y planes del centro
       SEA/                   equipo docente, empresas de FE, bloques anuales y `vigia.yaml` (lo dado por revisado)
-    salidas/                 .docx generados e informes del vigía (fuera de git)
+    salidas/                 .docx generados e informes del vigía y de «Comparar» (fuera de git)
 ```
 
-Versionado: un commit por cambio aprobado y una etiqueta por versión aprobada (`SEA-2026-2027-v1`). «Comparar» lee dos cursos o dos etiquetas y muestra las diferencias por apartado.
+Versionado: un commit por cambio aprobado y una etiqueta por versión aprobada (`SEA-2026-2027-v1`).
+
+**Nuevo curso** (`python -m pccf nuevo-curso SEA 2026-2027 [2027-2028]`, ADR-017): copia `cursos/<origen>/<SIGLA>/` en el curso nuevo. Lo de centro y de ciclo no se copia (es común a todos los cursos); el equipo docente y los bloques del curso pasan como **heredados** (`estado: borrador`, `origen: heredado del curso <origen>`) y el Word los marca «Heredado» y sale en borrador hasta que se confirman; lo que el vigía dio por revisado se copia, y el vigía se pasa al crear el curso; lo que no sabe heredar (p. ej., `empresas.yaml`) se copia tal cual y se avisa. Nunca sobrescribe: si el ciclo ya tiene carpeta en el curso nuevo, se para; si el resultado no pasa la comprobación, se deshace.
+
+**Comparar** (`python -m pccf comparar SEA 2026-2027 2027-2028`; un lado puede ser `2026-2027@SEA-2026-2027-v1`, la carpeta de datos en esa etiqueta de git, sin red): lo que dice cada apartado en líneas (lo calculado y los párrafos de cada bloque con su estado) y, por apartado, lo añadido y lo quitado. Lo calculado se rehace con el catálogo de hoy en los dos lados: el catálogo no se guarda con los datos. Informe en Markdown en `salidas/`.
 
 ## 5. Vigía
 
@@ -129,4 +134,5 @@ Como Programaciones (su `TRD.md` §6 y sus flujos de `.github/workflows/`), con 
 
 - `pytest` con una carpeta de datos ficticia en `tests/datos/` (docentes y empresas inventados).
 - El Word generado se comprueba convertido a PDF, mirando todas las páginas.
+- «Nuevo curso» y «Comparar», con la carpeta de datos ficticia (y un git temporal para comparar con una etiqueta).
 - El índice de citas y el vigía, con un catálogo ficticio que las pruebas cambian (huellas, referencias posteriores, consolidados, normas que entran y salen): sin red.

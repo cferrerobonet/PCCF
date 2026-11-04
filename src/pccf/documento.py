@@ -576,7 +576,19 @@ def apartado_1(e: Escritor, ident: derivados.Identificacion, avisos: list[str]) 
     out.append(e.tabla(anchos, filas, sangria=e.sangria, cabecera=True))
     out.append(e.fuente([Negrita("Fuente: "), "catálogo curricular (horas del currículo) y equipo docente del curso. "
                          "Las optativas, una por fila."], e.sangria))
+    if not ident.equipo_confirmado:
+        avisos.append(f"Apartado 1: equipo docente sin confirmar{f' ({ident.equipo_origen})' if ident.equipo_origen else ''}")
+        out += e.aviso(*_sin_confirmar("Equipo docente", ident.equipo_origen))
     return out
+
+
+def _sin_confirmar(que: str, origen: str) -> tuple[str, list[str]]:
+    """La etiqueta y el texto del aviso de algo sin confirmar: heredado del curso anterior o en borrador."""
+    if origen.startswith("heredado del curso "):
+        return "Heredado", [f"{que} heredado del curso {origen.rsplit(' ', 1)[-1]}: pendiente de revisar y confirmar "
+                            "por el equipo docente y de aprobar por el departamento."]
+    return "Borrador", [f"{que} en borrador: pendiente de revisar y confirmar por el equipo docente y de aprobar por "
+                        "el departamento."]
 
 
 def apartado_2(e: Escritor, marco: dict[str, list[Norma]]) -> list:
@@ -698,9 +710,9 @@ def bloques_de(e: Escritor, lista: list[Bloque], n: int, avisos: list[str], subt
     for b in sorted(lista, key=lambda b: (b.orden if b.orden is not None else 999, b.ruta.name)):
         out += e.markdown(b.cuerpo, n, subtitulos)
         if not b.confirmado:
-            avisos.append(f"Apartado {n}: «{b.ruta.name}» está en borrador")
-            out += e.aviso("Borrador", ["Texto en borrador: pendiente de revisar y confirmar por el equipo docente "
-                                        "y de aprobar por el departamento."])
+            heredado = b.origen.startswith("heredado del curso ")
+            avisos.append(f"Apartado {n}: «{b.ruta.name}» {b.origen if heredado else 'está en borrador'}, sin confirmar")
+            out += e.aviso(*_sin_confirmar("Texto", b.origen))
     return out
 
 
@@ -860,7 +872,8 @@ def _borrador_previo(cat: Catalogo, datos: CarpetaDatos, sigla: str, curso: str,
     con_bloque = {b.apartado for b in todos}
     calculados = {1, 2, 4, 20}
     falta = any(a.n not in calculados and a.n not in con_bloque for a in apartados.apartados(ident.grado))
-    return falta or any(not b.confirmado for b in todos) or ident.departamento is None or ident.tutorias is None
+    return (falta or any(not b.confirmado for b in todos) or ident.departamento is None or ident.tutorias is None
+            or not ident.equipo_confirmado)
 
 
 def generar(cat: Catalogo, datos: CarpetaDatos, sigla: str, curso: str, opciones: Opciones | None = None) -> Resultado:

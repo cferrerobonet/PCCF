@@ -31,14 +31,16 @@ src/pccf/
   bloques.py       bloques Markdown con cabecera: tipo, apartado, estado, autoría, citas
   derivados.py     lo calculado: identificación (1), marco normativo (2), módulo × competencia (4); después,
                    distribución horaria, RA en FE…
-  citas.py         índice inverso norma → bloques que la citan
+  citas.py         índice inverso norma → apartados y bloques que se apoyan en ella (citas de los bloques, por id
+                   o por nombre, y lo que se calcula del catálogo); la cita que no casa con una sola norma, sin vigilar
   documento.py     el Word (ADR-015): portada, control del documento, contenido enlazado, apartados con su apertura y
                    lo que pide la guía si están pendientes, matriz apaisada y anexos A y B; borrador en portada y
                    encabezado si queda algo pendiente o en borrador
   ooxml.py         paquete .docx en memoria, relaciones y utilidades de párrafo (copia de Programaciones)
-  __main__.py      sin interfaz: `python -m pccf generar|comprobar <SIGLA> <curso>`
+  __main__.py      sin interfaz: `python -m pccf generar|comprobar|vigia <SIGLA> <curso>`
   cursos.py        «Nuevo curso» (clonar) y «Comparar» (diferencias por apartado)
-  vigia.py         consulta BOE, DOGV y Conselleria; informe de bloques afectados
+  vigia.py         compara el catálogo con la última revisión del PCCF (ADR-016); informe de apartados y bloques
+                   afectados
   ui/              interfaz PyQt6 (copiada de Programaciones)
   esquemas/        JSON Schema de cada archivo de datos (bloque, equipo, departamentos)
   recursos/apartados/ · recursos/plantilla/
@@ -93,23 +95,26 @@ erDiagram
       bloques/               bloques de ciclo redactados por el equipo
     cursos/2026-2027/
       curso.yaml             calendario y planes del centro
-      SEA/                   equipo docente, empresas de FE y bloques anuales
-    salidas/                 .docx generados (fuera de git)
+      SEA/                   equipo docente, empresas de FE, bloques anuales y `vigia.yaml` (lo dado por revisado)
+    salidas/                 .docx generados e informes del vigía (fuera de git)
 ```
 
 Versionado: un commit por cambio aprobado y una etiqueta por versión aprobada (`SEA-2026-2027-v1`). «Comparar» lee dos cursos o dos etiquetas y muestra las diferencias por apartado.
 
 ## 5. Vigía
 
-Amplía el de Programaciones, que ya consulta el BOE, el DOGV y la página de normativa de FP de la Conselleria y guarda lo visto en su `catalogo/vigia.yaml`.
+Amplía el de Programaciones sin repetir sus consultas (ADR-016): **no sale a la red**. El de Programaciones revisa cada semana el BOE, el DOGV y la página de normativa de FP de la Conselleria y deja lo visto en el catálogo; el del PCCF compara ese catálogo con lo que se dio por revisado del PCCF de un ciclo y un curso y dice qué apartados y bloques se apoyan en cada norma que ha cambiado.
 
-| Fuente | Cómo |
+| Qué mira | Dónde lo deja el vigía de Programaciones |
 | --- | --- |
-| Normas consolidadas del BOE | API de datos abiertos, sin clave, con `Accept: application/json`: `legislacion-consolidada/id/{id}/metadatos` (vigencia, derogación, `fecha_actualizacion`) y `/analisis` (referencias posteriores: 270 modifica, 210 deroga, 201 corrección; filtrar 440 «se dicta de conformidad») |
-| Reales decretos de título (sin consolidar) | XML del diario, `/diario_boe/xml.php?id=…`, `<analisis><referencias><posteriores>` |
-| Normas del DOGV | Sin API ni RSS: huella SHA-256 del PDF de cada norma registrada y comparación de la página de normativa de FP de la Conselleria entre ejecuciones |
+| Documento publicado distinto (huella SHA-256; en el DOGV, sus anexos se revisan a mano) | `catalogo/fuentes.yaml` |
+| Referencias posteriores del real decreto de cada ciclo (modifica, deroga, corrección; sin «se dicta de conformidad») | `catalogo/ciclos/<SIGLA>.yaml`, `rd.posteriores` |
+| Título y enlace; normas que entran o salen del marco normativo del ciclo | `catalogo/normativa.yaml` |
+| Fecha y vigencia del texto consolidado del BOE; disposiciones nuevas del BOE y de la página de la Conselleria | `catalogo/vigia.yaml`: solo en el catálogo de desarrollo (el publicado no lo lleva, y el informe lo avisa) |
 
-Salida: informe en Markdown con cada norma cambiada (qué cambia, enlace) y los bloques que la citan (índice de `citas.py`). **No toca ningún texto** ni lleva resumen generado con un modelo de lenguaje (ADR-010).
+Usos de cada norma (`citas.py`): las citas de los bloques (por id del catálogo o por nombre: «Decreto 114/2025», «Orden 20/2019») y lo que se calcula del catálogo (apartado 1: real decreto del título y horario; 2: marco normativo; 3 y 4: competencias del título; 7: horario; la lista de apartados: el decreto de currículos). La cita que no casa con una sola norma queda **sin vigilar** y sale en el informe.
+
+Uso: `python -m pccf vigia <SIGLA> <curso>` escribe el informe en Markdown en `salidas/` (cada norma cambiada, qué cambia, enlace y dónde se usa; las normas citadas no vigentes; las disposiciones nuevas; las citas sin vigilar). Solo lee: un aviso no desaparece por ejecutarlo. `--revisado` guarda en `cursos/<curso>/<SIGLA>/vigia.yaml` lo que dice hoy el catálogo de las normas que usa el PCCF: el punto de partida de la próxima revisión; la primera vez no hay con qué comparar. **No toca ningún texto** ni lleva resumen generado con un modelo de lenguaje (ADR-010).
 
 ## 6. Versiones, compilación y actualizaciones
 
@@ -124,4 +129,4 @@ Como Programaciones (su `TRD.md` §6 y sus flujos de `.github/workflows/`), con 
 
 - `pytest` con una carpeta de datos ficticia en `tests/datos/` (docentes y empresas inventados).
 - El Word generado se comprueba convertido a PDF, mirando todas las páginas.
-- El vigía, con respuestas del BOE grabadas (sin red en las pruebas).
+- El índice de citas y el vigía, con un catálogo ficticio que las pruebas cambian (huellas, referencias posteriores, consolidados, normas que entran y salen): sin red.

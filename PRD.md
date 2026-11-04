@@ -93,11 +93,11 @@ Además, como pide la guía (2.2), el documento abre con el **control del docume
 | RF-3 | Leer del catálogo firmado de Programaciones ciclos, módulos, RA, horas y competencias, y calcular los derivados |
 | RF-4 | «Nuevo curso»: clonar el curso anterior; los bloques anuales pasan a borrador y hay que confirmarlos |
 | RF-5 | «Comparar» dos cursos o dos versiones aprobadas, por apartado |
-| RF-6 | **Vigía normativo**, a mano o programado: detectar modificaciones y derogaciones de las normas citadas (BOE y lo disponible del DOGV) e informar de los bloques afectados. **Nunca reescribe texto**: solo avisa. Sin resumen con un modelo de lenguaje (ADR-010) |
+| RF-6 | **Vigía normativo**: con lo que el vigía semanal de Programaciones ve en el BOE y el DOGV (ADR-016), detectar modificaciones y derogaciones de las normas en que se apoya el PCCF desde su última revisión e informar de los apartados y bloques afectados; las citas que el catálogo no conoce, «sin vigilar». **Nunca reescribe texto**: solo avisa. Sin resumen con un modelo de lenguaje (ADR-010) |
 | RF-7 | Exportar e importar un bloque suelto, para que el equipo aporte textos sin la carpeta entera |
 | RF-8 | Actualizaciones desde la app, como Programaciones: al arrancar y desde «Acerca de», aviso «↑ Actualizar a X.Y.Z» con las novedades de esa versión (`CHANGELOG.md`) e instalación sin pasos manuales |
 | RF-9 | Seguir la guía de la DGFP: cada apartado sabe su punto de la guía; la app enseña qué pide y su ejemplo, y el documento recoge sus tablas y fichas (ponderación en %, matrices, agrupaciones, fichas de empresa y de programa formativo) |
-| RNF-1 | Todo en local; sin bases de datos en servidor ni nube. La única red permitida: BOE y DOGV (vigía) y la descarga del catálogo publicado de Programaciones |
+| RNF-1 | Todo en local; sin bases de datos en servidor ni nube. La única red permitida: la descarga del catálogo publicado de Programaciones (que trae lo que su vigía ve en el BOE y el DOGV) y las releases de GitHub |
 | RNF-2 | Datos en archivos legibles y editables a mano (YAML y Markdown), en una carpeta con git |
 | RNF-3 | Instalación sencilla para el equipo: releases de `github.com/cferrerobonet/PCCF` (repositorio público) con DMG de macOS, instalador y portable de Windows y portable de Linux; para compartir los datos, se pasa la carpeta |
 | RNF-4 | Datos personales (docentes, empresas, alumnado) solo en la carpeta de datos, nunca en el repositorio de la app |
@@ -114,7 +114,7 @@ Además, como pide la guía (2.2), el documento abre con el **control del docume
 | --- | --- | --- |
 | F0 | Diseño, documentación de partida e investigación | Hecha (2026-10-28) |
 | F1 | Repositorio con barrera de secretos, maqueta de la interfaz aprobada y entorno | Hecha (2026-11-03) |
-| F2 | **MVP** (en curso: núcleo de datos y Word con los apartados 1, 2, 4 y 16, 2026-11-03; estructura de la guía y maqueta del documento v1, 2026-11-04): SEA, curso 2026-2027, apartados 1, 2, 4 y 16 (los cinco tipos de contenido), Word con el diseño propio, vigía, «Nuevo curso» y «Comparar» | Pendiente |
+| F2 | **MVP** (en curso: núcleo de datos y Word con los apartados 1, 2, 4 y 16, 2026-11-03; estructura de la guía y maqueta del documento v1, 2026-11-04; Word con el diseño propio, índice de citas y vigía, 2026-11-04): SEA, curso 2026-2027, apartados 1, 2, 4 y 16 (los cinco tipos de contenido), Word con el diseño propio, vigía, «Nuevo curso» y «Comparar» | Pendiente |
 | F3 | Resto de apartados de SEA | Pendiente |
 | F4 | Resto de ciclos del centro (ADR-012): STI, ARI, IEA e IT; después Automoción, Administración y Servicios Sociales; al final, Grado Básico con sus 17 apartados | Pendiente |
 | F5 | Programaciones lee del PCCF los acuerdos comunes | Pendiente |

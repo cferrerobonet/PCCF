@@ -2,6 +2,14 @@
 
 Registro fechado de decisiones (ADR). Lo más reciente, arriba. El estado actual está en `PRD.md`, `ARCHITECTURE.md` y `DESIGN.md`.
 
+## ADR-016 · El vigía del PCCF lee el catálogo, no la red (2026-11-04)
+
+- **Decisión:** el vigía del PCCF no consulta el BOE ni el DOGV. Compara lo que el vigía semanal de Programaciones deja en el catálogo (huellas de los documentos, referencias posteriores de cada real decreto, normativa y, en el catálogo de desarrollo, textos consolidados y disposiciones nuevas) con lo que se dio por revisado del PCCF de cada ciclo y curso (`cursos/<curso>/<SIGLA>/vigia.yaml` de la carpeta de datos), y dice qué apartados y bloques se apoyan en cada norma que cambia. Precisa ADR-007 («consulta BOE y DOGV»).
+- **Motivo:** Programaciones ya hace esas consultas cada semana, con pausa entre peticiones, y CarlosFB revisa lo que encuentra antes de publicarlo; repetirlas daría dos registros de lo visto que pueden no coincidir. Así la app no necesita más red que la del catálogo publicado (RNF-1) y las pruebas no dependen de respuestas grabadas.
+- **Cómo:** `citas.py` casa cada cita de un bloque con el catálogo por id o por el principio del título («Decreto 114/2025»); si no casa con una sola norma, no se adivina: sale como «sin vigilar». Ejecutar el vigía solo lee; lo revisado se guarda a mano (`--revisado`), para que un aviso no desaparezca por mirarlo.
+- **Límite:** el catálogo publicado no lleva `vigia.yaml` (estado de trabajo de Programaciones): con él no se ven los textos consolidados ni las disposiciones nuevas, y el informe lo avisa. La carpeta de datos la mantiene CarlosFB con el catálogo de desarrollo, que sí lo lleva.
+- **Descartado:** consultar desde el PCCF la API del BOE y las huellas del DOGV de cada norma citada (duplica el vigía de Programaciones) y vigilar normas que no están en el catálogo (una cita por nombre no da su id: se pide que entre en el catálogo).
+
 ## ADR-015 · El documento tiene diseño propio, no el de las programaciones (2026-11-04)
 
 - **Decisión de CarlosFB:** el Word del PCCF rompe con el formato y el aspecto de las programaciones: diseño corporativo del centro, formal pero rompedor, que no parezca un documento genérico ni hecho con IA. Sustituye a ADR-005 y, en lo visual, a ADR-013.
@@ -54,7 +62,7 @@ Registro fechado de decisiones (ADR). Lo más reciente, arriba. El estado actual
 - **Decisión de CarlosFB:** el repositorio es público, `github.com/cferrerobonet/PCCF`, con el mismo ciclo de versiones que Programaciones: etiquetas `vX.Y.Z`, compilación en GitHub Actions (DMG de macOS, instalador y portable de Windows, portable de Linux) publicada como release, y actualización desde la app (botón dorado «↑ Actualizar a X.Y.Z» y ventana de novedades con la entrada del `CHANGELOG.md`).
 - **Consecuencias:** barrera de secretos desde el primer commit (gancho y CI «Secretos»); en el repositorio, nunca datos reales (docentes, empresas, alumnado) ni PCCF reales: van en la carpeta de datos (ADR-002); licencia MIT, como Programaciones; `CHANGELOG.md` en formato Keep a Changelog, porque sus entradas son las novedades que ve el profesorado.
 
-## ADR-007 · Vigía: avisa, nunca reescribe (2026-10-28)
+## ADR-007 · Vigía: avisa, nunca reescribe (2026-10-28) · cómo se entera de los cambios, precisado por ADR-016
 
 - **Decisión:** el vigía consulta BOE y DOGV, detecta modificaciones y derogaciones de las normas citadas e informa de los bloques afectados; no cambia ningún texto. El resumen con un modelo de lenguaje, si se hace, solo con un modelo local.
 - **Motivo:** petición de CarlosFB; la única red permitida es la del BOE y el DOGV (RNF-1).

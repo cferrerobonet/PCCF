@@ -4,6 +4,7 @@ Lo que falta por decidir o por recibir. Se pregunta a CarlosFB **de una en una**
 
 | Desde | Qué | De quién | Para |
 | --- | --- | --- | --- |
+| 2026-11-04 | Dos citas del apartado 16 que el catálogo de Programaciones no tiene y el vigía no puede vigilar: **Decreto 104/2018** y **Resolución de 23 de diciembre de 2021** (NEAE). Al revisar el bloque: o entran en el catálogo (con su id del DOGV) o se quitan de las citas | CarlosFB | MVP, apartado 16 |
 | 2026-11-04 | Si el PCCF fija un **modelo común de unidad de programación** (guía, 3.2 y anexo V) o lo deja a Programaciones | CarlosFB | F5 |
 | 2026-11-03 | Revisar la propuesta del apartado 16 (`centro/atencion-diversidad.md` de la carpeta de datos, en borrador): plan de centro que la recoge, procedimiento real de derivación al Gabinete Psicopedagógico y artículos de cada norma | CarlosFB y jefatura de departamento | MVP, apartado 16 |
 | 2026-11-03 | El catálogo no distingue las competencias personales y sociales de las profesionales (SEA: 19, de la a a la r): hay que marcarlas para el apartado 5 (ADR-011) | Desarrollo (Programaciones o PCCF) | F3, apartado 5 |

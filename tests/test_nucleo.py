@@ -11,9 +11,12 @@ from .conftest import CURSO
 
 
 # -- apartados -------------------------------------------------------------------------------------------------------
-def test_apartados_gm_gs_son_los_18_del_art_8_4():
+def test_apartados_gm_gs_son_los_18_del_art_8_4_y_los_2_de_la_guia():
     lista = apartados.apartados("GS")
-    assert [a.n for a in lista] == list(range(1, 19))
+    assert [a.n for a in lista] == list(range(1, 21))
+    assert [a.n for a in lista if a.origen == "norma"] == list(range(1, 19))
+    assert [a.n for a in lista if a.origen == "guia"] == [19, 20]
+    assert all(a.guia == f"2.3.{a.n - 1}" for a in lista)
     assert lista == apartados.apartados("GM")
     assert apartados.apartado("GS", 1).titulo == "Identificación del ciclo formativo"
     assert apartados.apartado("GS", 16).titulo == "Atención a la Diversidad"

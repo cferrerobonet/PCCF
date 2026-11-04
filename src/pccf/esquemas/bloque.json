@@ -5,7 +5,7 @@
   "required": ["tipo", "apartado", "origen", "estado", "aportado_por", "fecha"],
   "properties": {
     "tipo": {"enum": ["centro", "ciclo", "anual", "normativo"]},
-    "apartado": {"type": "integer", "minimum": 1, "maximum": 18},
+    "apartado": {"type": "integer", "minimum": 1, "maximum": 20},
     "origen": {
       "type": "string",
       "description": "catálogo, equipo, propuesta (texto sugerido que el equipo revisa) o «heredado del curso AAAA-AAAA»",

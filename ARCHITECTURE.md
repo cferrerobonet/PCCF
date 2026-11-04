@@ -9,7 +9,7 @@ Cómo está hecha la app. Producto: [PRD.md](PRD.md) · diseño: [DESIGN.md](DES
 | Lenguaje | Python 3.11 | El de Programaciones y Partes de salida |
 | Interfaz | PyQt6 6.7 (mismas versiones que Programaciones) | Se copian sus componentes (`ui/`), su diseño y su empaquetado; `QTextEdit` edita Markdown |
 | Datos | YAML (datos) + Markdown con cabecera YAML (textos), validados con JSON Schema (`jsonschema`) | Legibles y editables a mano; git da versionado y comparación |
-| Documento | Plantilla sacada de la de Programaciones (`scripts/plantilla.py`) y cuerpo escrito con `lxml` (ADR-013) | Conserva la identidad del centro (encabezado, pie, estilos); el cuerpo sale de los datos |
+| Documento | Plantilla propia construida por `scripts/plantilla.py` con las fuentes Barlow incrustadas, y cuerpo escrito con `lxml` (ADR-013 y ADR-015) | Diseño propio del PCCF (`DESIGN.md` § Documento), igual en cualquier equipo; el cuerpo sale de los datos |
 | PDF | Word del equipo (AppleScript en macOS, COM en Windows), como Programaciones | Sin dependencias nuevas |
 | Catálogo | El publicado y firmado por Programaciones (rama `catalogo-publicado`, firma Ed25519 que la app verifica con `cryptography`) | Un solo dato oficial para las dos apps |
 | Red | Solo BOE, DOGV, página de normativa de FP de la Conselleria y catálogo publicado | RNF-1 |
@@ -24,15 +24,17 @@ Cómo está hecha la app. Producto: [PRD.md](PRD.md) · diseño: [DESIGN.md](DES
 src/pccf/
   catalogo.py      lee el catálogo de Programaciones (copia de su lector); en desarrollo, el de su repositorio, al lado
                    (`PCCF_CATALOGO` lo cambia); la descarga del publicado y firmado llega con el empaquetado
-  apartados.py     apartados por grado, con títulos literales (`recursos/apartados/gm-gs.yaml`)
+  apartados.py     apartados por grado, con títulos literales y su punto de la guía de la DGFP
+                   (`recursos/apartados/gm-gs.yaml`: los 18 del art. 8.4 y el 19 y el 20 de la guía, ADR-014)
   datos.py         carga la carpeta de datos (`PCCF_DATOS`; en desarrollo, `../PCCF - DATOS/`), la valida con los
                    esquemas y da el modelo en memoria; lo que falta llega como None («pendiente»)
   bloques.py       bloques Markdown con cabecera: tipo, apartado, estado, autoría, citas
   derivados.py     lo calculado: identificación (1), marco normativo (2), módulo × competencia (4); después,
                    distribución horaria, RA en FE…
   citas.py         índice inverso norma → bloques que la citan
-  documento.py     el Word: portada por marcas, índice enlazado y cuerpo escrito con los estilos de la plantilla
-                   (ADR-013); marca «BORRADOR» si queda algo pendiente o en borrador
+  documento.py     el Word (ADR-015): portada, control del documento, contenido enlazado, apartados con su apertura y
+                   lo que pide la guía si están pendientes, matriz apaisada y anexos A y B; borrador en portada y
+                   encabezado si queda algo pendiente o en borrador
   ooxml.py         paquete .docx en memoria, relaciones y utilidades de párrafo (copia de Programaciones)
   __main__.py      sin interfaz: `python -m pccf generar|comprobar <SIGLA> <curso>`
   cursos.py        «Nuevo curso» (clonar) y «Comparar» (diferencias por apartado)
@@ -40,7 +42,7 @@ src/pccf/
   ui/              interfaz PyQt6 (copiada de Programaciones)
   esquemas/        JSON Schema de cada archivo de datos (bloque, equipo, departamentos)
   recursos/apartados/ · recursos/plantilla/
-scripts/plantilla.py  crea la plantilla desde la de Programaciones y la comprueba (ADR-013)
+scripts/plantilla.py  crea la plantilla desde cero, con las fuentes incrustadas, y la comprueba (ADR-015)
 tests/             pytest con un catálogo y una carpeta de datos ficticios (`tests/datos/`)
 ```
 
@@ -50,7 +52,7 @@ tests/             pytest con un catálogo y una carpeta de datos ficticios (`te
 erDiagram
   CICLO ||--o{ PCCF : "uno por curso"
   CURSO ||--o{ PCCF : ""
-  PCCF ||--|{ APARTADO : "18 (art. 8.4)"
+  PCCF ||--|{ APARTADO : "20 (art. 8.4 + guía)"
   APARTADO ||--|{ BLOQUE : "se compone de"
   BLOQUE }o--o{ NORMA : "cita (artículo)"
   CICLO ||--|{ MODULO : "catálogo"
@@ -66,7 +68,7 @@ erDiagram
 | Familia o departamento | Del catálogo (familia profesional) y `centro/departamentos.yaml` de la carpeta de datos (qué departamento lleva cada ciclo) | Para agrupar los ciclos y saber qué jefatura aprueba |
 | Curso académico | `cursos/AAAA-AAAA/` en la carpeta de datos | |
 | PCCF | Ciclo × curso | Estado: borrador, revisado, aprobado (fecha y órgano) |
-| Apartado | Lista fija **por grado** en `src/pccf/recursos/apartados/` (GM-GS: los 18 del Decreto 114/2025, art. 8.4; GB: los 17 del Decreto 117/2025, art. 8.4; títulos literales) y los de la Resolución del curso | Cada uno dice qué bloques admite y de qué tipo |
+| Apartado | Lista fija **por grado** en `src/pccf/recursos/apartados/` (GM-GS: los 18 del Decreto 114/2025, art. 8.4, y el 19 y el 20 de la guía de la DGFP; GB: los 17 del Decreto 117/2025, art. 8.4, y los de la guía; títulos literales), cada uno con su punto de la guía (`guia`) y su origen (`norma` o `guia`) | Cada uno dice qué bloques admite y de qué tipo |
 | **Bloque** | Markdown con cabecera YAML | `tipo` (`centro`, `ciclo`, `anual`, `normativo`, `derivado`), `apartado`, `origen` (catálogo, equipo, heredado del curso X, o propuesta: texto sugerido que el equipo revisa), `estado` (borrador o confirmado), `aportado_por`, `fecha`, `citas` (norma y artículo) |
 | Norma | `normativa.yaml` del catálogo + normas propias del centro (`normativa.yaml` de la carpeta de datos) | Id BOE o DOGV, título, enlace, vigencia, fecha de comprobación |
 | Cita | Calculada al cargar | Índice inverso para el vigía |
@@ -78,6 +80,9 @@ erDiagram
 
 ```
 03 APPS Y WEBS/PCCF (python)/
+  GUÍA PCCF (DGFP 2024-2025)/  la guía de la DGFP: PDF, espejo troceado e índice (base del contenido, ADR-014)
+  Maqueta v0 (2026-10-28)/     maqueta de la interfaz (aprobada)
+  Maqueta documento v1 (2026-11-04)/  maqueta del Word (aprobada, ADR-015)
   PCCF - CÓDIGO FUENTE/      repositorio de la app (código, esquemas, plantilla, pruebas con datos ficticios)
   PCCF - DATOS/              carpeta de datos con su propio git (de CarlosFB; nunca en GitHub público)
     centro/                  bloques de centro (atencion-diversidad.md, plan-tutoria.md, ideario.md…)

@@ -1,12 +1,12 @@
 # PCCF
 
-App de escritorio para generar el **Proyecto Curricular de Ciclo Formativo** de FP (Decreto 114/2025, art. 8.4) desde datos estructurados, en Word con la plantilla del centro. Para todos los ciclos y departamentos de EPLA (grado básico, medio y superior). App hermana de [Programaciones](https://github.com/cferrerobonet/programaciones_fp), cuyo catálogo curricular lee.
+App de escritorio para generar el **Proyecto Curricular de Ciclo Formativo** de FP (Decreto 114/2025, art. 8.4) desde datos estructurados, en Word con diseño propio del centro. El contenido sigue la guía práctica del PCCF de la Dirección General de FP de la Generalitat Valenciana. Para todos los ciclos y departamentos de EPLA (grado básico, medio y superior). App hermana de [Programaciones](https://github.com/cferrerobonet/programaciones_fp), cuyo catálogo curricular lee.
 
-**Estado:** diseño y maqueta aprobados y entorno preparado (2026-11-03); todavía sin código de la app. Licencia MIT.
+**Estado:** MVP en curso (2026-11-04): núcleo de datos y Word con los apartados 1, 2, 4 y 16; diseño propio del documento, pendiente de aprobar. Licencia MIT.
 
 | Documento | Qué cuenta |
 | --- | --- |
-| [PRD.md](PRD.md) | Qué hace, para quién, los 18 apartados y la hoja de ruta |
+| [PRD.md](PRD.md) | Qué hace, para quién, los 20 apartados y la hoja de ruta |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Stack, componentes, modelo de datos, carpetas y vigía |
 | [DESIGN.md](DESIGN.md) | Interfaz y documento |
 | [docs/DECISIONES.md](docs/DECISIONES.md) | Decisiones fechadas |

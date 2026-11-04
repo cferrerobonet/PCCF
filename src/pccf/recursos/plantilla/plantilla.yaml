@@ -1,7 +1,33 @@
 # Generado por scripts/plantilla.py crear: no se edita a mano.
-version: '2026-11-03'
-origen: Plantilla de Programaciones (src/programaciones/recursos/plantilla/es), portada
-  del PCCF
+version: '2026-11-04'
+origen: scripts/plantilla.py crear (diseño propio, ADR-015)
 idiomas:
 - es
-vinetas: '8'
+vinetas: '1'
+ancho: 9751
+col_margen: 1928
+sangria: 2268
+margenes:
+  top: 1361
+  right: 1021
+  bottom: 1361
+  left: 1134
+  header: 624
+  footer: 567
+colores:
+  v9: 14401A
+  v7: '206028'
+  oro: C98A1E
+  oro_t: 8A5A0B
+  t: 1E2420
+  t2: 47504A
+  t3: 6E7771
+  l: D5DBD6
+  l2: ECEFEC
+  blanco: FFFFFF
+fuentes:
+  texto: Barlow
+  semi: Barlow SemiBold
+  cond: Barlow Condensed
+  cond_semi: Barlow Condensed SemiBold
+  cond_extra: Barlow Condensed ExtraBold

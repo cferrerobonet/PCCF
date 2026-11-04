@@ -2,7 +2,23 @@
 
 Registro fechado de decisiones (ADR). Lo más reciente, arriba. El estado actual está en `PRD.md`, `ARCHITECTURE.md` y `DESIGN.md`.
 
-## ADR-013 · Plantilla derivada de la de Programaciones y cuerpo escrito en código (2026-11-03)
+## ADR-015 · El documento tiene diseño propio, no el de las programaciones (2026-11-04)
+
+- **Decisión de CarlosFB:** el Word del PCCF rompe con el formato y el aspecto de las programaciones: diseño corporativo del centro, formal pero rompedor, que no parezca un documento genérico ni hecho con IA. Sustituye a ADR-005 y, en lo visual, a ADR-013.
+- **Aprobada por CarlosFB el 2026-11-04** y programada el mismo día: `DESIGN.md` § Documento y la maqueta `../Maqueta documento v1 (2026-11-04)/`: portada con bloque verde a sangre y las siglas del ciclo, control del documento con registro de revisiones, retícula con columna de margen para los números de apartado, base normativa bajo cada título, tablas sin rejilla, matrices apaisadas con celdas rellenas, «Pendiente» con filetes de oro y Barlow incrustada.
+- **Cómo se buscó:** guías públicas de diseño con mucho uso, de las que se toma la lista de lo que delata un diseño genérico (antetítulos, barras laterales de color, tarjetas iguales, tipos del sistema), adaptada al papel en `DESIGN.md`, y la mecánica de OOXML. Descartadas las recetas de documento «corporativo» con Calibri o Aptos: dan justo el aspecto que se quiere evitar.
+- **Consecuencia:** `scripts/plantilla.py` construye la plantilla desde cero e incrusta las fuentes Barlow (licencia OFL); sin marca de agua: el borrador se ve en la portada y en el encabezado. **Medidas de prevención de riesgos laborales** que la guía incluye en el PCCF (2.1): en el apartado 14, como subapartado propio (decisión de CarlosFB: van ligadas al uso de talleres y equipos).
+- **Descartado:** mantener la plantilla de Programaciones con otra portada; diseño en Canva o en otra herramienta externa (el documento se genera desde datos y lo edita el equipo en Word).
+
+## ADR-014 · La guía práctica de la DGFP es la base del contenido (2026-11-04)
+
+- **Decisión de CarlosFB:** el contenido de los PCCF sigue al pie de la letra, en la medida de lo posible, la «Guía práctica para el docente» del PCCF de la Dirección General de FP (curso 2024-2025): sus apartados, lo que pide en cada uno, sus tablas y sus fichas.
+- **Cómo:** la lista de apartados lleva para cada uno su punto de la guía (apartado N = 2.3.(N−1)) y suma los dos que la guía añade al art. 8.4: **19 «Otros aspectos del proyecto curricular»** (2.3.18; aquí van las actividades del profesorado durante la FE de la Resolución de 2026-2027, §17.8.1) y **20 «Las programaciones didácticas de los módulos y/o proyectos»** (2.3.19). El documento añade el control del documento con el registro de revisiones (2.2) y los anexos A (ficha de empresa, anexo III) y B (programa formativo personalizado, anexo IV).
+- **Donde choca con la norma, manda la norma:** títulos literales del Decreto 114/2025 (la guía cambia los de 2.3.7, 2.3.8, 2.3.15 y 2.3.17), Orden 8/2025 en lugar de la Orden 79/2010, plazo del art. 8.2, grado básico con sus 17 apartados y los términos de la LO 3/2022. La tabla completa está en el índice de la guía.
+- **Dónde está:** el PDF, su espejo troceado en ocho partes y su índice (qué pide cada apartado, en qué trozo y con qué ejemplo) están en `../GUÍA PCCF (DGFP 2024-2025)/`, **fuera del repositorio**: la licencia de la guía (CC BY-NC-ND 4.0) no casa con la MIT del repositorio. Aquí solo se cita.
+- **Descartado:** usar la guía solo como orientación (planteamiento de ADR-005).
+
+## ADR-013 · Plantilla derivada de la de Programaciones y cuerpo escrito en código (2026-11-03) · la plantilla, sustituida por ADR-015; el cuerpo escrito en código sigue
 
 - **Decisión:** `scripts/plantilla.py crear` saca la plantilla del PCCF de la de Programaciones: conserva estilos, numeración, tema, encabezados, pies y la sección de la portada; cambia la portada (departamento, horas del ciclo, jefatura y curso) y la franja del encabezado («Proyecto curricular»), y deja dos marcas de párrafo, `{{indice}}` y `{{cuerpo}}`. `documento.py` escribe el cuerpo apartado por apartado con los estilos de la plantilla y el índice con hipervínculos y campos de página, que Word actualiza al abrir.
 - **Motivo:** el cuerpo depende de los datos (18 apartados, cada uno con tablas calculadas o bloques de texto de longitud variable). Las marcas de repetición de Programaciones están pensadas para un documento fijo y aquí no aportarían nada.
@@ -48,7 +64,7 @@ Registro fechado de decisiones (ADR). Lo más reciente, arriba. El estado actual
 
 - **Decisión de CarlosFB:** Identificación (ciclo + anual), Marco normativo (normativo), Contribución de cada módulo a las competencias profesionales (derivado) y Atención a la diversidad (centro): los cinco tipos de contenido en cuatro apartados.
 
-## ADR-005 · El Word parte de la plantilla de las programaciones (2026-10-28)
+## ADR-005 · El Word parte de la plantilla de las programaciones (2026-10-28) · sustituida por ADR-015
 
 - **Decisión de CarlosFB:** no hay PCCF previo que seguir; el documento usa la plantilla de las programaciones del centro (encabezado, pie, tipografías, índice, legislación con hipervínculo) y el motor de plantilla con marcas de Programaciones, con los 18 apartados del art. 8.4.
 - **Descartado:** el anexo I de la guía de la DGFP, que es un PDF de ejemplo, sin plantilla editable.

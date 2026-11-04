@@ -62,7 +62,8 @@ Tabla en [PRD.md §2](../PRD.md). Fuente de los identificadores: `catalogo/norma
 - URL: https://ceice.gva.es/documents/388109149/390831792/PCCF_Guia_practica_docente.pdf/8bc62623-4792-05b4-707f-3ad694f6be0b?t=1741783900533
 - Enlazada desde https://ceice.gva.es/es/web/formacion-profesional/avaluacio («Guía Práctica para el Desarrollo Curricular en FP»).
 - **Sin plantilla Word**: solo PDF, con un anexo I de ejemplo (CFGM Preimpresión Digital, en parte).
-- **Anterior al Decreto 114/2025**: cita la Orden 79/2010 para la evaluación y avisa de que habrá cambios. Sirve de orientación, no de norma.
+- **Anterior al Decreto 114/2025**: cita la Orden 79/2010 para la evaluación y avisa de que habrá cambios. Desde el 2026-11-04 es la **base del contenido** de la app (ADR-014); donde choca con la norma, manda la norma.
+- **Copia local** (2026-11-04): PDF, espejo literal en ocho trozos (con la página del original en cada título) e índice con qué pide cada apartado, en `../GUÍA PCCF (DGFP 2024-2025)/`, fuera del repositorio por la licencia. Huella SHA-256 del PDF: `f5729de7982c20ccecfd96c0baddccf805f8254542b145321fb871ae5c2803e0`.
 - Índice: 0 Introducción · 1 Normativa · 2 PCCF · 3 Programación didáctica por competencias · 4 Evaluación · anexos I (ejemplo de PCCF), II (programación), III (ficha de base de datos de empresas), IV (ficha de programas formativos en empresa), V-VI (unidades de programación) · glosario.
 - Lo útil para el modelo (apartado 2.3):
   - 2.3.2 Las competencias profesionales no se suprimen: **se ponderan con porcentajes** (el ejemplo suma 100 %), tras consultar al consejo territorial y al prospector de empresas.

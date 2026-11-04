@@ -4,7 +4,7 @@ Qué es la app, para quién y qué debe hacer. Técnica: [ARCHITECTURE.md](ARCHI
 
 ## 1. Qué es
 
-App de escritorio para generar el **Proyecto Curricular de Ciclo Formativo (PCCF)** de **todos los ciclos de FP de EPLA y de todos sus departamentos** (centro concertado, Comunitat Valenciana): grado básico, medio y superior, en Word con la plantilla del centro.
+App de escritorio para generar el **Proyecto Curricular de Ciclo Formativo (PCCF)** de **todos los ciclos de FP de EPLA y de todos sus departamentos** (centro concertado, Comunitat Valenciana): grado básico, medio y superior, en Word con un diseño propio del centro (ADR-015). **El contenido sigue la guía práctica de la DGFP para el PCCF** (ADR-014): sus apartados, lo que pide en cada uno, sus tablas y sus fichas, al pie de la letra en la medida de lo posible; donde choque con la norma vigente, manda la norma.
 
 Ciclos del centro (los del catálogo de Programaciones, comprobado el 2026-10-21):
 
@@ -28,7 +28,7 @@ Ciclos del centro (los del catálogo de Programaciones, comprobado el 2026-10-21
 | RD de cada título (SEA: RD 1127/2010, BOE-A-2010-15355, modificado por los RD 401/2023 y 500/2024) | Identificación, perfil, competencias, módulos y orientaciones pedagógicas |
 | Orden 8/2025, de 22 de abril (DOGV-C-2025-13083), modificada por la Orden 5/2026 (DOGV-C-2026-10102) | Evaluación en los ciclos LOFP |
 | Resolución de instrucciones de inicio de curso (2026-2027: de 16 de julio de 2026, DOGV-C-2026-24495) | §6: quién elabora y aprueba el PCCF; §17.8.1: actividades del profesorado durante la FE; §19.1: evaluación del PCCF (la CCP propone al claustro el plan; evalúa el equipo educativo) |
-| Guía práctica de la DGFP para el PCCF (2025) | Orientativa y anterior al Decreto 114/2025 |
+| Guía práctica de la DGFP para el PCCF (curso 2024-2025) | **Base del contenido** (ADR-014): estructura (apartado 2.3), qué pide cada apartado, ejemplo de PCCF (anexo I) y fichas de empresa y de programa formativo (anexos III y IV). Anterior al Decreto 114/2025 y a la Orden 8/2025: donde choque, manda la norma. Espejo troceado e índice en `../GUÍA PCCF (DGFP 2024-2025)/` (fuera del repositorio: licencia CC BY-NC-ND) |
 
 El vigía (§6) mantiene esta tabla al día; la vigencia comprobada y los enlaces están en `docs/INVESTIGACION.md`.
 
@@ -53,37 +53,42 @@ Cada bloque de texto lleva su tipo como metadato:
 | `normativo` | Referencias a normas con identificador, artículo citado y estado de vigencia; cada referencia sabe en qué bloques aparece | Marco normativo |
 | `derivado` | Tablas y textos calculados desde los datos; nunca se escriben a mano | Matriz módulo × competencia, distribución horaria, RA en FE, criterios del Proyecto intermodular |
 
-## 5. Los apartados (art. 8.4) y su automatización
+## 5. Los apartados (art. 8.4 y guía de la DGFP) y su automatización
 
-GM y GS: los 18 del Decreto 114/2025, art. 8.4. **GB: 17** (Decreto 117/2025, art. 8.4): los mismos menos el 11 (Digitalización y Sostenibilidad), con el 18 como «Proyecto intermodular de aprendizaje colaborativo», y los requisitos de inicio de la FE (art. 7.3) dentro del 9 o del 10. La app guarda la lista de cada grado; nada la da por supuesta.
+GM y GS: los 18 del Decreto 114/2025, art. 8.4, con sus títulos literales, y los dos que añade la guía de la DGFP (2.3.18 y 2.3.19): **20**. Apartado N = punto 2.3.(N−1) de la guía, que dice qué pide cada uno (índice de la guía: columna «Qué pide la guía»). **GB: 17 del decreto + los 2 de la guía** (Decreto 117/2025, art. 8.4): los mismos menos el 11 (Digitalización y Sostenibilidad), con el 18 como «Proyecto intermodular de aprendizaje colaborativo», y los requisitos de inicio de la FE (art. 7.3) dentro del 9 o del 10. La app guarda la lista de cada grado; nada la da por supuesta.
 
-| # | Apartado (literal) | Tipo | Automatizable |
-| --- | --- | --- | --- |
-| 1 | Identificación del ciclo formativo | ciclo + anual | Alta |
-| 2 | Marco normativo para el desarrollo del proyecto curricular | normativo | Alta |
-| 3 | Adecuación y arreglo de las competencias profesionales del título al contexto socioeconómico y cultural del centro | ciclo + derivado | Media: lista del RD; ponderación (%) y motivo, del equipo |
-| 4 | Contribución de cada módulo a las competencias profesionales del ciclo | derivado | Alta: orientaciones pedagógicas del RD, ajustable |
-| 5 | Contribución de cada módulo a las competencias para la empleabilidad del ciclo | derivado + ciclo | Media: competencias personales y sociales del RD del título, del catálogo, sin ponderar (ADR-011) |
-| 6 | Enfoques didácticos y metodológicos | ciclo | Baja |
-| 7 | La organización y distribución de los módulos profesionales | derivado | Alta: horas del Decreto 95/2026 |
-| 8 | Criterios de organización, comunicación y desarrollo de la evaluación del aprendizaje | normativo + ciclo | Media |
-| 9 | Base de datos de empresas u organismos equiparados para la formación en empresa, y criterios de asignación del alumnado | anual + ciclo | Media |
-| 10 | Criterios para la realización de los planes formativos individuales | ciclo + derivado | Media |
-| 11 | Criterios para adaptar los módulos de Digitalización y Sostenibilidad a las características específicas del perfil profesional del ciclo formativo | ciclo | Baja |
-| 12 | El plan de tutoría y orientación profesional | centro | Baja |
-| 13 | Concreción de los planes y programas del centro vinculados al currículo | anual | Baja |
-| 14 | Orientaciones para el uso de espacios, medios y equipamientos disponibles | ciclo | Baja (en el futuro, dotación desde la web de Pedidos) |
-| 15 | Criterios y procedimientos para la evaluación y revisión de la práctica docente | centro | Baja |
-| 16 | Atención a la Diversidad | centro | Baja |
-| 17 | Criterios para la planificación de actividades complementarias y extraescolares | ciclo + anual | Baja-media |
-| 18 | Criterios para la organización del módulo profesional de Proyecto intermodular | ciclo + derivado | Media |
-| — | Propuesta de actividades del profesorado durante la FE (Resolución 2026-2027, §17.8.1) | anual | Baja-media |
+| # | Apartado (literal) | Guía | Tipo | Automatizable |
+| --- | --- | --- | --- | --- |
+| 1 | Identificación del ciclo formativo | 2.3.0 | ciclo + anual | Alta |
+| 2 | Marco normativo para el desarrollo del proyecto curricular | 2.3.1 | normativo | Alta |
+| 3 | Adecuación y arreglo de las competencias profesionales del título al contexto socioeconómico y cultural del centro | 2.3.2 | ciclo + derivado | Media: lista del RD; ponderación (%) y motivo, del equipo |
+| 4 | Contribución de cada módulo a las competencias profesionales del ciclo | 2.3.3 | derivado | Alta: orientaciones pedagógicas del RD, ajustable |
+| 5 | Contribución de cada módulo a las competencias para la empleabilidad del ciclo | 2.3.4 | derivado + ciclo | Media: competencias personales y sociales del RD del título, del catálogo, sin ponderar (ADR-011) |
+| 6 | Enfoques didácticos y metodológicos | 2.3.5 | ciclo | Baja |
+| 7 | La organización y distribución de los módulos profesionales | 2.3.6 | derivado | Alta: horas del Decreto 95/2026 |
+| 8 | Criterios de organización, comunicación y desarrollo de la evaluación del aprendizaje | 2.3.7 | normativo + ciclo | Media |
+| 9 | Base de datos de empresas u organismos equiparados para la formación en empresa, y criterios de asignación del alumnado | 2.3.8 | anual + ciclo | Media |
+| 10 | Criterios para la realización de los planes formativos individuales | 2.3.9 | ciclo + derivado | Media |
+| 11 | Criterios para adaptar los módulos de Digitalización y Sostenibilidad a las características específicas del perfil profesional del ciclo formativo | 2.3.10 | ciclo | Baja |
+| 12 | El plan de tutoría y orientación profesional | 2.3.11 | centro | Baja |
+| 13 | Concreción de los planes y programas del centro vinculados al currículo | 2.3.12 | anual | Baja |
+| 14 | Orientaciones para el uso de espacios, medios y equipamientos disponibles | 2.3.13 | ciclo | Baja (en el futuro, dotación desde la web de Pedidos). Incluye las medidas de prevención de riesgos laborales consensuadas (guía, 2.1; ADR-015) |
+| 15 | Criterios y procedimientos para la evaluación y revisión de la práctica docente | 2.3.14 | centro | Baja |
+| 16 | Atención a la Diversidad | 2.3.15 | centro | Baja |
+| 17 | Criterios para la planificación de actividades complementarias y extraescolares | 2.3.16 | ciclo + anual | Baja-media |
+| 18 | Criterios para la organización del módulo profesional de Proyecto intermodular | 2.3.17 | ciclo + derivado | Media |
+| 19 | Otros aspectos del proyecto curricular (guía) | 2.3.18 | ciclo + anual | Baja. Aquí va la propuesta de actividades del profesorado durante la FE (Resolución 2026-2027, §17.8.1) |
+| 20 | Las programaciones didácticas de los módulos y/o proyectos (guía) | 2.3.19 | derivado | Alta: relación de módulos y su programación (las genera Programaciones) |
+| Anexo A | Ficha de empresa u organismo equiparado (guía, anexo III) | 2.3.8 | anual | Alta: modelo; los datos, de `empresas.yaml` |
+| Anexo B | Programa formativo personalizado (guía, anexo IV) | 2.3.9 | ciclo | Alta: modelo |
+
+Además, como pide la guía (2.2), el documento abre con el **control del documento**: quién lo elabora, coordina y aprueba, su incorporación a la PGA y el registro de revisiones.
 
 ## 6. Requisitos
 
 | Id | Requisito |
 | --- | --- |
-| RF-1 | Generar el PCCF de cualquier ciclo del centro (GB, GM o GS) y un curso en `.docx` con la plantilla de las programaciones del centro, con los apartados de su grado (los que no tengan contenido, con su título y «pendiente») |
+| RF-1 | Generar el PCCF de cualquier ciclo del centro (GB, GM o GS) y un curso en `.docx` con el diseño del documento (`DESIGN.md`), con los apartados de su grado (los que no tengan contenido, con su título y «pendiente» con lo que pide la guía) |
 | RF-2 | Editar los bloques de texto (Markdown) con su tipo, estado (borrador o confirmado) y autoría; lo oficial se ve, no se edita |
 | RF-3 | Leer del catálogo firmado de Programaciones ciclos, módulos, RA, horas y competencias, y calcular los derivados |
 | RF-4 | «Nuevo curso»: clonar el curso anterior; los bloques anuales pasan a borrador y hay que confirmarlos |
@@ -91,6 +96,7 @@ GM y GS: los 18 del Decreto 114/2025, art. 8.4. **GB: 17** (Decreto 117/2025, ar
 | RF-6 | **Vigía normativo**, a mano o programado: detectar modificaciones y derogaciones de las normas citadas (BOE y lo disponible del DOGV) e informar de los bloques afectados. **Nunca reescribe texto**: solo avisa. Sin resumen con un modelo de lenguaje (ADR-010) |
 | RF-7 | Exportar e importar un bloque suelto, para que el equipo aporte textos sin la carpeta entera |
 | RF-8 | Actualizaciones desde la app, como Programaciones: al arrancar y desde «Acerca de», aviso «↑ Actualizar a X.Y.Z» con las novedades de esa versión (`CHANGELOG.md`) e instalación sin pasos manuales |
+| RF-9 | Seguir la guía de la DGFP: cada apartado sabe su punto de la guía; la app enseña qué pide y su ejemplo, y el documento recoge sus tablas y fichas (ponderación en %, matrices, agrupaciones, fichas de empresa y de programa formativo) |
 | RNF-1 | Todo en local; sin bases de datos en servidor ni nube. La única red permitida: BOE y DOGV (vigía) y la descarga del catálogo publicado de Programaciones |
 | RNF-2 | Datos en archivos legibles y editables a mano (YAML y Markdown), en una carpeta con git |
 | RNF-3 | Instalación sencilla para el equipo: releases de `github.com/cferrerobonet/PCCF` (repositorio público) con DMG de macOS, instalador y portable de Windows y portable de Linux; para compartir los datos, se pasa la carpeta |
@@ -108,7 +114,7 @@ GM y GS: los 18 del Decreto 114/2025, art. 8.4. **GB: 17** (Decreto 117/2025, ar
 | --- | --- | --- |
 | F0 | Diseño, documentación de partida e investigación | Hecha (2026-10-28) |
 | F1 | Repositorio con barrera de secretos, maqueta de la interfaz aprobada y entorno | Hecha (2026-11-03) |
-| F2 | **MVP** (en curso: núcleo de datos y Word con los apartados 1, 2, 4 y 16, 2026-11-03): SEA, curso 2026-2027, apartados 1, 2, 4 y 16 (los cinco tipos de contenido), Word, vigía, «Nuevo curso» y «Comparar» | Pendiente |
+| F2 | **MVP** (en curso: núcleo de datos y Word con los apartados 1, 2, 4 y 16, 2026-11-03; estructura de la guía y maqueta del documento v1, 2026-11-04): SEA, curso 2026-2027, apartados 1, 2, 4 y 16 (los cinco tipos de contenido), Word con el diseño propio, vigía, «Nuevo curso» y «Comparar» | Pendiente |
 | F3 | Resto de apartados de SEA | Pendiente |
 | F4 | Resto de ciclos del centro (ADR-012): STI, ARI, IEA e IT; después Automoción, Administración y Servicios Sociales; al final, Grado Básico con sus 17 apartados | Pendiente |
 | F5 | Programaciones lee del PCCF los acuerdos comunes | Pendiente |

@@ -1,60 +1,111 @@
-# Apartados del PCCF de grado medio y superior: Decreto 114/2025, art. 8.4 (títulos literales, comprobados en el DOGV:
-# docs/INVESTIGACION.md §1). «tipos»: de qué clase son sus bloques (PRD.md §5). El de grado básico (Decreto 117/2025,
-# 17 apartados) se añade con la F4.
+# Apartados del PCCF de grado medio y superior (ADR-014): los 18 del Decreto 114/2025, art. 8.4 (títulos literales,
+# comprobados en el DOGV: docs/INVESTIGACION.md §1) y los dos que añade la guía práctica de la DGFP (2.3.18 y 2.3.19).
+# «guia»: el punto de la guía que dice qué pide el apartado (apartado N = 2.3.(N-1)); «pide», lo que pide, en una frase
+# (sale en el documento cuando el apartado está pendiente). «tipos»: de qué clase son sus
+# bloques (PRD.md §5). El de grado básico (Decreto 117/2025, 17 apartados) se añade con la F4.
 norma: DOGV-C-2025-29742
 articulo: "8.4"
+guia: Guía práctica del PCCF, Dirección General de FP, curso 2024-2025, apartado 2.3
 apartados:
   - n: 1
+    guia: "2.3.0"
+    pide: "Denominación oficial, familia profesional y datos del ciclo; centro con su localización y equipo educativo responsable."
     titulo: Identificación del ciclo formativo
     tipos: [ciclo, anual]
   - n: 2
+    guia: "2.3.1"
+    pide: "Relación unificada de normas estatales, autonómicas y del centro, para que las programaciones no la repitan."
     titulo: Marco normativo para el desarrollo del proyecto curricular
     tipos: [normativo]
   - n: 3
+    guia: "2.3.2"
+    pide: "Análisis del contexto socioeconómico y cultural y del alumnado. Las competencias no se suprimen ni se modifican: se ponderan en %, tras consultar al consejo territorial y a la prospección de empresas."
     titulo: Adecuación y arreglo de las competencias profesionales del título al contexto socioeconómico y cultural del centro
     tipos: [ciclo, derivado]
   - n: 4
+    guia: "2.3.3"
+    pide: "Tabla de módulos por competencias según las orientaciones pedagógicas del real decreto del título, que el equipo debate y puede ajustar."
     titulo: Contribución de cada módulo a las competencias profesionales del ciclo
     tipos: [derivado]
   - n: 5
+    guia: "2.3.4"
+    pide: "Qué módulos trabajan cada competencia para la empleabilidad, sin ponderarlas; deben verse en rúbricas, listas de control e instrumentos de evaluación."
     titulo: Contribución de cada módulo a las competencias para la empleabilidad del ciclo
     tipos: [derivado, ciclo]
   - n: 6
+    guia: "2.3.5"
+    pide: "Principios metodológicos consensuados y de obligado cumplimiento para todo el profesorado del ciclo, con metodologías activas."
     titulo: Enfoques didácticos y metodológicos
     tipos: [ciclo]
   - n: 7
+    guia: "2.3.6"
+    pide: "Cómo se imparten los módulos: agrupaciones intermodulares u otros cambios de organización, respetando el currículo y todos los resultados de aprendizaje."
     titulo: La organización y distribución de los módulos profesionales
     tipos: [derivado]
   - n: 8
+    guia: "2.3.7"
+    pide: "Cómo se verifica la adquisición de los RA, cómo se informa al alumnado y a las familias, alternativas para los RA más difíciles y qué RA son imprescindibles para superar un módulo."
     titulo: Criterios de organización, comunicación y desarrollo de la evaluación del aprendizaje
     tipos: [normativo, ciclo]
   - n: 9
+    guia: "2.3.8"
+    pide: "Base de datos de las empresas que han colaborado, con los RA trabajados en cada una, y criterios de asignación del alumnado."
     titulo: Base de datos de empresas u organismos equiparados para la formación en empresa, y criterios de asignación del alumnado
     tipos: [anual, ciclo]
   - n: 10
+    guia: "2.3.9"
+    pide: "Documentos y protocolo para programar la formación en empresa de cada alumna o alumno (LO 3/2022, art. 58)."
     titulo: Criterios para la realización de los planes formativos individuales
     tipos: [ciclo, derivado]
   - n: 11
+    guia: "2.3.10"
+    pide: "Criterios para ajustar cada módulo: equipamiento, software, conectividad, inteligencia artificial y realidad virtual, protección de datos; residuos, reciclado y huellas de carbono e hídrica."
     titulo: Criterios para adaptar los módulos de Digitalización y Sostenibilidad a las características específicas del perfil profesional del ciclo formativo
     tipos: [ciclo]
   - n: 12
+    guia: "2.3.11"
+    pide: "Líneas estratégicas de la tutoría y la orientación para las programaciones, coordinadas con las comisiones colegiadas de orientación profesional."
     titulo: El plan de tutoría y orientación profesional
     tipos: [centro]
   - n: 13
+    guia: "2.3.12"
+    pide: "Cómo se aplican en el ciclo los planes y programas del centro: acciones, responsables y temporalización."
     titulo: Concreción de los planes y programas del centro vinculados al currículo
     tipos: [anual]
   - n: 14
+    guia: "2.3.13"
+    pide: "Criterios de uso compartido de talleres, laboratorios y aulas, con prioridades y protocolos, y las medidas de prevención de riesgos laborales consensuadas."
     titulo: Orientaciones para el uso de espacios, medios y equipamientos disponibles
     tipos: [ciclo]
   - n: 15
+    guia: "2.3.14"
+    pide: "Criterios y procedimientos comunes para evaluar la práctica docente, con modelos unificados, y cómo se evalúa y revisa el propio proyecto curricular."
     titulo: Criterios y procedimientos para la evaluación y revisión de la práctica docente
     tipos: [centro]
   - n: 16
+    guia: "2.3.15"
+    pide: "Adaptaciones organizativas, de acceso, curriculares y metodológicas, con los principios de normalización, inclusión y accesibilidad."
     titulo: Atención a la Diversidad
     tipos: [centro]
   - n: 17
+    guia: "2.3.16"
+    pide: "Criterios de pertinencia curricular, inclusión, coherencia con la programación y viabilidad, e información previa al alumnado y a las familias."
     titulo: Criterios para la planificación de actividades complementarias y extraescolares
     tipos: [ciclo, anual]
   - n: 18
+    guia: "2.3.17"
+    pide: "Selección de propuestas, tutorización, presentación, evaluación y calendario por fases del proyecto."
     titulo: Criterios para la organización del módulo profesional de Proyecto intermodular
     tipos: [ciclo, derivado]
+  - n: 19
+    guia: "2.3.18"
+    pide: "Cualquier otro acuerdo del equipo educativo; entre ellos, las actividades del profesorado durante la formación en empresa."
+    origen: guia
+    titulo: Otros aspectos del proyecto curricular
+    tipos: [ciclo, anual]
+  - n: 20
+    guia: "2.3.19"
+    pide: "Las programaciones didácticas de los módulos, que se elaboran a partir de este proyecto curricular."
+    origen: guia
+    titulo: Las programaciones didácticas de los módulos y/o proyectos
+    tipos: [derivado]

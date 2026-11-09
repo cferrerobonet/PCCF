@@ -132,7 +132,7 @@ class ZonaResumen(QWidget):
                                               lambda: self.pedir_apartado.emit(primero)))
         inf = e.informe
         if self.ctx.error:
-            self.avisos.addWidget(etiqueta(self.ctx.error, "aviso", envolver=True))
+            self.avisos.addWidget(etiqueta(f"✕ {self.ctx.error}", "error", envolver=True))
         elif inf is not None and (inf.hay_cambios or inf.no_vigentes):
             n = len(inf.cambios) + len(inf.no_vigentes)
             texto = (f"Vigía: {inf.cambios[0].cita} ha cambiado" if n == 1 and inf.cambios

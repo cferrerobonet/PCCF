@@ -84,8 +84,8 @@ ESTILOS = f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:style w:type="paragraph" w:styleId="ListBullet"><w:name w:val="List Bullet"/><w:basedOn w:val="Normal"/>
 <w:qFormat/><w:pPr><w:numPr><w:numId w:val="1"/></w:numPr><w:spacing w:after="60"/></w:pPr></w:style>
 <w:style w:type="paragraph" w:customStyle="1" w:styleId="NotaInterna"><w:name w:val="{ESTILO_NOTA}"/>
-<w:basedOn w:val="Normal"/><w:qFormat/><w:pPr><w:shd w:val="clear" w:color="auto" w:fill="FBF1D9"/>
-<w:ind w:left="170" w:right="170"/></w:pPr><w:rPr><w:i/><w:color w:val="6B5A2E"/></w:rPr></w:style>
+<w:basedOn w:val="Normal"/><w:qFormat/><w:pPr><w:shd w:val="clear" w:color="auto" w:fill="F2ECF8"/>
+<w:ind w:left="170" w:right="170"/></w:pPr><w:rPr><w:i/><w:color w:val="5E3D78"/></w:rPr></w:style>
 <w:style w:type="paragraph" w:customStyle="1" w:styleId="PCCFAviso"><w:name w:val="{ESTILO_AVISO}"/>
 <w:basedOn w:val="Normal"/><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="4" w:space="6" w:color="BFC8C1"/></w:pBdr>
 <w:spacing w:after="240"/></w:pPr><w:rPr><w:color w:val="5D6B60"/><w:sz w:val="18"/><w:szCs w:val="18"/></w:rPr>

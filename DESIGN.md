@@ -25,7 +25,7 @@
 | --- | --- |
 | Principal (tres zonas) | Izquierda: ciclo (agrupado por familia o departamento y grado, con buscador: son 15 ciclos) y curso, y los apartados de su grado (20 en GM y GS: los 18 del decreto y los 2 de la guía; 19 en GB) con su número, título corto, chips de tipo e icono de estado (pendiente, en borrador, confirmado). Centro: los bloques del apartado elegido. Derecha: progreso (apartados confirmados de 20), avisos del vigía, vista previa y «Exportar» |
 | Apartado con texto | Bloques con su chip de tipo, autoría y estado, editados como en Word; «Confirmar bloque»; «Importar Word…» |
-| Ajustes | Como en Programaciones y Partes de salida (ADR-022): menú lateral de 220 px en `surface2` y, a la derecha, el apartado con su título en Barlow Condensed y filas «etiqueta | control» con la ayuda debajo; cada cambio se guarda al momento y los errores salen en `warn` bajo su campo. Apartados: **Carpetas** (datos y catálogo, «Elegir…», «Abrir», «Volver al automático») · **Documento** (programa del PDF, correo del pie) · **Versión y catálogo** (versión con «Buscar actualizaciones» y «Acerca de…», versión y origen del catálogo, «Comprobar ahora», carpeta de la app) |
+| Ajustes | Como en Programaciones y Partes de salida (ADR-022): menú lateral de 220 px en `surface2` y, a la derecha, el apartado con su título en Barlow Condensed y filas «etiqueta | control» con la ayuda debajo; cada cambio se guarda al momento y los errores salen en rojo con «✕» bajo su campo (ADR-025). Apartados: **Carpetas** (datos y catálogo, «Elegir…», «Abrir», «Volver al automático») · **Documento** (programa del PDF, correo del pie) · **Versión y catálogo** (versión con «Buscar actualizaciones» y «Acerca de…», versión y origen del catálogo, «Comprobar ahora», carpeta de la app) |
 | Apartado derivado | Tabla calculada de solo lectura (p. ej. módulo × competencia) con su fuente, y debajo los ajustes del equipo con su motivo |
 | Marco normativo | Lista de normas con su estado (vigente, modificada, derogada) y, en cada una, los bloques que la citan |
 | Vigía | Informe de la última revisión: normas con cambios, qué cambia, enlace y bloques afectados; «Marcar como revisado» |
@@ -33,8 +33,8 @@
 
 ### Cómo está hecha (ADR-018)
 
-- **Avance (ADR-024)**, encima de la lista: «N apartados en GS · X completos · Y por completar» (y «⚠ N con aviso del vigía»), una barra en tres colores (confirmado `accent`, listo `accent_soft_fuerte`, por completar `warn`) y tres filtros en chip: «Todos», «Completar N» y «Aprobar N». Pedir un apartado que el filtro esconde vuelve a «Todos».
-- **Lista de apartados:** cada fila con una franja de 4 px a la izquierda y el número en su cuadro según el avance: **por completar**, ámbar (`warn_soft`) con borde discontinuo y «● Faltan N cosas» o «● Sin contenido»; **listo para aprobar**, verde claro y «◆ Listo · falta confirmarlo»; **confirmado**, verde lleno y «✓ Confirmado». El aviso del vigía va aparte, «⚠ vigía» en `danger`, sin tapar el avance. Título cortado al ancho; la ayuda lo da entero, con su motivo y la lista de lo que falta. El panel de la derecha cuenta los completos y pone primero los que se pueden confirmar ya.
+- **Avance (ADR-024)**, encima de la lista: «N apartados en GS · X completos · Y por completar» (y «⚠ N con aviso del vigía»), una barra en tres colores (confirmado `accent`, listo `accent_soft_fuerte`, por completar `pend`) y tres filtros en chip: «Todos», «Completar N» y «Aprobar N». Pedir un apartado que el filtro esconde vuelve a «Todos».
+- **Lista de apartados:** cada fila con una franja de 4 px a la izquierda y el número en su cuadro según el avance: **por completar**, ciruela (`pend_soft` y `pend`) con borde discontinuo y «● Faltan N cosas» o «● Sin contenido»; **listo para aprobar**, verde claro y «◆ Listo · falta confirmarlo»; **confirmado**, verde lleno y «✓ Confirmado». El aviso del vigía va aparte, «⚠ vigía» en `warn`, sin tapar el avance. Título cortado al ancho; la ayuda lo da entero, con su motivo y la lista de lo que falta. El panel de la derecha cuenta los completos y pone primero los que se pueden confirmar ya.
 - **Apartado:** cabecera con el número «de 20», el título, los chips, la base (norma · punto de la guía) y el estado; debajo, la caja plegable de la guía y, si toca, el aviso dorado del vigía con «Ver informe ›». Lo calculado va en cajas grises «Del catálogo» con su fuente; el 1 añade «Del centro» (departamento, jefatura, tutorías) y el equipo docente con «Confirmar equipo» si está heredado o en borrador y «Abrir equipo.yaml»; el 2, sus normas con lo que dice el vigía y cuántos usos tiene cada una, y las citas sin vigilar; el 3, las competencias con el peso pendiente; el 4, la matriz con puntos verdes y «sin orient.» en oro; el 7 y el 20, sus tablas.
 - **Bloque:** banda dorada «Heredado de … · revisa y confirma» o «En borrador · revisa y confirma» con «Confirmar bloque»; chip de tipo, nombre del archivo y autoría; editor como en Word (ADR-020) con su barra de chips (Subtítulo, N, Viñetas, Enlace…, Nota interna; ⌘B y ⌘K), que se guarda solo y nunca enseña Markdown: los subtítulos más grandes y en negrita, los enlaces subrayados y las notas internas sombreadas en ámbar y en cursiva; citas como chips azules (en ámbar las que el catálogo no conoce); «Exportar a Word…». Al final de cada apartado que admite texto, la caja discontinua con «Añadir bloque» e «Importar Word…» (un Word exportado vuelve a su bloque; cualquier otro, a un bloque nuevo del apartado).
 - **Derecha:** progreso, lo que necesita atención (revisar, heredado, borrador; se pulsa para ir), avisos dorados con «Ir ›», miniatura de la portada tras la vista previa, formatos Word y PDF y «Exportar» abajo.
@@ -71,6 +71,21 @@ Evitan el aspecto de documento genérico o de documento generado por IA (anti-pa
 - Marca de agua diagonal «BORRADOR»: el estado va en la portada y en el encabezado.
 - Números de sección de adorno: los números grandes son los de los apartados, que la norma y la guía usan para citarlos.
 - Monoespaciada: los códigos de módulo y RA van en Barlow Condensed SemiBold (la monoespaciada de la maqueta no se incrusta bien en Word por ser variable).
+
+### Significado de los colores (ADR-025)
+
+Cada significado tiene su color y su distintivo de forma (también para quien no distingue bien los colores). Error, aviso y consejo son los de Programaciones (su ADR-046).
+
+| Significado | Token | Distintivo | Dónde |
+| --- | --- | --- | --- |
+| Error: no se puede hacer o no vale | `danger`, `danger_soft` | ✕ | Carpeta de datos ilegible, dato que no vale en Ajustes, apartado que no se puede enseñar |
+| Aviso: ha cambiado algo y hay que mirarlo | `warn`, `warn_soft` | ⚠ / «!» | Vigía, citas sin vigilar, heredado del curso anterior, sin conexión |
+| Consejo y borrador: qué toca hacer | `info`, `info_soft` | ⓘ / punto azul | Lo que pide la guía, «En borrador · revisa y confirma» |
+| Por completar: falta contenido | `pend`, `pend_soft` (ciruela) | ● / borde discontinuo | Avance de la barra lateral, notas internas del editor y de Word, módulos sin orientación del RD |
+| Completo | `accent`, `accent_soft`, `accent_soft_fuerte` | ✓ / ◆ | Confirmado, listo para aprobar, códigos de módulo |
+| Marca | `gold`, `gold_soft` | — | Número del apartado, «Actualizar», novedades, chip `anual` |
+
+Los avisos, los errores y lo que falta no usan nunca el oro.
 
 ### Tokens
 

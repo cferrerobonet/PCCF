@@ -148,7 +148,7 @@ def formato_bloque(clase: str) -> QTextBlockFormat:
     f.setBottomMargin(4)
     if clase == "nota":
         f.setProperty(CLASE, "nota")
-        f.setBackground(QColor(estilo.T["warn_soft"]))
+        f.setBackground(QColor(estilo.T["pend_soft"]))
         f.setLeftMargin(6)
         f.setRightMargin(6)
     return f

@@ -4,6 +4,8 @@ Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones 
 
 ## [Sin publicar]
 
+- 2026-11-09 · Un color para cada cosa: errores en rojo (✕), avisos en ámbar (⚠), consejos y borradores en azul (ⓘ), lo que falta por completar en ciruela y lo completo en verde (ADR-025).
+
 ## [0.4.0] - 2026-11-09
 
 Todos los ciclos del centro y, de un vistazo, qué apartados están completos y cuáles faltan.

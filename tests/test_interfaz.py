@@ -170,7 +170,7 @@ def test_ajustes_con_menu_lateral_y_cambios_al_momento(ventana, qtbot, tmp_path,
     assert [d.nav.item(i).text() for i in range(d.nav.count())] == APARTADOS
     # carpeta de datos: una que no existe no se guarda; una buena, sí, y la ventana la recargará al cerrar
     assert not d.elegir_datos(str(tmp_path / "no-existe")) and not d.carpetas_cambiadas
-    assert d.estado_datos.property("rol") == "aviso-texto"
+    assert d.estado_datos.property("rol") == "error-texto" and d.estado_datos.text().startswith("✕")
     assert d.elegir_datos(str(datos.carpeta)) and d.carpetas_cambiadas
     # catálogo: sin normativa.yaml no vale; «Volver al automático» quita el fijado
     assert not d.elegir_catalogo(str(tmp_path))
@@ -216,3 +216,27 @@ def test_barra_lateral_separa_lo_completo_de_lo_que_falta(ventana, qtbot):
     assert sorted(visibles) == [1, 2, 4, 16, 20]
     z.ir(3)   # pedir uno que el filtro esconde: vuelven a verse todos
     assert z.filtro == "todos" and not any(z.lista.item(i).isHidden() for i in range(z.lista.count()))
+
+
+def test_error_aviso_consejo_y_por_completar_se_distinguen():
+    """ADR-025: cada significado con su color, separados al menos 25° de tono en claro y en oscuro; el oro, solo para la
+    marca, no se usa en avisos ni en lo que falta."""
+    import colorsys
+
+    from pccf.ui import estilo
+
+    def tono(h: str) -> float:
+        r, g, b = (int(h[i:i + 2], 16) / 255 for i in (1, 3, 5))
+        return colorsys.rgb_to_hls(r, g, b)[0] * 360
+
+    for paleta in (estilo.CLARO, estilo.OSCURO):
+        claves = ["danger", "warn", "info", "pend", "accent"]
+        for i, a in enumerate(claves):
+            for b in claves[i + 1:]:
+                d = abs(tono(paleta[a]) - tono(paleta[b]))
+                assert min(d, 360 - d) >= 25, f"{a} y {b} se parecen demasiado"
+    hoja = estilo.hoja(estilo.CLARO) if hasattr(estilo, "hoja") else ""
+    if hoja:
+        for regla in hoja.splitlines():
+            if "aviso" in regla or 'avance="vivo"' in regla or "error" in regla:
+                assert estilo.CLARO["gold"] not in regla, regla

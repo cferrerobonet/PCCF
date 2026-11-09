@@ -58,7 +58,8 @@ class DialogoVigia(QDialog):
         capa = _base(self, "Vigía normativo", 860, 640)
         inf = ctx.informe
         if inf is None:
-            capa.addWidget(etiqueta(ctx.error or "Sin informe", "aviso", envolver=True))
+            capa.addWidget(etiqueta(f"✕ {ctx.error}" if ctx.error else "Sin informe", "error" if ctx.error else "aviso",
+                                    envolver=True))
             return
         anterior = (f"comparado con la revisión del {inf.anterior}" if inf.anterior else
                     "es la primera revisión de este PCCF: no hay con qué comparar hasta marcarla como revisada")
@@ -75,13 +76,13 @@ class DialogoVigia(QDialog):
             lista.addWidget(self._cambio(c, "No vigente"))
         if inf.nuevas:
             f = self._caja("caja")
-            f.layout().addWidget(etiqueta("Disposiciones nuevas que ha visto el vigía de Programaciones", "aviso-texto"))
+            f.layout().addWidget(etiqueta("⚠ Disposiciones nuevas que ha visto el vigía de Programaciones", "aviso-texto"))
             for n in inf.nuevas:
                 f.layout().addWidget(etiqueta(f"• {n}", envolver=True))
             lista.addWidget(f)
         if inf.sin_vigilar:
             f = self._caja("caja")
-            f.layout().addWidget(etiqueta("Citas sin vigilar (el catálogo no las tiene)", "aviso-texto"))
+            f.layout().addWidget(etiqueta("⚠ Citas sin vigilar (el catálogo no las tiene)", "aviso-texto"))
             for cita, usos in inf.sin_vigilar.items():
                 f.layout().addWidget(etiqueta(f"• {cita} — {', '.join(sorted({u.detalle for u in usos}))}",
                                               envolver=True))
@@ -92,7 +93,7 @@ class DialogoVigia(QDialog):
                                           "Sin revisión anterior: no hay cambios que enseñar", "ok"))
             lista.addWidget(f)
         for a in inf.avisos:
-            lista.addWidget(etiqueta(a, "info", envolver=True))
+            lista.addWidget(etiqueta(f"ⓘ {a}", "info", envolver=True))
         lista.addStretch(1)
         capa.addWidget(desplazable(cuerpo), 1)
         nota = etiqueta("El vigía no cambia ningún texto: avisa. Revisa los bloques y márcalo como revisado.", "pequeno")

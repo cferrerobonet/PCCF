@@ -28,15 +28,17 @@ CLARO = {
     "bg": "#f3f5f1", "surface": "#ffffff", "surface2": "#eef2ec", "line": "#d9e0d5",
     "fg": "#1d2a20", "muted": "#5d6b60", "accent": "#2c7a3a", "accent_ink": "#ffffff",
     "accent_soft": "#e2f0e3", "accent_soft_fuerte": "#9fd0a6", "gold": "#b97a12", "gold_soft": "#fbf0d9",
-    "warn": "#9a5b00", "warn_soft": "#fff3dc", "danger": "#a32d2d",
-    "azul": "#2f5d8a", "azul_soft": "#e4edf6",
+    "warn": "#9a5b00", "warn_soft": "#fff3dc", "danger": "#a32d2d", "danger_soft": "#fbe9e7",
+    "azul": "#2f5d8a", "azul_soft": "#e4edf6", "info": "#2f5d8a", "info_soft": "#e4edf6",
+    "pend": "#7a4f9a", "pend_soft": "#f2ecf8",
 }
 OSCURO = {
     "bg": "#121713", "surface": "#1a211c", "surface2": "#222b24", "line": "#323d35",
     "fg": "#e4ebe5", "muted": "#9aa89d", "accent": "#5fbf6e", "accent_ink": "#0d1a10",
     "accent_soft": "#1f3524", "accent_soft_fuerte": "#3f7a4a", "gold": "#e3a94a", "gold_soft": "#3a2e17",
-    "warn": "#f0b45a", "warn_soft": "#3a2c14", "danger": "#f08a8a",
-    "azul": "#8fb6de", "azul_soft": "#1c2a38",
+    "warn": "#f0b45a", "warn_soft": "#3a2c14", "danger": "#f08a8a", "danger_soft": "#3b1f1f",
+    "azul": "#8fb6de", "azul_soft": "#1c2a38", "info": "#8fb6de", "info_soft": "#1c2a38",
+    "pend": "#c9a8ec", "pend_soft": "#2a2236",
 }
 
 T: dict[str, str] = dict(CLARO)
@@ -81,13 +83,16 @@ QLabel[rol="pequeno"] {{ color: {t['muted']}; font-size: 12px; }}
 QLabel[rol="etiqueta"] {{ color: {t['muted']}; }}
 QLabel[rol="ok"] {{ color: {t['accent']}; font-weight: 600; }}
 QLabel[rol="aviso-texto"] {{ color: {t['warn']}; font-weight: 600; }}
+QLabel[rol="error-texto"] {{ color: {t['danger']}; font-weight: 600; }}
+QLabel[rol="consejo-texto"] {{ color: {t['info']}; font-weight: 600; }}
 QLabel[rol="mono"] {{ font-family: "{MONO}"; font-size: 14px; }}
 QLabel[rol="titulo-vacio"] {{ color: {t['fg']}; }}
 QLabel[rol="tag-etapa"] {{ background: {t['gold_soft']}; color: {t['gold']}; font-weight: 600;
   font-size: 13px; padding: 3px 9px; border-radius: 5px; }}
 QLabel[rol="tag"] {{ background: {t['surface2']}; font-weight: 600; font-size: 13px; padding: 3px 9px; border-radius: 5px; }}
 QLabel[rol="aviso"] {{ background: {t['warn_soft']}; color: {t['warn']}; font-size: 13px; padding: 7px 9px; border-radius: 7px; }}
-QLabel[rol="pendiente"] {{ background: {t['warn_soft']}; color: {t['warn']}; font-weight: 600; border-radius: 8px; }}
+QLabel[rol="error"] {{ background: {t['danger_soft']}; color: {t['danger']}; font-size: 13px; padding: 7px 9px; border-radius: 7px; }}
+QLabel[rol="pendiente"] {{ background: {t['pend_soft']}; color: {t['pend']}; font-weight: 600; border-radius: 8px; }}
 QLabel[rol="tel"] {{ font-family: "{MONO}"; font-size: 14px; }}
 QLabel[rol="correo"] {{ color: {t['muted']}; font-size: 13px; }}
 QFrame[rol="caja"] {{ background: {t['surface']}; border: 1px solid {t['line']}; border-radius: 10px; }}
@@ -143,18 +148,21 @@ QLabel[rol="rojo"] {{ color: {t['danger']}; }}
 QLabel[rol="ra"] {{ color: {t['accent']}; font-family: "{MONO}"; font-weight: 700; font-size: 14px; }}
 QLabel[rol="letra"] {{ border: 1px solid {t['line']}; border-radius: 4px; background: {t['surface']};
   font-family: "{MONO}"; font-size: 12px; padding: 0 4px; }}
-QLabel[rol="codigo"] {{ color: {t['gold']}; }}
+QLabel[rol="codigo"] {{ color: {t['accent']}; }}
 QLabel[rol="cifra"] {{ color: {t['fg']}; }}
-QLabel[rol="info"] {{ background: {t['gold_soft']}; color: {t['warn']}; font-size: 13px; padding: 9px 12px;
+QLabel[rol="info"] {{ background: {t['info_soft']}; color: {t['info']}; font-size: 13px; padding: 9px 12px;
   border-radius: 8px; }}
 QLabel[rol="miniatura"] {{ border: 1px solid {t['line']}; background: {t['surface2']}; color: {t['muted']}; }}
 QFrame[rol="curriculo"] {{ background: {t['surface2']}; border: 1px solid {t['line']}; border-radius: 10px; }}
 QFrame[rol="codigo"] {{ background: {t['gold_soft']}; border: 0; border-radius: 12px; }}
-QFrame[rol="banda"] {{ background: {t['warn_soft']}; border: 0; border-top-left-radius: 10px;
+QFrame[rol="banda"][heredado="true"] {{ background: {t['warn_soft']}; }}
+QLabel[rol="banda"][heredado="true"] {{ color: {t['warn']}; }}
+QFrame[rol="banda"] {{ background: {t['info_soft']}; border: 0; border-top-left-radius: 10px;
   border-top-right-radius: 10px; }}
-QLabel[rol="banda"] {{ color: {t['warn']}; font-size: 14px; }}
+QLabel[rol="banda"] {{ color: {t['info']}; font-size: 14px; }}
 QFrame[rol="aviso-roja"] {{ border: 1px solid {t['danger']}; border-radius: 8px; background: {t['surface']}; }}
 QFrame[rol="aviso-ambar"] {{ border: 1px solid {t['warn']}; border-radius: 8px; background: {t['warn_soft']}; }}
+QFrame[rol="aviso-error"] {{ border: 1px solid {t['danger']}; border-radius: 8px; background: {t['danger_soft']}; }}
 QFrame[rol="dato"] QLabel {{ border: 0; }}
 QPushButton[enlace="true"] {{ background: transparent; border: 0; padding: 2px 4px; font-weight: 700; }}
 QPushButton[verde="true"] {{ color: {t['accent']}; }}
@@ -169,18 +177,20 @@ QLabel[tipo="cita"] {{ background: {t['azul_soft']}; color: {t['azul']}; font-fa
   font-weight: 500; }}
 QLabel[rol="numero"] {{ background: {t['gold_soft']}; color: {t['gold']}; border-radius: 6px; }}
 QLabel[rol="estado-confirmado"] {{ color: {t['accent']}; font-weight: 600; }}
-QLabel[rol="estado-borrador"], QLabel[rol="estado-heredado"] {{ color: {t['gold']}; font-weight: 600; }}
+QLabel[rol="estado-borrador"] {{ color: {t['info']}; font-weight: 600; }}
+QLabel[rol="estado-heredado"] {{ color: {t['warn']}; font-weight: 600; }}
+QLabel[rol="estado-pendiente"] {{ color: {t['pend']}; font-weight: 600; }}
 QLabel[rol="estado-revisar"] {{ color: {t['warn']}; font-weight: 600; }}
 QLabel[rol="estado-pendiente"] {{ color: {t['muted']}; font-weight: 600; }}
 QLabel[rol="mas"] {{ color: {t['accent']}; font-weight: 700; }}
 QLabel[rol="menos"] {{ color: {t['danger']}; font-weight: 700; }}
 QFrame[rol="bloque"] {{ background: {t['surface']}; border: 1px solid {t['line']}; border-radius: 10px; }}
-QFrame[rol="bloque"][heredado="true"] {{ border-color: {t['gold']}; }}
+QFrame[rol="bloque"][heredado="true"] {{ border-color: {t['warn']}; }}
 QFrame[rol="nuevo"] {{ background: transparent; border: 1.5px dashed {t['line']}; border-radius: 10px; }}
 QFrame[rol="guia"] {{ background: {t['surface2']}; border: 1px solid {t['line']}; border-radius: 10px; }}
-QFrame[rol="aviso-vigia"] {{ background: {t['gold_soft']}; border: 1px solid {t['gold']}; border-radius: 9px; }}
+QFrame[rol="aviso-vigia"] {{ background: {t['warn_soft']}; border: 1px solid {t['warn']}; border-radius: 9px; }}
 QLabel[rol="aviso-vigia"] {{ color: {t['warn']}; font-weight: 600; }}
-QPushButton[aviso="true"] {{ background: {t['gold_soft']}; border-color: {t['gold']}; color: {t['warn']}; }}
+QPushButton[aviso="true"] {{ background: {t['warn_soft']}; border-color: {t['warn']}; color: {t['warn']}; }}
 QPushButton[ok="true"] {{ background: transparent; border-color: transparent; color: {t['accent']}; }}
 QPushButton[ciclo="true"] {{ text-align: left; padding: 8px 12px; border-radius: 10px; }}
 QPushButton[formato="true"] {{ font-size: 13px; padding: 4px 14px; border-radius: 13px; }}
@@ -189,19 +199,19 @@ QPlainTextEdit#editor, QTextEdit#editor {{ background: {t['surface']}; border: 1
   font-size: 14px; }}
 QListWidget#apartados {{ background: transparent; border: 0; outline: 0; }}
 QWidget#fila {{ background: transparent; border-left: 4px solid transparent; border-radius: 0; }}
-QWidget#fila[avance="vivo"] {{ border-left-color: {t['warn']}; }}
+QWidget#fila[avance="vivo"] {{ border-left-color: {t['pend']}; }}
 QWidget#fila[avance="listo"] {{ border-left-color: {t['accent_soft_fuerte']}; }}
 QWidget#fila[avance="confirmado"] {{ border-left-color: {t['accent']}; }}
 QWidget#fila[avance="revisar"] {{ border-left-color: {t['danger']}; }}
 QLabel#numero-avance {{ border-radius: 7px; }}
-QLabel#numero-avance[avance="vivo"] {{ background: {t['warn_soft']}; color: {t['warn']}; border: 2px dashed {t['warn']}; }}
+QLabel#numero-avance[avance="vivo"] {{ background: {t['pend_soft']}; color: {t['pend']}; border: 2px dashed {t['pend']}; }}
 QLabel#numero-avance[avance="listo"] {{ background: {t['accent_soft']}; color: {t['accent']}; border: 2px solid {t['accent_soft_fuerte']}; }}
 QLabel#numero-avance[avance="confirmado"] {{ background: {t['accent']}; color: {t['accent_ink']}; border: 2px solid {t['accent']}; }}
 QLabel#numero-avance[avance="revisar"] {{ background: {t['danger']}; color: {t['accent_ink']}; border: 2px solid {t['danger']}; }}
 QLabel#avance {{ font-size: 12px; font-weight: 600; }}
-QLabel#avance[avance="vivo"] {{ color: {t['warn']}; }}
+QLabel#avance[avance="vivo"] {{ color: {t['pend']}; }}
 QLabel#avance[avance="listo"], QLabel#avance[avance="confirmado"] {{ color: {t['accent']}; }}
-QLabel#avance[avance="revisar"] {{ color: {t['danger']}; }}
+QLabel#avance[avance="revisar"] {{ color: {t['warn']}; }}
 QListWidget#apartados::item {{ border-radius: 8px; margin: 1px 0; }}
 QListWidget#apartados::item:selected {{ background: {t['accent_soft']}; color: {t['fg']}; }}
 QListWidget#apartados::item:hover {{ background: {t['surface2']}; }}
@@ -334,14 +344,14 @@ def icono_visto(color: str, tam: int = 16, circulo: bool = False) -> QPixmap:
     return _terminar(pm, p)
 
 
-#: Estado de un bloque o de una programación → (token del color, forma). DESIGN.md: verde confirmado, ámbar heredado
-#: o en curso, vacío sin empezar.
+#: Estado de un bloque o de un apartado → (token del color, forma). ADR-025: verde confirmado, azul en borrador (hay que
+#: revisarlo y confirmarlo), ámbar heredado o con aviso del vigía, ciruela pendiente (le falta contenido).
 ESTADOS = {
     "vacio": ("line", "anillo"),
-    "pendiente": ("muted", "anillo"),
+    "pendiente": ("pend", "anillo"),
     "heredado": ("warn", "punto"),
-    "borrador": ("warn", "punto"),
-    "en_curso": ("warn", "punto"),
+    "borrador": ("info", "punto"),
+    "en_curso": ("info", "punto"),
     "revisar": ("warn", "alerta"),
     "confirmado": ("accent", "visto"),
     "exportada": ("accent", "visto"),
@@ -363,7 +373,7 @@ def icono_estado(estado: str, tam: int = 16) -> QPixmap:
         p.drawEllipse(QRectF(s * 0.1, s * 0.1, s * 0.8, s * 0.8))
     else:
         p.setPen(Qt.PenStyle.NoPen)
-        p.setBrush(QColor(T["warn_soft"]))
+        p.setBrush(QColor(T.get(f"{color}_soft", T["surface2"])))
         p.drawEllipse(QRectF(s * 0.05, s * 0.05, s * 0.9, s * 0.9))
         p.setBrush(QColor(T[color]))
         p.drawEllipse(QRectF(s * 0.36, s * 0.36, s * 0.28, s * 0.28))

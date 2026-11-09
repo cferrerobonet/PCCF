@@ -5,7 +5,7 @@
 - Aviso del vigía si una norma en la que se apoya ha cambiado (no se ha tocado ningún texto).
 - Contenido según el apartado: lo oficial en gris y de solo lectura con su fuente; lo calculado, en tablas de solo
   lectura con «Se calcula de…»; los bloques del equipo, editables como en Word (ADR-020), con su chip de tipo, autoría y estado,
-  «Confirmar bloque» y la banda dorada si vienen heredados del curso anterior.
+  «Confirmar bloque» y la banda: azul si está en borrador, ámbar si viene heredada del curso anterior (ADR-025).
 
 Los bloques se guardan solos al dejar de escribir (un texto cambiado vuelve a borrador: hay que confirmarlo).
 """
@@ -97,7 +97,7 @@ def tabla(cabeceras: list[str], filas: list[list[str]], estirar: int = 1, mono: 
             it = QTableWidgetItem(valor)
             if j in mono:
                 it.setFont(estilo.fuente(13, familia=estilo.MONO))
-                it.setForeground(QColor(estilo.T["gold"]))
+                it.setForeground(QColor(estilo.T["accent"]))   # códigos en verde (ADR-025)
             if j in derecha:
                 it.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             t.setItem(i, j, it)
@@ -179,7 +179,7 @@ def matriz(k: derivados.Contribucion) -> QTableWidget:
         n = QTableWidgetItem(str(len(ls)) if ls else "sin orient.")
         n.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         if not ls:
-            n.setForeground(QColor(estilo.T["gold"]))
+            n.setForeground(QColor(estilo.T["pend"]))   # lo decide el equipo: por completar
             n.setToolTip("El real decreto no le asigna competencias (módulo nuevo de la LO 3/2022): lo decide el equipo")
         t.setItem(i, len(letras) + 1, n)
     t.setWordWrap(False)
@@ -223,11 +223,13 @@ class TarjetaBloque(QFrame):
         if not b.confirmado:
             banda = QFrame()
             banda.setProperty("rol", "banda")
+            banda.setProperty("heredado", hered)   # ámbar (aviso) si viene del curso anterior; azul si es borrador
             fb = QHBoxLayout(banda)
             fb.setContentsMargins(14, 7, 10, 7)
-            texto = (f"Heredado de {b.origen.rsplit(' ', 1)[-1]} · revisa y confirma" if hered
-                     else "En borrador · revisa y confirma")
+            texto = (f"⚠ Heredado de {b.origen.rsplit(' ', 1)[-1]} · revisa y confirma" if hered
+                     else "ⓘ En borrador · revisa y confirma")
             e = etiqueta(texto, "banda")
+            e.setProperty("heredado", hered)
             e.setFont(estilo.fuente(14, QFont.Weight.DemiBold))
             fb.addWidget(e, 1)
             self.boton_confirmar = boton("Confirmar bloque", pequeno=True, primario=True)
@@ -395,7 +397,7 @@ class VistaApartado(QWidget):
                 self.capa.addWidget(self._pendiente(ea))
         except Exception as ex:  # noqa: BLE001 - un dato mal no tumba la ventana: se dice
             logger.exception("Apartado %s", n)
-            self.capa.addWidget(etiqueta(f"No se puede enseñar este apartado: {ex}", "aviso", envolver=True))
+            self.capa.addWidget(etiqueta(f"✕ No se puede enseñar este apartado: {ex}", "error", envolver=True))
         for b in ea.bloques:
             t = TarjetaBloque(self.ctx, b)
             t.cambiado.connect(self.estados_cambiados)
@@ -580,11 +582,14 @@ class VistaApartado(QWidget):
         if tiene and not ident.equipo_confirmado:
             banda = QFrame()
             banda.setProperty("rol", "banda")
+            banda.setProperty("heredado", hered)
             fb = QHBoxLayout(banda)
             fb.setContentsMargins(14, 7, 10, 7)
-            texto = (f"Heredado de {ident.equipo_origen.rsplit(' ', 1)[-1]} · revisa y confirma" if hered
-                     else "En borrador · revisa y confirma")
-            fb.addWidget(etiqueta(texto, "banda"), 1)
+            texto = (f"⚠ Heredado de {ident.equipo_origen.rsplit(' ', 1)[-1]} · revisa y confirma" if hered
+                     else "ⓘ En borrador · revisa y confirma")
+            et = etiqueta(texto, "banda")
+            et.setProperty("heredado", hered)
+            fb.addWidget(et, 1)
             confirmar = boton("Confirmar equipo", pequeno=True, primario=True)
             confirmar.clicked.connect(self._confirmar_equipo)
             fb.addWidget(confirmar)
@@ -672,7 +677,7 @@ class VistaApartado(QWidget):
         self.capa.addWidget(f)
         if idx.sin_vigilar:
             f, capa = caja("aviso-ambar")
-            capa.addWidget(etiqueta("Citas sin vigilar", "aviso-texto"))
+            capa.addWidget(etiqueta("⚠ Citas sin vigilar", "aviso-texto"))
             capa.addWidget(etiqueta("Estas citas de los bloques no casan con una sola norma del catálogo: el vigía no "
                                     "puede vigilarlas. O entran en el catálogo o se quitan de las citas.", "muted",
                                     envolver=True))

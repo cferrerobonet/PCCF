@@ -2,6 +2,12 @@
 
 Registro fechado de decisiones (ADR). Lo más reciente, arriba. El estado actual está en `PRD.md`, `ARCHITECTURE.md` y `DESIGN.md`.
 
+## ADR-025 · Un color por significado: error, aviso, consejo, por completar, completo y marca (2026-11-09)
+
+- **Contexto.** CarlosFB: la app usaba el mismo naranja para avisos, errores y otras cosas. El ámbar (`warn`) y el oro (`gold`) marcaban a la vez errores (carpeta ilegible, dato no válido), avisos (vigía, heredado), lo que falta por completar (barra lateral, notas internas), consejos (lo que pide la guía) y la marca (número del apartado).
+- **Decisión de CarlosFB:** colores apropiados para cada cosa, que no desentonen. Error, aviso y consejo, como en Programaciones (su ADR-046): **error** en rojo con «✕» y fondo `danger_soft`; **aviso** en ámbar con «⚠»; **consejo y borrador** en azul con «ⓘ» (`info`, el azul que ya usaban las citas). **Por completar**, en un color nuevo, ciruela (`pend` y `pend_soft`: `#7a4f9a`/`#f2ecf8` en claro, `#c9a8ec`/`#2a2236` en oscuro), lejos en el círculo de color del verde, el oro, el ámbar, el rojo y el azul y que casa con el verde y el oro de EPLA. **Completo**, en verde, que pasa también a los códigos de módulo. El **oro** queda solo para la marca. La nota interna, en el editor y en el Word exportado, pasa al ciruela: casi siempre dice lo que falta.
+- **Consecuencias.** `DESIGN.md` § Significado de los colores. El Word del PCCF no cambia: su diseño (oro en «Pendiente» y «Borrador») es el de la maqueta aprobada. Prueba: `test_error_aviso_consejo_y_por_completar_se_distinguen` (tonos separados al menos 25° en claro y en oscuro).
+
 ## ADR-024 · La barra lateral distingue lo completo de lo que falta (2026-11-09)
 
 - **Contexto.** CarlosFB quiere ver «mucho más visual» qué apartados están rellenos del todo y solo requieren aprobación y cuáles son «apartados vivos que necesitan alimentarse todavía». La lista solo enseñaba el estado de confirmación con un icono pequeño.

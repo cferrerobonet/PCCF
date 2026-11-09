@@ -212,7 +212,7 @@ class BarraAvance(QWidget):
         if not total:
             return
         x = 0.0
-        colores = {"confirmado": estilo.T["accent"], "listo": estilo.T["accent_soft_fuerte"], "vivo": estilo.T["warn"]}
+        colores = {"confirmado": estilo.T["accent"], "listo": estilo.T["accent_soft_fuerte"], "vivo": estilo.T["pend"]}
         for clave in ("confirmado", "listo", "vivo"):
             ancho = self.width() * self.partes.get(clave, 0) / total
             if ancho:
@@ -297,8 +297,8 @@ class ZonaApartados(QWidget):
         listos = cuenta["listo"] + cuenta["confirmado"]
         revisar = len(e.con("revisar"))
         self.resumen.setText(f"{len(e.apartados)} apartados en {c['grado']} · <b style='color:{estilo.T['accent']}'>"
-                             f"{listos} completos</b> · <b style='color:{estilo.T['warn']}'>{cuenta['vivo']} por "
-                             "completar</b>" + (f" · <span style='color:{estilo.T['danger']}'>⚠ {revisar} con aviso "
+                             f"{listos} completos</b> · <b style='color:{estilo.T['pend']}'>{cuenta['vivo']} por "
+                             "completar</b>" + (f" · <span style='color:{estilo.T['warn']}'>⚠ {revisar} con aviso "
                                                 "del vigía</span>" if revisar else ""))
         self.resumen.setToolTip(f"{n} ciclos en el catálogo. Completos: {cuenta['confirmado']} confirmados y "
                                 f"{cuenta['listo']} listos para aprobar.")

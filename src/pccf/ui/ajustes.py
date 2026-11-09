@@ -203,7 +203,7 @@ class DialogoAjustes(QDialog):
             return False
         error = datos_validos(ruta)
         if error:
-            _rol(self.estado_datos, "aviso-texto", error)
+            _rol(self.estado_datos, "error-texto", f"✕ {error}")
             return False
         self._a.setValue("carpeta_datos", ruta)
         self.datos.setText(ruta)
@@ -219,7 +219,7 @@ class DialogoAjustes(QDialog):
             return False
         error = catalogo_valido(ruta)
         if error:
-            _rol(self.estado_catalogo, "aviso-texto", error)
+            _rol(self.estado_catalogo, "error-texto", f"✕ {error}")
             return False
         self._a.setValue("catalogo", ruta)
         self.catalogo.setText(ruta)
@@ -255,7 +255,7 @@ class DialogoAjustes(QDialog):
     def poner_correo(self, valor: str) -> bool:
         valor = valor.strip()
         if valor and not RE_CORREO.match(valor):
-            _rol(self.estado_correo, "aviso-texto", "No parece un correo: no se ha guardado")
+            _rol(self.estado_correo, "error-texto", "✕ No parece un correo: no se ha guardado")
             return False
         self._a.setValue("correo_pie", valor)
         _rol(self.estado_correo, "pequeno", "Guardado. Sale al pie de la portada." if valor else
@@ -335,8 +335,9 @@ class DialogoAjustes(QDialog):
         cuando = estado.get("ultima_comprobacion") or estado.get("ultimo_intento")
         if cuando:
             texto = f"{str(cuando)[:16].replace('T', ' ')} · {texto}" if texto else str(cuando)[:16].replace("T", " ")
-        _rol(self.catalogo_comprobado, "aviso-texto" if estado.get("resultado") in ("error", "sin_red") and not mensaje
-             else "pequeno", texto or "Todavía no se ha comprobado")
+        aviso = estado.get("resultado") in ("error", "sin_red") and not mensaje
+        _rol(self.catalogo_comprobado, "aviso-texto" if aviso else "pequeno",
+             (f"⚠ {texto}" if aviso else texto) or "Todavía no se ha comprobado")
 
     def buscar_actualizaciones(self) -> None:
         from .actualizar import buscar_actualizaciones, ofrecer

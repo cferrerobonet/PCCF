@@ -159,3 +159,37 @@ def test_qtpdf_disponible():
     from pccf.ui.vista_previa import comprobar_qtpdf
 
     assert "1 página" in comprobar_qtpdf()
+
+
+def test_ajustes_con_menu_lateral_y_cambios_al_momento(ventana, qtbot, tmp_path, datos, monkeypatch):
+    from pccf.ui import actualizar
+    from pccf.ui.ajustes import APARTADOS, DialogoAjustes
+
+    d = DialogoAjustes(ventana)
+    qtbot.addWidget(d)
+    assert [d.nav.item(i).text() for i in range(d.nav.count())] == APARTADOS
+    # carpeta de datos: una que no existe no se guarda; una buena, sí, y la ventana la recargará al cerrar
+    assert not d.elegir_datos(str(tmp_path / "no-existe")) and not d.carpetas_cambiadas
+    assert d.estado_datos.property("rol") == "aviso-texto"
+    assert d.elegir_datos(str(datos.carpeta)) and d.carpetas_cambiadas
+    # catálogo: sin normativa.yaml no vale; «Volver al automático» quita el fijado
+    assert not d.elegir_catalogo(str(tmp_path))
+    assert d.elegir_catalogo(str(ventana.ctx.cat.carpeta)) and d.boton_automatico.isEnabled()
+    d.catalogo_automatico()
+    assert d.catalogo.text() == "" and not d.boton_automatico.isEnabled()
+    # documento: el correo se valida y se guarda al momento; el programa del PDF, al elegirlo
+    assert not d.poner_correo("no es un correo")
+    assert d.poner_correo("departamento@example.com")
+    d.motor.setCurrentIndex(d.motor.findData("libreoffice"))
+    from pccf.ui.contexto import ajustes
+
+    assert ajustes().value("correo_pie", "", str) == "departamento@example.com"
+    assert ajustes().value("motor_pdf", "", str) == "libreoffice"
+    # versión: «Buscar actualizaciones» avisa también si está al día
+    llamadas = []
+    monkeypatch.setattr(actualizar, "buscar_actualizaciones", lambda padre, avisar_si_al_dia, al_encontrar:
+                        llamadas.append(avisar_si_al_dia))
+    d.ir("Versión y catálogo")
+    d.boton_buscar.click()
+    assert llamadas == [True]
+    assert not d.boton_comprobar.isEnabled()   # copia de desarrollo: el catálogo publicado no se comprueba

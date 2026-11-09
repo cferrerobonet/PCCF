@@ -4,6 +4,8 @@ Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones 
 
 ## [Sin publicar]
 
+- 2026-11-09 · Ajustes con menú lateral, como en las programaciones: carpetas, documento y versión; «Buscar actualizaciones» y «Comprobar ahora» el catálogo, sin cerrar la app. Cada cambio se guarda al momento (ADR-022).
+
 - 2026-11-09 · Portada: el nombre del ciclo, grande y a la derecha de las siglas, con su mismo alto, como el código y el nombre del módulo en las programaciones (ADR-021).
 
 ## [0.2.0] - 2026-11-09

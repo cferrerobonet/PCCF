@@ -2,14 +2,11 @@
 mientras se hace el documento."""
 from __future__ import annotations
 
-from pathlib import Path
-
 from PyQt6.QtCore import Qt, QUrl
 from PyQt6.QtGui import QDesktopServices, QFont
 from PyQt6.QtWidgets import (
     QComboBox,
     QDialog,
-    QFileDialog,
     QFormLayout,
     QFrame,
     QHBoxLayout,
@@ -392,78 +389,6 @@ class DialogoNuevoBloque(QDialog):
         except (DatosNoValidos, FileExistsError, OSError) as e:
             QMessageBox.warning(self, "Añadir bloque", str(e))
             return
-        self.accept()
-
-
-# ---------------------------------------------------------------------------------------------------------------------
-# Ajustes
-# ---------------------------------------------------------------------------------------------------------------------
-class DialogoAjustes(QDialog):
-    """Carpeta de datos, catálogo, programa del PDF y correo del pie de la portada (QSettings de este equipo)."""
-
-    def __init__(self, padre=None):
-        super().__init__(padre)
-        from .contexto import ajustes, carpeta_catalogo, carpeta_datos
-
-        self._a = ajustes()
-        capa = _base(self, "Ajustes", 720, 360)
-        form = QFormLayout()
-        form.setVerticalSpacing(10)
-        self.datos = self._carpeta(form, "Carpeta de datos", str(carpeta_datos()),
-                                   "La carpeta con git que mantiene el equipo (PCCF - DATOS)")
-        self.catalogo = self._carpeta(form, "Catálogo", str(carpeta_catalogo()),
-                                      "El catálogo curricular de Programaciones (carpeta «catalogo»)")
-        self.motor = QComboBox()
-        for texto, valor in (("Word y, si no, LibreOffice", "auto"), ("Solo Word", "word"),
-                             ("Solo LibreOffice", "libreoffice")):
-            self.motor.addItem(texto, valor)
-        self.motor.setCurrentIndex(max(0, self.motor.findData(self._a.value("motor_pdf", "auto", str))))
-        form.addRow("PDF con", self.motor)
-        self.correo = QLineEdit(self._a.value("correo_pie", "", str))
-        self.correo.setPlaceholderText("correo del centro para el pie de la portada (opcional)")
-        form.addRow("Correo del pie", self.correo)
-        capa.addLayout(form)
-        capa.addWidget(etiqueta("PCCF_DATOS y PCCF_CATALOGO, si están definidas, mandan sobre estas carpetas.",
-                                "pequeno", envolver=True))
-        capa.addStretch(1)
-        botones = QHBoxLayout()
-        botones.addStretch(1)
-        cancelar = boton("Cancelar")
-        cancelar.clicked.connect(self.reject)
-        botones.addWidget(cancelar)
-        guardar = boton("Guardar", primario=True)
-        guardar.clicked.connect(self.guardar)
-        botones.addWidget(guardar)
-        capa.addLayout(botones)
-
-    def _carpeta(self, form: QFormLayout, titulo: str, valor: str, ayuda: str) -> QLineEdit:
-        fila = QHBoxLayout()
-        campo = QLineEdit(valor)
-        campo.setToolTip(ayuda)
-        campo.setAccessibleName(titulo)
-        fila.addWidget(campo, 1)
-        elegir = boton("Elegir…", pequeno=True)
-        elegir.clicked.connect(lambda: self._elegir(campo, titulo))
-        fila.addWidget(elegir)
-        form.addRow(titulo, fila)
-        return campo
-
-    def _elegir(self, campo: QLineEdit, titulo: str) -> None:
-        ruta = QFileDialog.getExistingDirectory(self, titulo, campo.text())
-        if ruta:
-            campo.setText(ruta)
-
-    def guardar(self) -> None:
-        if not Path(self.datos.text()).is_dir():
-            QMessageBox.warning(self, "Ajustes", "La carpeta de datos no existe")
-            return
-        if not (Path(self.catalogo.text()) / "normativa.yaml").is_file():
-            QMessageBox.warning(self, "Ajustes", "En esa carpeta no hay un catálogo (falta normativa.yaml)")
-            return
-        self._a.setValue("carpeta_datos", self.datos.text())
-        self._a.setValue("catalogo", self.catalogo.text())
-        self._a.setValue("motor_pdf", self.motor.currentData())
-        self._a.setValue("correo_pie", self.correo.text().strip())
         self.accept()
 
 

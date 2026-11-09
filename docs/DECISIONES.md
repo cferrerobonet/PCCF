@@ -2,6 +2,12 @@
 
 Registro fechado de decisiones (ADR). Lo más reciente, arriba. El estado actual está en `PRD.md`, `ARCHITECTURE.md` y `DESIGN.md`.
 
+## ADR-022 · Ajustes como en Programaciones y Partes de salida, con «Buscar actualizaciones» (2026-11-09)
+
+- **Contexto.** CarlosFB: el diálogo de Ajustes «deja un poco que desear» en diseño y echa de menos «Buscar actualizaciones» (solo estaba en el menú Ayuda). Era un formulario con cuatro campos y «Guardar».
+- **Decisión de CarlosFB:** tomar como referencia Ajustes de Programaciones (su ADR-052), que copia el de Partes de salida: `ui/ajustes.py` con menú lateral y tres apartados (Carpetas, Documento, Versión y catálogo); cada cambio se guarda al momento y se valida en su campo (la carpeta de datos tiene que existir, el catálogo tiene que tener `normativa.yaml`, el correo del pie tiene que parecer un correo). En «Versión y catálogo», «Buscar actualizaciones» (avisa también si está al día; si hay versión nueva, cierra Ajustes y la ofrece), «Acerca de…» y «Comprobar ahora» el catálogo publicado sin esperar al día siguiente (solo en la app instalada y con el catálogo automático).
+- **Consecuencias.** Sin «Guardar» ni «Cancelar»: al cerrar, la ventana recarga los datos solo si cambiaron las carpetas, y el arranque, si faltan los datos, vuelve a intentarlo cuando las carpetas valen. `DialogoAjustes` sale de `dialogos.py`. Prueba: `test_ajustes_con_menu_lateral_y_cambios_al_momento`.
+
 ## ADR-021 · Portada: el nombre del ciclo con el alto de las siglas, como en Programaciones (2026-11-09)
 
 - **Contexto.** CarlosFB pide que la portada del PCCF ponga las siglas y el nombre del ciclo como Programaciones pone el código y el nombre del módulo (su ADR-049). El nombre salía en una línea pequeña bajo las siglas.

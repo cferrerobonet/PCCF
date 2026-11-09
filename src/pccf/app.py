@@ -105,8 +105,8 @@ def main(argv: list[str] | None = None) -> int:
     estilo.aplicar(app)
 
     from pccf.datos import CarpetaDatos
+    from pccf.ui.ajustes import DialogoAjustes
     from pccf.ui.contexto import Contexto
-    from pccf.ui.dialogos import DialogoAjustes
     from pccf.ui.ventana import VentanaPrincipal
 
     ctx = None

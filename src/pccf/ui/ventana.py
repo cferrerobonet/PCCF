@@ -20,11 +20,12 @@ from pccf.datos import WordSinBloque
 from pccf.rutas import carpeta_app, congelada
 
 from . import estilo
+from .ajustes import DialogoAjustes
 from .apartado import VistaApartado
 from .apartados import ZonaApartados
 from .componentes import AvisoFlotante, Tarea, boton, etiqueta, refrescar_estilo, separador_vertical
 from .contexto import ajustes
-from .dialogos import DialogoAjustes, DialogoEspera, DialogoNuevoBloque, DialogoNuevoCurso, DialogoVigia
+from .dialogos import DialogoEspera, DialogoNuevoBloque, DialogoNuevoCurso, DialogoVigia
 from .resumen import ZonaResumen
 from .vista_previa import DialogoVistaPrevia
 
@@ -289,8 +290,11 @@ class VentanaPrincipal(QMainWindow):
             return None
         return bloques.escribir_de_word(d.bloque.ruta, bloques.cabecera(d.bloque), imp.parrafos, self.ctx.hoy())
 
-    def abrir_ajustes(self) -> None:
-        if DialogoAjustes(self).exec():
+    def abrir_ajustes(self, apartado: str | None = None) -> None:
+        self.centro.guardar_pendiente()
+        d = DialogoAjustes(self, apartado)
+        d.exec()
+        if d.carpetas_cambiadas:
             from .contexto import Contexto
 
             try:
@@ -331,9 +335,10 @@ class VentanaPrincipal(QMainWindow):
             self.mostrar_al_frente()
             ofrecer(self, *self._actualizacion)
 
-    def comprobar_catalogo(self) -> None:
-        """En la app instalada, al arrancar y como mucho una vez al día: si hay un catálogo publicado más nuevo y
-        verificado, se pasa a él y el vigía dice qué ha cambiado. Con el catálogo fijado en Ajustes, nada."""
+    def comprobar_catalogo(self, forzar: bool = False, al_terminar=None) -> None:
+        """En la app instalada, al arrancar y como mucho una vez al día (o ya, desde Ajustes): si hay un catálogo
+        publicado más nuevo y verificado, se pasa a él y el vigía dice qué ha cambiado. Con el catálogo fijado en
+        Ajustes, nada. `al_terminar(resultado)`, después."""
         from .actualizar import buscar_catalogo
         from .contexto import catalogo_elegido
 
@@ -341,6 +346,8 @@ class VentanaPrincipal(QMainWindow):
             return
 
         def listo(res):
+            if al_terminar is not None:
+                al_terminar(res)
             if not res.nuevas:
                 return
             from pccf import catalogo_remoto
@@ -353,7 +360,7 @@ class VentanaPrincipal(QMainWindow):
                 self.ctx.recalcular()
                 self.aviso.mostrar(f"Catálogo {nuevo.version} verificado: el vigía dice qué ha cambiado", 6000)
 
-        buscar_catalogo(carpeta_app(), self.ctx.cat.version, listo)
+        buscar_catalogo(carpeta_app(), self.ctx.cat.version, listo, forzar=forzar)
 
     # -- documento ---------------------------------------------------------------------------------------------------
     def _opciones(self) -> documento.Opciones:

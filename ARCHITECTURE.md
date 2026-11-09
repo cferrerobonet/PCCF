@@ -58,7 +58,8 @@ src/pccf/
                    contexto.py (catálogo, datos, ciclo, curso, estado y vigía; ajustes en QSettings), ventana.py
                    (barra, tres zonas, menú, vista previa y exportar en segundo plano), apartados.py (ciclo y lista
                    de apartados), apartado.py (el apartado elegido y sus bloques), resumen.py (estado, vista previa
-                   y exportar) y dialogos.py (vigía, nuevo curso y comparar, nuevo bloque, ajustes)
+                   y exportar) dialogos.py (vigía, nuevo curso y comparar, nuevo bloque), ajustes.py (Ajustes con menú lateral, ADR-022) y
+                   editor.py (los bloques como en Word, ADR-020)
   esquemas/        JSON Schema de cada archivo de datos (bloque, equipo, departamentos)
   recursos/apartados/ · recursos/plantilla/
 scripts/plantilla.py  crea la plantilla desde cero, con las fuentes incrustadas, y la comprueba (ADR-015)

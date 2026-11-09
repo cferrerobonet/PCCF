@@ -45,8 +45,9 @@ class _Puente(QObject):
 _puentes: list[_Puente] = []
 
 
-def buscar_catalogo(carpeta: Path, actual: str, al_terminar) -> None:
-    """Catálogo publicado en segundo plano, como mucho una vez al día: `al_terminar(resultado)` en la interfaz."""
+def buscar_catalogo(carpeta: Path, actual: str, al_terminar, forzar: bool = False) -> None:
+    """Catálogo publicado en segundo plano, como mucho una vez al día (o ya, con `forzar`): `al_terminar(resultado)`
+    en la interfaz."""
     from threading import Thread
 
     from pccf import catalogo_remoto
@@ -59,7 +60,7 @@ def buscar_catalogo(carpeta: Path, actual: str, al_terminar) -> None:
         al_terminar(res)
 
     puente.resultado.connect(recibir)
-    Thread(target=lambda: puente.resultado.emit(catalogo_remoto.comprobar(carpeta, actual)), daemon=True).start()
+    Thread(target=lambda: puente.resultado.emit(catalogo_remoto.comprobar(carpeta, actual, forzar=forzar)), daemon=True).start()
 
 
 def buscar_actualizaciones(padre, avisar_si_al_dia: bool = False, al_encontrar=None) -> None:

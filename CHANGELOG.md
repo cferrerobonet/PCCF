@@ -4,6 +4,15 @@ Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones 
 
 ## [Sin publicar]
 
+## [0.5.0] - 2026-11-09
+
+Cada cosa con su color, para no confundir un aviso con un error ni con lo que falta por hacer.
+
+- Errores en rojo (✕), avisos en ámbar (⚠), borradores y consejos en azul (ⓘ), lo que falta por completar en ciruela y lo completo en verde.
+- Las notas internas de los textos, también en ciruela, en la app y en el Word que se exporta.
+
+### Cambiado
+
 - 2026-11-09 · Un color para cada cosa: errores en rojo (✕), avisos en ámbar (⚠), consejos y borradores en azul (ⓘ), lo que falta por completar en ciruela y lo completo en verde (ADR-025).
 
 ## [0.4.0] - 2026-11-09

@@ -1,7 +1,7 @@
 # Versión de la app (SemVer): aquí y en src/pccf/__init__.py, que un test compara.
 [project]
 name = "pccf"
-version = "0.2.0"
+version = "0.3.0"
 description = "Proyecto Curricular de Ciclo Formativo de FP desde datos, con la plantilla del centro, en Word"
 readme = "README.md"
 requires-python = ">=3.11"

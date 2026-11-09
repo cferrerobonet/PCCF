@@ -25,6 +25,7 @@ import yaml
 from lxml import etree
 
 from pccf import apartados, derivados, ooxml
+from pccf import portada as medidas_portada
 from pccf.bloques import Bloque
 from pccf.catalogo import Catalogo, Norma
 from pccf.datos import CarpetaDatos
@@ -411,6 +412,14 @@ ANCHO_APAISADA = 16838 - 2 * 1021
 # ---------------------------------------------------------------------------------------------------------------------
 # Portada y control del documento
 # ---------------------------------------------------------------------------------------------------------------------
+def _exacto(p, interlineado_pt: float, antes_pt: float = 0.0) -> None:
+    """Interlineado exacto (la base, al 80 % de la línea en Word y LibreOffice) y espacio antes, en pt."""
+    sp = ooxml.hijo(ooxml.ppr(p), "spacing", ooxml.ORDEN_PPR)
+    for k, v in (("before", round(antes_pt * 20)), ("after", 0), ("line", round(interlineado_pt * 20))):
+        sp.set(W + k, str(v))
+    sp.set(W + "lineRule", "exact")
+
+
 def portada(e: Escritor, ident: derivados.Identificacion, cat: Catalogo, borrador: bool, fecha: dt.date) -> list:
     c, f = e.c, e.f
     blanco = "FFFFFF"
@@ -432,8 +441,17 @@ def portada(e: Escritor, ident: derivados.Identificacion, cat: Catalogo, borrado
     pb = _e("pBdr", ooxml.ppr(regla))
     _e("top", pb, val="single", sz=12, space=1, color=c["oro"])
     ooxml.ordenar(ooxml.ppr(regla), ooxml.ORDEN_PPR)
-    siglas = p(ident.sigla, e.rpr(f["cond_extra"], 178, blanco))
-    nombre = p(ident.nombre, e.rpr(f["cond_semi"], 13, "E3EDE3"), jc="right")
+    # siglas a la medida de su celda y el nombre con su mismo alto, como en Programaciones (ADR-021)
+    med = medidas_portada.colocacion(ident.sigla, ident.nombre, (ancho - 6237 - m_der) / 20)
+    siglas = p(ident.sigla, e.rpr(f["cond_extra"], med["siglas_pt"], blanco))
+    _exacto(siglas, med["linea_siglas"])
+    nombre = e.parrafo((), None, jc="right")
+    for k, linea in enumerate(med["lineas"]):
+        if k:
+            _e("br", _e("r", nombre))
+        nombre.append(ooxml.run(linea, e.rpr(f["cond_semi"], med["nombre_pt"], blanco)))
+    _exacto(nombre, med["interlineado"], med["antes_nombre"])
+    arriba = round(med["arriba"] * 20)
     verde = {"fondo": "v9", "bordes": sin}
 
     def alto(tr_hijo, tw):
@@ -444,8 +462,8 @@ def portada(e: Escritor, ident: derivados.Identificacion, cat: Catalogo, borrado
         [{**verde, "p": p("Escuelas Profesionales Luis Amigó", sup), "mar": {"top": 850, "left": m_izq}},
          {**verde, "p": p(f"Curso {ident.curso}", sup, jc="right"), "mar": {"top": 850, "right": m_der}}],
         [{**verde, "p": [tit, regla], "span": 2, "mar": {"top": 1250, "left": m_izq}}],
-        [{**verde, "p": siglas, "va": "bottom", "mar": {"left": 936, "bottom": 0}},
-         {**verde, "p": nombre, "va": "bottom", "mar": {"right": m_der, "bottom": 680}}],
+        [{**verde, "p": siglas, "va": "top", "mar": {"top": arriba, "left": 936, "bottom": 0}},
+         {**verde, "p": nombre, "va": "top", "mar": {"top": arriba, "right": m_der, "bottom": 0}}],
     ]
     if borrador:
         filas.append([{"fondo": "oro", "bordes": sin, "span": 2, "va": "center", "mar": {"left": m_izq, "top": 0, "bottom": 0},

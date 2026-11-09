@@ -2,6 +2,12 @@
 
 Registro fechado de decisiones (ADR). Lo más reciente, arriba. El estado actual está en `PRD.md`, `ARCHITECTURE.md` y `DESIGN.md`.
 
+## ADR-021 · Portada: el nombre del ciclo con el alto de las siglas, como en Programaciones (2026-11-09)
+
+- **Contexto.** CarlosFB pide que la portada del PCCF ponga las siglas y el nombre del ciclo como Programaciones pone el código y el nombre del módulo (su ADR-049). El nombre salía en una línea pequeña bajo las siglas.
+- **Decisión:** `pccf/portada.py` mide la letra Barlow de los archivos que lleva la app (sin dependencias; la función de Programaciones) y calcula, para cada ciclo, la letra de las siglas (178 pt o la que quepa) y la letra, el interlineado exacto y los saltos de línea del nombre para que ocupe el alto de las mayúsculas de las siglas, con su última línea en la base de las siglas. Dos mejoras sobre Programaciones: ninguna línea queda con una palabra corta sola («y», «de»…) y, si ningún tamaño da justo ese alto, se toma el mayor cuyo bloque no lo pasa (antes, el nombre de SEA salía en cuatro líneas y por encima de las siglas).
+- **Consecuencias.** Los nombres de tres líneas llenan el alto; los cortos (Automoción, Integración social) quedan más bajos, apoyados en la base, como los módulos de nombre corto en Programaciones. Pruebas: `tests/test_portada.py`.
+
 ## ADR-020 · El equipo no ve Markdown: editor como en Word e importación de Word (2026-11-09)
 
 - **Contexto.** Los bloques se editan hoy como Markdown en texto plano y se exportan e importan como `.md` (RF-2 y RF-7). Quien redacta el PCCF es el equipo docente, que no sabe Markdown.

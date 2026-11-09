@@ -4,6 +4,8 @@ Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones 
 
 ## [Sin publicar]
 
+- 2026-11-09 · Portada: el nombre del ciclo, grande y a la derecha de las siglas, con su mismo alto, como el código y el nombre del módulo en las programaciones (ADR-021).
+
 ## [0.2.0] - 2026-11-09
 
 Los textos del PCCF se escriben como en Word: ya no hace falta saber Markdown.

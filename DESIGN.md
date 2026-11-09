@@ -84,7 +84,8 @@ Evitan el aspecto de documento genérico o de documento generado por IA (anti-pa
 
 | Papel | Tipo | Cuerpo |
 | --- | --- | --- |
-| Siglas de portada | Barlow Condensed ExtraBold | 178 pt |
+| Siglas de portada | Barlow Condensed ExtraBold | 178 pt, o la que quepa en su celda |
+| Nombre del ciclo en la portada | Barlow Condensed SemiBold | 14-64 pt, calculada para ocupar el alto de las siglas (ADR-021) |
 | Número de apartado | Barlow Condensed ExtraBold | 46 pt (40 en página apaisada) |
 | Título de apartado (Título 1) | Barlow Condensed Bold | 19 pt, interlineado 1,06 |
 | Subapartado (Título 2) | Barlow SemiBold; número en Barlow Condensed Bold | 11 pt |
@@ -105,7 +106,7 @@ Evitan el aspecto de documento genérico o de documento generado por IA (anti-pa
 
 | Pieza | Cómo es |
 | --- | --- |
-| Portada (sección sin márgenes) | Bloque `verde-900` a sangre en los dos tercios superiores: arriba, centro y curso en versalitas; «Proyecto curricular / de ciclo formativo» en blanco con filete de oro; siglas del ciclo enormes abajo a la izquierda y nombre del ciclo abajo a la derecha. Si es borrador, banda de oro «Borrador · pendiente de aprobación por el departamento». Debajo, ficha en 3 × 3 (título, grado y horas, familia, departamento, jefatura, curso, real decreto, currículo, revisión). Al pie, escudo, nombre y dirección del centro, y la base normativa (Decreto 114/2025, art. 8; Resolución de inicio de curso, §6.2) |
+| Portada (sección sin márgenes) | Bloque `verde-900` a sangre en los dos tercios superiores: arriba, centro y curso en versalitas; «Proyecto curricular / de ciclo formativo» en blanco con filete de oro; siglas del ciclo enormes abajo a la izquierda y, a su derecha, el nombre del ciclo alineado a la derecha, como el código y el nombre del módulo en Programaciones: ocupa el alto de las siglas, de lo alto de las mayúsculas a la base de la última línea, sin dejar sola una palabra corta; si es corto y no cabe más grande a lo ancho, apoya en la base de las siglas (ADR-021). Si es borrador, banda de oro «Borrador · pendiente de aprobación por el departamento». Debajo, ficha en 3 × 3 (título, grado y horas, familia, departamento, jefatura, curso, real decreto, currículo, revisión). Al pie, escudo, nombre y dirección del centro, y la base normativa (Decreto 114/2025, art. 8; Resolución de inicio de curso, §6.2) |
 | Control del documento | Página 2: elaboración, coordinación, aprobación, incorporación a la PGA, evaluación del PCCF y vigencia; **registro de revisiones** (revisión, fecha, apartados, motivo, estado), que pide la guía (2.2: documento vivo con sus mecanismos de revisión); firmas de la jefatura del departamento, la jefatura de estudios de FP y la dirección |
 | Contenido | Índice enlazado en tres grupos: apartados del art. 8.4, apartados que añade la guía (19 y 20) y anexos. Número en la columna de margen, título y página a la derecha **sin puntos guía**; los apartados sin contenido llevan «pendiente» en oro |
 | Apertura de apartado | Número en la columna de margen con filete de oro debajo; título; debajo, la **base**: norma y artículo · punto de la guía · origen de los datos («Se calcula del RD…», «Bloque de centro · borrador», «Vigía: comprobado el…») |

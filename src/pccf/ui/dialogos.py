@@ -350,19 +350,21 @@ LUGAR = {"centro": "común a todos los ciclos del centro", "ciclo": "del ciclo, 
 
 
 class DialogoNuevoBloque(QDialog):
-    def __init__(self, ctx, n: int, tipos: list[str], padre=None):
+    def __init__(self, ctx, n: int, tipos: list[str], padre=None, nombre: str = "", explicacion: str = ""):
         super().__init__(padre)
         self.ctx = ctx
         self.n = n
         self.bloque = None
         capa = _base(self, "Añadir bloque", 520, 300)
-        capa.addWidget(etiqueta(f"Apartado {n}. El bloque empieza vacío y en borrador.", "muted", envolver=True))
+        capa.addWidget(etiqueta(explicacion or f"Apartado {n}. El bloque empieza vacío y en borrador.", "muted",
+                                envolver=True))
         form = QFormLayout()
         self.tipo = QComboBox()
         for t in tipos:
             self.tipo.addItem(f"{t} · {LUGAR.get(t, '')}", t)
         self.nombre = QLineEdit()
         self.nombre.setPlaceholderText("p. ej. metodologia-taller")
+        self.nombre.setText(nombre)
         self.autor = QLineEdit()
         self.autor.setPlaceholderText("Equipo docente, departamento…")
         form.addRow("Tipo", self.tipo)

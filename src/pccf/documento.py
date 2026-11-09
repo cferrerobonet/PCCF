@@ -29,10 +29,10 @@ from pccf.bloques import Bloque
 from pccf.catalogo import Catalogo, Norma
 from pccf.datos import CarpetaDatos
 from pccf.ooxml import NS, W
+from pccf.texto import RE_EN_LINEA
 
 PLANTILLA = Path(__file__).resolve().parent / "recursos" / "plantilla"
 RE_MARCA = re.compile(r"\{\{(\w+)\}\}")
-RE_EN_LINEA = re.compile(r"\*\*(.+?)\*\*|\[([^\]]+)\]\((https?://[^)\s]+)\)")
 PENDIENTE = "Pendiente"
 GUIA = "Guía DGFP"
 R_ID = "{%s}id" % NS["r"]

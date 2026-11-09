@@ -7,7 +7,7 @@ from pathlib import Path
 
 import yaml
 
-from pccf import esquemas
+from pccf import esquemas, texto, word
 
 RE_CABECERA = re.compile(r"\A---\n(.*?)\n---\n?(.*)\Z", re.S)
 
@@ -108,3 +108,29 @@ def confirmar(b: Bloque, hoy: str) -> Bloque:
     ab, cab, cierre, cuerpo = _partes(b.ruta)
     cab = _fechar(poner(cab, "estado", "confirmado", "origen"), hoy)
     return _escribir(b.ruta, ab + cab + cierre + cuerpo)
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Word (ADR-020): el equipo escribe y revisa en Word; la carpeta de datos sigue en Markdown
+# ---------------------------------------------------------------------------------------------------------------------
+def cabecera(b: Bloque) -> str:
+    """La cabecera YAML del bloque tal como está escrita (con sus comentarios)."""
+    return _partes(b.ruta)[1]
+
+
+def a_word(b: Bloque, titulo: str) -> bytes:
+    """El `.docx` del bloque, con su cabecera y el nombre de su archivo dentro para devolverlo a su sitio."""
+    _ab, cab, _cierre, cuerpo = _partes(b.ruta)
+    aviso = (f"{titulo}. Escribe o corrige el texto debajo de esta línea, con los estilos de Word: Título 2 para los "
+             "subtítulos, viñetas, negrita y enlaces. Los párrafos sombreados son notas internas: no salen en el PCCF. "
+             "Guarda el archivo como Word y devuélvelo para importarlo en la app.")
+    return word.exportar(texto.de_markdown(cuerpo), titulo, aviso, cabecera=cab, archivo=b.ruta.name)
+
+
+def escribir_de_word(destino: Path, cabecera: str, parrafos: list[texto.Parrafo], hoy: str) -> Bloque:
+    """Un bloque que vuelve de Word: su cabecera, con el texto nuevo, en borrador y con la fecha de hoy (hay que
+    confirmarlo otra vez)."""
+    cab = cabecera.replace("\r\n", "\n").strip("\n") + "\n"
+    cab = _fechar(poner(cab, "estado", "borrador", "origen"), hoy)
+    destino.parent.mkdir(parents=True, exist_ok=True)
+    return _escribir(destino, "---\n" + cab + "---\n\n" + texto.a_markdown(parrafos) + "\n")

@@ -2,6 +2,13 @@
 
 Registro fechado de decisiones (ADR). Lo más reciente, arriba. El estado actual está en `PRD.md`, `ARCHITECTURE.md` y `DESIGN.md`.
 
+## ADR-020 · El equipo no ve Markdown: editor como en Word e importación de Word (2026-11-09)
+
+- **Contexto.** Los bloques se editan hoy como Markdown en texto plano y se exportan e importan como `.md` (RF-2 y RF-7). Quien redacta el PCCF es el equipo docente, que no sabe Markdown.
+- **Decisión de CarlosFB:** todo campo de texto del equipo se edita con un **editor visual (WYSIWYG) con barra de herramientas básica**, que solo ofrece lo que el Word sabe escribir; y lo que se importa o exporta es **Word (`.docx`)**, no Markdown.
+- **Cómo:** se parte del editor de Programaciones (su ADR-045: negrita, viñetas de tres niveles, atajos de Word, pegar desde Word conservando negrita y viñetas) y se le añade lo que escribe el motor del PCCF: subtítulos, enlaces y nota destacada. «Exportar bloque» da un `.docx` y «Importar bloque» lee un `.docx` (y, por compatibilidad, `.md` y `.txt`), quedándose con lo que el documento sabe escribir. El Markdown sigue siendo **el formato interno de la carpeta de datos** (legible y con historial en git, ADR-003), pero el usuario no lo ve nunca.
+- **Descartado:** un editor web (QtWebEngine), que pesa decenas de MB en los instaladores, como en Programaciones. Cursiva, subrayado y colores: el documento no los escribe.
+
 ## ADR-019 · Primera versión: compilación, actualizaciones y catálogo publicado dentro de la app (2026-11-04)
 
 - **Decisión de CarlosFB:** primera versión (0.1.0) con su compilación en GitHub, como Programaciones: DMG de macOS (arm64), instalador y portable de Windows y portable de Linux; la app avisa de las versiones nuevas con su entrada del `CHANGELOG.md` y las instala.

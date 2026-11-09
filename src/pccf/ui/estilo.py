@@ -185,7 +185,7 @@ QPushButton[ok="true"] {{ background: transparent; border-color: transparent; co
 QPushButton[ciclo="true"] {{ text-align: left; padding: 8px 12px; border-radius: 10px; }}
 QPushButton[formato="true"] {{ font-size: 13px; padding: 4px 14px; border-radius: 13px; }}
 QPushButton[formato="true"]:checked {{ background: {t['accent']}; border-color: {t['accent']}; color: {t['accent_ink']}; }}
-QPlainTextEdit#editor {{ background: {t['surface']}; border: 1px solid {t['line']}; border-radius: 8px; padding: 8px 10px;
+QPlainTextEdit#editor, QTextEdit#editor {{ background: {t['surface']}; border: 1px solid {t['line']}; border-radius: 8px; padding: 8px 10px;
   font-size: 14px; }}
 QListWidget#apartados {{ background: transparent; border: 0; outline: 0; }}
 QListWidget#apartados::item {{ border-radius: 8px; margin: 1px 0; }}

@@ -15,7 +15,8 @@ from PyQt6.QtGui import QAction, QDesktopServices, QFont, QImage, QKeySequence, 
 from PyQt6.QtPdf import QPdfDocument
 from PyQt6.QtWidgets import QFileDialog, QHBoxLayout, QLabel, QMainWindow, QMenu, QMessageBox, QVBoxLayout, QWidget
 
-from pccf import __version__, documento, pdf
+from pccf import __version__, bloques, documento, pdf, word
+from pccf.datos import WordSinBloque
 from pccf.rutas import carpeta_app, congelada
 
 from . import estilo
@@ -235,22 +236,58 @@ class VentanaPrincipal(QMainWindow):
             self.aviso.mostrar(f"Bloque añadido: {d.bloque.ruta.relative_to(self.ctx.datos.carpeta).as_posix()}")
 
     def importar_bloque(self) -> None:
-        ruta, _ = QFileDialog.getOpenFileName(self, "Importar bloque", str(Path.home()), "Bloque del PCCF (*.md)")
+        """Un Word exportado desde la app vuelve a su bloque; cualquier otro Word, a un bloque nuevo del apartado
+        abierto (ADR-020). Se aceptan también los bloques `.md` de la versión 0.1.0."""
+        ruta, _ = QFileDialog.getOpenFileName(self, "Importar Word", str(Path.home()),
+                                              "Word (*.docx);;Bloque de la versión 0.1.0 (*.md)")
         if not ruta:
             return
+        self.centro.guardar_pendiente()
+        origen = Path(ruta)
         try:
-            b = self.ctx.datos.importar_bloque(Path(ruta), self.ctx.sigla, self.ctx.curso)
-        except FileExistsError as e:
-            r = QMessageBox.question(self, "Importar bloque", f"{e}. ¿Lo sustituyes por el que traes?")
-            if r != QMessageBox.StandardButton.Yes:
+            try:
+                b = self.ctx.datos.importar_bloque(origen, self.ctx.sigla, self.ctx.curso, hoy=self.ctx.hoy())
+            except FileExistsError as e:
+                r = QMessageBox.question(self, "Importar Word", f"{e}. ¿Lo sustituyes por el texto que traes?")
+                if r != QMessageBox.StandardButton.Yes:
+                    return
+                b = self.ctx.datos.importar_bloque(origen, self.ctx.sigla, self.ctx.curso, sustituir=True,
+                                                   hoy=self.ctx.hoy())
+        except WordSinBloque:
+            b = self._word_a_bloque_nuevo(origen)
+            if b is None:
                 return
-            b = self.ctx.datos.importar_bloque(Path(ruta), self.ctx.sigla, self.ctx.curso, sustituir=True)
         except Exception as e:  # noqa: BLE001 - se dice qué le pasa al archivo
-            QMessageBox.warning(self, "Importar bloque", f"No se puede importar:\n{e}")
+            QMessageBox.warning(self, "Importar Word", f"No se puede importar:\n{e}")
             return
         self._repintar_todo()
         self.izquierda.ir(b.apartado)
-        self.aviso.mostrar(f"Importado en el apartado {b.apartado}: {b.ruta.name}")
+        self.aviso.mostrar(f"Importado en el apartado {b.apartado}, en borrador: {b.ruta.name}")
+
+    def _word_a_bloque_nuevo(self, origen: Path):
+        """Un Word cualquiera: su texto va a un bloque nuevo del apartado abierto (se pide el tipo y la autoría)."""
+        n = self.centro.n
+        if n is None:
+            QMessageBox.information(self, "Importar Word", "Elige antes el apartado al que va el texto")
+            return None
+        try:
+            imp = word.importar(origen.read_bytes())
+        except (OSError, word.WordNoValido) as e:
+            QMessageBox.warning(self, "Importar Word", str(e))
+            return None
+        if not imp.parrafos:
+            QMessageBox.warning(self, "Importar Word", "El Word no tiene texto")
+            return None
+        tipos = [t for t in self.ctx.estado.de(n).apartado.tipos if t != "derivado"]
+        if not tipos:
+            QMessageBox.information(self, "Importar Word", f"El apartado {n} se calcula: no lleva textos del equipo")
+            return None
+        d = DialogoNuevoBloque(self.ctx, n, tipos, self, nombre=origen.stem,
+                               explicacion=f"Apartado {n}. El texto de «{origen.name}» entra en un bloque nuevo, en "
+                                           "borrador." + ("".join(f" {a}." for a in imp.avisos)))
+        if not d.exec():
+            return None
+        return bloques.escribir_de_word(d.bloque.ruta, bloques.cabecera(d.bloque), imp.parrafos, self.ctx.hoy())
 
     def abrir_ajustes(self) -> None:
         if DialogoAjustes(self).exec():

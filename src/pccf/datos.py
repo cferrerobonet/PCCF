@@ -5,6 +5,7 @@ Solo lee. Lo que falta (un archivo que aún no existe) llega como None o lista v
 """
 from __future__ import annotations
 
+import datetime as dt
 import os
 import re
 import shutil
@@ -15,13 +16,17 @@ from pathlib import Path
 
 import yaml
 
-from pccf import bloques, esquemas
+from pccf import bloques, esquemas, word
 
 RAIZ = Path(__file__).resolve().parents[2]
 
 
 class DatosNoValidos(ValueError):
     pass
+
+
+class WordSinBloque(ValueError):
+    """Un Word que no viene de «Exportar bloque»: hay que decir a qué apartado y de qué tipo es."""
 
 
 def _sin_tildes(t: str) -> str:
@@ -159,10 +164,26 @@ class CarpetaDatos:
                            encoding="utf-8")
         return bloques.leer(destino)
 
-    def importar_bloque(self, origen: Path, sigla: str, curso: str, sustituir: bool = False) -> bloques.Bloque:
-        """Un bloque suelto que aporta alguien del equipo (RF-7): se valida y se copia en la carpeta de su tipo."""
+    def importar_bloque(self, origen: Path, sigla: str, curso: str, sustituir: bool = False,
+                        hoy: str | None = None) -> bloques.Bloque:
+        """Un bloque suelto que aporta alguien del equipo (RF-7): se valida y se guarda en la carpeta de su tipo.
+
+        Un Word exportado desde la app (ADR-020) vuelve a su archivo con el texto de Word, en borrador. Un Word
+        cualquiera no sabe a qué bloque va: da `WordSinBloque` (la interfaz pide entonces el apartado y el tipo).
+        Se aceptan también los `.md` exportados por la versión 0.1.0."""
+        origen = Path(origen)
+        if origen.suffix.lower() == ".docx":
+            imp = word.importar(origen.read_bytes())
+            if not imp.cabecera:
+                raise WordSinBloque(f"{origen.name} no se exportó desde la app: no dice a qué bloque va")
+            cab = esquemas.sin_fechas(yaml.safe_load(imp.cabecera) or {})
+            nombre = Path(imp.archivo or origen.stem + ".md").name
+            destino = self.carpeta_de_tipo(cab.get("tipo", ""), sigla, curso) / nombre
+            if destino.exists() and not sustituir:
+                raise FileExistsError(f"Ya hay un bloque {destino.relative_to(self.carpeta).as_posix()}")
+            return bloques.escribir_de_word(destino, imp.cabecera, imp.parrafos, hoy or dt.date.today().isoformat())
         b = bloques.leer(origen)
-        destino = self.carpeta_de_tipo(b.tipo, sigla, curso) / Path(origen).name
+        destino = self.carpeta_de_tipo(b.tipo, sigla, curso) / origen.name
         if destino.exists() and not sustituir:
             raise FileExistsError(f"Ya hay un bloque {destino.relative_to(self.carpeta).as_posix()}")
         destino.parent.mkdir(parents=True, exist_ok=True)

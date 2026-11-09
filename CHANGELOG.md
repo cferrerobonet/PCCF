@@ -4,6 +4,17 @@ Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones 
 
 ## [Sin publicar]
 
+## [0.2.0] - 2026-11-09
+
+Los textos del PCCF se escriben como en Word: ya no hace falta saber Markdown.
+
+- Editor con su barra: subtítulo, negrita, viñetas, enlace y nota interna (sombreada, no sale en el PCCF); los atajos de Word (⌘B o Ctrl+B, ⌘K o Ctrl+K) y «- » al principio para empezar una viñeta. Lo que pegues de Word conserva los títulos, las viñetas, la negrita y los enlaces.
+- «Exportar a Word…» guarda un bloque en Word para que alguien del equipo lo escriba o lo revise; «Importar Word…» lo devuelve a su sitio, en borrador. Un Word cualquiera entra como bloque nuevo del apartado abierto.
+
+### Cambiado
+
+- 2026-11-09 · Editor de los bloques como en Word e importación y exportación en Word (ADR-020). Los bloques `.md` exportados con la versión 0.1.0 se siguen pudiendo importar.
+
 ## [0.1.0] - 2026-11-04
 
 Primera versión del PCCF: el proyecto curricular de un ciclo y un curso, desde los datos del catálogo y los textos del equipo, en Word con el diseño del centro. Sirve ya para el ciclo de Sistemas Electrotécnicos y Automatizados (SEA) en 2026-2027, con los apartados 1, 2, 4 y 16; los demás salen «Pendiente» con lo que pide la guía de la DGFP.

@@ -7,7 +7,7 @@ Cómo está hecha la app. Producto: [PRD.md](PRD.md) · diseño: [DESIGN.md](DES
 | Pieza | Elección | Por qué |
 | --- | --- | --- |
 | Lenguaje | Python 3.11 | El de Programaciones y Partes de salida |
-| Interfaz | PyQt6 6.7 (mismas versiones que Programaciones) | Se copian sus componentes (`ui/`), su diseño y su empaquetado; `QTextEdit` edita Markdown |
+| Interfaz | PyQt6 6.7 (mismas versiones que Programaciones) | Se copian sus componentes (`ui/`), su diseño y su empaquetado; el equipo escribe en un editor como en Word (`ui/editor.py`, ADR-020) que guarda Markdown; nunca ve el Markdown |
 | Datos | YAML (datos) + Markdown con cabecera YAML (textos), validados con JSON Schema (`jsonschema`) | Legibles y editables a mano; git da versionado y comparación |
 | Documento | Plantilla propia construida por `scripts/plantilla.py` con las fuentes Barlow incrustadas, y cuerpo escrito con `lxml` (ADR-013 y ADR-015) | Diseño propio del PCCF (`DESIGN.md` § Documento), igual en cualquier equipo; el cuerpo sale de los datos |
 | PDF | Word del equipo (AppleScript en macOS, COM en Windows), como Programaciones | Sin dependencias nuevas |
@@ -32,7 +32,9 @@ src/pccf/
                    (`recursos/apartados/gm-gs.yaml`: los 18 del art. 8.4 y el 19 y el 20 de la guía, ADR-014)
   datos.py         carga la carpeta de datos (`PCCF_DATOS`; en desarrollo, `../PCCF - DATOS/`), la valida con los
                    esquemas y da el modelo en memoria; lo que falta llega como None («pendiente»)
-  bloques.py       bloques Markdown con cabecera: tipo, apartado, estado, autoría, citas
+  bloques.py       bloques Markdown con cabecera: tipo, apartado, estado, autoría, citas; a Word y desde Word
+  texto.py         el texto de un bloque como párrafos (párrafo, subtítulo, viñeta, nota) ↔ Markdown (ADR-020)
+  word.py          un bloque en .docx (cabecera y archivo en las propiedades del documento) y lectura de cualquier Word
   derivados.py     lo calculado: identificación (1), marco normativo (2), módulo × competencia (4); después,
                    distribución horaria, RA en FE…
   citas.py         índice inverso norma → apartados y bloques que se apoyan en ella (citas de los bloques, por id

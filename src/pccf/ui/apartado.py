@@ -4,7 +4,7 @@
 - La guía a la vista (ADR-014): caja plegable de solo lectura con su punto de la guía y lo que pide.
 - Aviso del vigía si una norma en la que se apoya ha cambiado (no se ha tocado ningún texto).
 - Contenido según el apartado: lo oficial en gris y de solo lectura con su fuente; lo calculado, en tablas de solo
-  lectura con «Se calcula de…»; los bloques del equipo, editables (Markdown), con su chip de tipo, autoría y estado,
+  lectura con «Se calcula de…»; los bloques del equipo, editables como en Word (ADR-020), con su chip de tipo, autoría y estado,
   «Confirmar bloque» y la banda dorada si vienen heredados del curso anterior.
 
 Los bloques se guardan solos al dejar de escribir (un texto cambiado vuelve a borrador: hay que confirmarlo).
@@ -12,11 +12,10 @@ Los bloques se guardan solos al dejar de escribir (un texto cambiado vuelve a bo
 from __future__ import annotations
 
 import logging
-import shutil
 from pathlib import Path
 
 from PyQt6.QtCore import QRectF, QSize, Qt, QTimer, QUrl, pyqtSignal
-from PyQt6.QtGui import QColor, QDesktopServices, QFont, QPainter, QTextCursor
+from PyQt6.QtGui import QColor, QDesktopServices, QFont, QPainter
 from PyQt6.QtWidgets import (
     QAbstractItemView,
     QFileDialog,
@@ -26,10 +25,8 @@ from PyQt6.QtWidgets import (
     QHeaderView,
     QLabel,
     QMessageBox,
-    QSizePolicy,
     QTableWidget,
     QTableWidgetItem,
-    QTextEdit,
     QVBoxLayout,
     QWidget,
 )
@@ -39,6 +36,7 @@ from pccf.bloques import Bloque
 
 from . import estilo
 from .componentes import DelegadoFila, FlujoLayout, boton, chip_tipo, desplazable, etiqueta, limpiar
+from .editor import EditorTexto
 
 logger = logging.getLogger(__name__)
 ROL_DATO = Qt.ItemDataRole.UserRole
@@ -206,43 +204,6 @@ def matriz(k: derivados.Contribucion) -> QTableWidget:
 # ---------------------------------------------------------------------------------------------------------------------
 # Bloque de texto
 # ---------------------------------------------------------------------------------------------------------------------
-class EditorMarkdown(QTextEdit):
-    """Texto Markdown plano que crece con su contenido (la zona central es la que se desplaza)."""
-
-    def __init__(self, texto: str):
-        super().__init__()
-        self.setObjectName("editor")
-        self.setAcceptRichText(False)
-        self.setTabChangesFocus(True)
-        self.setPlainText(texto)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        self.document().documentLayout().documentSizeChanged.connect(self._alto)
-        self._alto()
-
-    def _alto(self, *_):
-        self.setFixedHeight(max(120, int(self.document().size().height()) + 26))
-
-    def resizeEvent(self, e):  # noqa: N802
-        super().resizeEvent(e)
-        self._alto()
-
-    # -- barra de formato -------------------------------------------------------------------------------------------
-    def envolver(self, marca: str) -> None:
-        c = self.textCursor()
-        sel = c.selectedText() or "texto"
-        c.insertText(f"{marca}{sel}{marca}")
-
-    def prefijo(self, marca: str) -> None:
-        c = self.textCursor()
-        c.movePosition(QTextCursor.MoveOperation.StartOfBlock)
-        c.insertText(marca)
-
-    def enlace(self) -> None:
-        c = self.textCursor()
-        c.insertText(f"[{c.selectedText() or 'texto'}](https://)")
-
-
 class TarjetaBloque(QFrame):
     """Un bloque: banda de heredado, chip de tipo, archivo y autoría, editor, citas y acciones."""
 
@@ -288,26 +249,8 @@ class TarjetaBloque(QFrame):
         cuerpo.addLayout(cab)
         self.autoria = etiqueta("", "pequeno", envolver=True)
         cuerpo.addWidget(self.autoria)
-        self.editor = EditorMarkdown(b.cuerpo)
-        self.editor.setAccessibleName(f"Texto del bloque {_humano(b.ruta.name)}")
-        barra = QHBoxLayout()
-        barra.setSpacing(4)
-        for texto, ayuda, accion in (
-            ("B", "Negrita (**texto**)", lambda: self.editor.envolver("**")),
-            ("• Lista", "Viñeta (- al principio de la línea)", lambda: self.editor.prefijo("- ")),
-            ("Subtítulo", "Subtítulo del apartado (### al principio de la línea)", lambda: self.editor.prefijo("### ")),
-            ("Enlace", "Enlace ([texto](https://…))", self.editor.enlace),
-        ):
-            x = boton(texto, pequeno=True)
-            x.setToolTip(ayuda)
-            x.clicked.connect(accion)
-            barra.addWidget(x)
-        barra.addStretch(1)
-        nota = etiqueta("Markdown", "pequeno")
-        nota.setToolTip("Párrafos, «### Subtítulo», viñetas «- », **negrita** y [enlaces](https://…). Las líneas "
-                        "«> …» son notas para quien edita: no salen en el documento.")
-        barra.addWidget(nota)
-        cuerpo.addLayout(barra)
+        self.editor = EditorTexto(b.cuerpo)
+        self.editor.texto.setAccessibleName(f"Texto del bloque {_humano(b.ruta.name)}")
         cuerpo.addWidget(self.editor)
         chips = QWidget()
         flujo = FlujoLayout(chips, 6)
@@ -327,8 +270,9 @@ class TarjetaBloque(QFrame):
         pie.addStretch(1)
         self.guardado = etiqueta("", "pequeno")
         pie.addWidget(self.guardado)
-        exportar = boton("Exportar bloque…", pequeno=True)
-        exportar.setToolTip("Guardar una copia del bloque para que alguien del equipo lo revise sin la carpeta de datos")
+        exportar = boton("Exportar a Word…", pequeno=True)
+        exportar.setToolTip("Guardar el bloque en Word para que alguien del equipo lo escriba o lo revise; "
+                            "después se importa con «Importar Word…»")
         exportar.clicked.connect(self.exportar)
         pie.addWidget(exportar)
         if b.confirmado:
@@ -341,7 +285,7 @@ class TarjetaBloque(QFrame):
         capa.addLayout(envoltura)
         self._sucio = False
         self._temporizador = QTimer(self, singleShot=True, interval=900, timeout=self.guardar)
-        self.editor.textChanged.connect(self._tecleado)
+        self.editor.cambiado.connect(self._tecleado)
         self._pintar_autoria()
 
     def _pintar_autoria(self) -> None:
@@ -360,7 +304,7 @@ class TarjetaBloque(QFrame):
         self._sucio = False
         antes = self.b.estado
         try:
-            self.b = bloques.guardar(self.b, self.editor.toPlainText(), self.ctx.hoy())
+            self.b = bloques.guardar(self.b, self.editor.markdown(), self.ctx.hoy())
         except (OSError, bloques.BloqueNoValido) as e:
             self.guardado.setText("No se ha guardado")
             QMessageBox.warning(self, "Guardar el bloque", str(e))
@@ -381,10 +325,15 @@ class TarjetaBloque(QFrame):
 
     def exportar(self) -> None:
         self.guardar()
-        ruta, _ = QFileDialog.getSaveFileName(self, "Exportar bloque", str(Path.home() / self.b.ruta.name),
-                                              "Bloque del PCCF (*.md)")
-        if ruta:
-            shutil.copyfile(self.b.ruta, ruta)
+        nombre = f"PCCF {self.ctx.sigla} {self.ctx.curso} - apartado {self.b.apartado} - {_humano(self.b.ruta.name)}.docx"
+        ruta, _ = QFileDialog.getSaveFileName(self, "Exportar a Word", str(Path.home() / nombre), "Word (*.docx)")
+        if not ruta:
+            return
+        titulo = f"PCCF {self.ctx.sigla} {self.ctx.curso} · apartado {self.b.apartado} · {_humano(self.b.ruta.name)}"
+        try:
+            Path(ruta).write_bytes(bloques.a_word(self.b, titulo))
+        except OSError as e:
+            QMessageBox.warning(self, "Exportar a Word", str(e))
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -554,8 +503,9 @@ class VistaApartado(QWidget):
         anadir = boton("Añadir bloque", pequeno=True)
         anadir.clicked.connect(lambda: self.pedir_nuevo_bloque.emit(ea.n))
         botones.addWidget(anadir)
-        importar = boton("Importar bloque…", pequeno=True)
-        importar.setToolTip("Un bloque .md exportado desde la app: se comprueba y se copia en la carpeta de datos")
+        importar = boton("Importar Word…", pequeno=True)
+        importar.setToolTip("Un Word exportado desde la app vuelve a su bloque; cualquier otro Word, a un bloque nuevo "
+                            "de este apartado")
         importar.clicked.connect(self.pedir_importar)
         botones.addWidget(importar)
         botones.addStretch(1)

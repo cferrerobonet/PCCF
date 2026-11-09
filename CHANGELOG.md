@@ -4,6 +4,15 @@ Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones 
 
 ## [Sin publicar]
 
+## [0.4.0] - 2026-11-09
+
+Todos los ciclos del centro y, de un vistazo, qué apartados están completos y cuáles faltan.
+
+- Ya se puede preparar el PCCF de los quince ciclos, también los de grado básico, con sus apartados y su decreto.
+- La lista de apartados pinta en verde los completos, que solo esperan que el equipo los confirme, y en ámbar los que aún hay que alimentar, con cuántas cosas les faltan. Arriba, una barra de avance y los filtros «Todos», «Completar» y «Aprobar».
+
+### Añadido
+
 - 2026-11-09 · Todos los ciclos del centro, también los de grado básico, con sus apartados (sin el de Digitalización y Sostenibilidad, y el Proyecto intermodular de aprendizaje colaborativo) y su decreto (ADR-023).
 - 2026-11-09 · La lista de apartados distingue de un vistazo los completos, que solo esperan que el equipo los confirme, de los que aún hay que alimentar, con lo que les falta; barra de avance y filtros «Todos · Completar · Aprobar» (ADR-024).
 

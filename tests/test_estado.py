@@ -116,3 +116,18 @@ def test_cursos_y_versiones_aprobadas(datos, carpeta):
                                                   "-qm", "datos"], ["tag", "PRU-2030-2031-v1"]):
         subprocess.run(["git", "-C", str(carpeta), *orden], check=True, capture_output=True)
     assert datos.etiquetas("PRU") == ["PRU-2030-2031-v1"]
+
+
+def test_avance_lo_que_falta_y_listo_para_aprobar(cat, datos, carpeta):
+    """ADR-024: un bloque con notas «Pendiente…» o «Para el equipo…» deja el apartado por completar; sin ellas, está
+    listo para aprobar; confirmado, confirmado. Las demás notas no cuentan."""
+    e = estado.calcular(cat, datos, "PRU", CURSO)
+    assert e.de(16).avance == "listo" and e.de(16).faltan == []
+    assert e.de(3).avance == "vivo" and e.de(3).faltan[0].startswith("Sin texto")
+    assert e.de(20).avance == "confirmado"
+    p = carpeta / "centro" / "diversidad.md"
+    p.write_text(p.read_text(encoding="utf-8") + "\n> Pendiente: el procedimiento del centro.\n\n"
+                 "> Para el equipo del ciclo: elegir una opción.\n\n> Nota de redacción: no cuenta.\n", encoding="utf-8")
+    e = estado.calcular(cat, datos, "PRU", CURSO)
+    assert e.de(16).avance == "vivo"
+    assert e.de(16).faltan == ["Pendiente: el procedimiento del centro.", "Para el equipo del ciclo: elegir una opción."]

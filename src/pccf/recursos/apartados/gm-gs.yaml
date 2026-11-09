@@ -2,8 +2,9 @@
 # comprobados en el DOGV: docs/INVESTIGACION.md §1) y los dos que añade la guía práctica de la DGFP (2.3.18 y 2.3.19).
 # «guia»: el punto de la guía que dice qué pide el apartado (apartado N = 2.3.(N-1)); «pide», lo que pide, en una frase
 # (sale en el documento cuando el apartado está pendiente). «tipos»: de qué clase son sus
-# bloques (PRD.md §5). El de grado básico (Decreto 117/2025, 17 apartados) se añade con la F4.
+# bloques (PRD.md §5). El de grado básico (Decreto 117/2025, 17 apartados) está en gb.yaml.
 norma: DOGV-C-2025-29742
+decreto: Decreto 114/2025
 articulo: "8.4"
 guia: Guía práctica del PCCF, Dirección General de FP, curso 2024-2025, apartado 2.3
 apartados:

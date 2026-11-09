@@ -7,7 +7,7 @@ import os
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 import pytest  # noqa: E402
-from PyQt6.QtCore import QSettings  # noqa: E402
+from PyQt6.QtCore import QSettings, Qt  # noqa: E402
 from PyQt6.QtWidgets import QLabel, QMessageBox  # noqa: E402
 
 from pccf import bloques, cursos  # noqa: E402
@@ -42,7 +42,7 @@ def test_abre_con_el_ciclo_y_sus_20_apartados(ventana):
     assert ventana.ctx.sigla == "PRU" and ventana.ctx.curso == CURSO
     assert ventana.izquierda.lista.count() == 20
     assert ventana.boton_curso.text() == f"PRU · {CURSO}"
-    assert ventana.derecha.progreso.value() == 4 and ventana.derecha.progreso.maximum() == 20
+    assert ventana.derecha.progreso.value() == 5 and ventana.derecha.progreso.maximum() == 20   # 4 confirmados y 1 listo
 
 
 def test_todos_los_apartados_se_ven_y_caben(ventana, qtbot):
@@ -193,3 +193,26 @@ def test_ajustes_con_menu_lateral_y_cambios_al_momento(ventana, qtbot, tmp_path,
     d.boton_buscar.click()
     assert llamadas == [True]
     assert not d.boton_comprobar.isEnabled()   # copia de desarrollo: el catálogo publicado no se comprueba
+
+
+def test_barra_lateral_separa_lo_completo_de_lo_que_falta(ventana, qtbot):
+    """ADR-024: cada fila dice su avance y los filtros dejan ver solo lo que falta o solo lo completo."""
+    from pccf.ui.apartados import FilaApartado
+
+    z = ventana.izquierda
+    filas = {z.lista.item(i).data(Qt.ItemDataRole.UserRole): z.lista.itemWidget(z.lista.item(i))
+             for i in range(z.lista.count())}
+    assert isinstance(filas[16], FilaApartado) and filas[16].avance == "listo"
+    assert filas[16].estado.text().startswith("◆ Listo")
+    assert filas[3].avance == "vivo" and filas[3].estado.text() == "● Sin contenido"
+    assert filas[20].estado.text() == "✓ Confirmado"
+    z.filtrar("vivo")
+    visibles = [z.lista.item(i).data(Qt.ItemDataRole.UserRole) for i in range(z.lista.count())
+                if not z.lista.item(i).isHidden()]
+    assert 16 not in visibles and 20 not in visibles and 3 in visibles
+    z.filtrar("listo")
+    visibles = [z.lista.item(i).data(Qt.ItemDataRole.UserRole) for i in range(z.lista.count())
+                if not z.lista.item(i).isHidden()]
+    assert sorted(visibles) == [1, 2, 4, 16, 20]
+    z.ir(3)   # pedir uno que el filtro esconde: vuelven a verse todos
+    assert z.filtro == "todos" and not any(z.lista.item(i).isHidden() for i in range(z.lista.count()))

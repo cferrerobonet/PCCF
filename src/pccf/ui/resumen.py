@@ -112,11 +112,13 @@ class ZonaResumen(QWidget):
             self.texto_vista.setText("")
             return
         total = len(e.apartados)
+        completos = len(e.con_avance("listo")) + len(e.con_avance("confirmado"))
         self.progreso.setMaximum(total)
-        self.progreso.setValue(e.confirmados)
-        self.cuenta.setText(f"{e.confirmados} de {total} apartados confirmados · {len(e.con('pendiente'))} "
-                            "pendientes")
-        orden = [a for est in ("revisar", "heredado", "borrador") for a in e.con(est)]
+        self.progreso.setValue(completos)
+        self.cuenta.setText(f"{completos} de {total} apartados completos ({e.confirmados} confirmados) · "
+                            f"{len(e.con_avance('vivo'))} por completar")
+        # lo que se puede hacer ya: confirmar los completos; después, lo que pide el vigía
+        orden = e.con_avance("listo") + [a for a in e.con("revisar") if a.avance != "listo"]
         for a in orden[:7]:
             self.atencion.addWidget(self._fila(a))
         if len(orden) > 7:
@@ -149,13 +151,13 @@ class ZonaResumen(QWidget):
         icono = QLabel()
         icono.setPixmap(estilo.icono_estado(a.estado, 12))
         fila.addWidget(icono)
-        t = etiqueta(f"{a.n} · {a.apartado.titulo}")
+        t = etiqueta(f"{a.numero} · {a.apartado.titulo}")
         t.setMaximumWidth(170)
         t.setText(t.fontMetrics().elidedText(t.text(), Qt.TextElideMode.ElideRight, 170))
         fila.addWidget(t, 1)
         fila.addWidget(etiqueta(estado_mod.NOMBRES[a.estado], f"estado-{a.estado}"))
         w.setMinimumHeight(24)
-        w.setAccessibleName(f"Ir al apartado {a.n}: {estado_mod.NOMBRES[a.estado]}")
+        w.setAccessibleName(f"Ir al apartado {a.numero}: {estado_mod.NOMBRES[a.estado]}")
         w.clicked.connect(lambda: self.pedir_apartado.emit(a.n))
         return w
 

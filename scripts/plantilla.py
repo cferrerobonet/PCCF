@@ -26,7 +26,7 @@ from pccf.ooxml import W  # noqa: E402
 
 RECURSOS = RAIZ / "src" / "pccf" / "recursos"
 DESTINO = RECURSOS / "plantilla"
-MARCAS = {"sigla", "curso", "borrador", "cuerpo", "correo_pie"}
+MARCAS = {"sigla", "curso", "borrador", "cuerpo", "correo_pie", "decreto_pie"}
 RE_MARCA = re.compile(r"\{\{([^}]+)\}\}")
 
 # -- tokens (DESIGN.md § Documento) ----------------------------------------------------------------------------------
@@ -282,7 +282,7 @@ def pie_portada(rid_escudo: str) -> str:
               f'<w:p>{ppr(linea=252)}<w:r>{r_txt}<w:t xml:space="preserve">Carretera de Bétera s/n · 46110 Godella '
               f'(Valencia)</w:t></w:r></w:p><w:p>{ppr(linea=252)}<w:r>{r_txt}<w:t xml:space="preserve">Centro '
               'concertado · Formación Profesional{{correo_pie}}</w:t></w:r></w:p>')
-    norma = (f'<w:p>{ppr(linea=252, jc="right")}<w:r>{r_txt}<w:t xml:space="preserve">Decreto 114/2025, art. 8. '
+    norma = (f'<w:p>{ppr(linea=252, jc="right")}<w:r>{r_txt}<w:t xml:space="preserve">{{{{decreto_pie}}}}, art. 8. '
              'Elaborado por el equipo docente del ciclo, bajo la coordinación de la jefatura del departamento '
              '(instrucciones de inicio de curso, §6.2).</w:t></w:r></w:p>')
     sin = '<w:tcBorders><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/></w:tcBorders>'

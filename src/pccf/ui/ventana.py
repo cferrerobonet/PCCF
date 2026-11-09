@@ -236,6 +236,15 @@ class VentanaPrincipal(QMainWindow):
             self._repintar_todo()
             self.aviso.mostrar(f"Bloque añadido: {d.bloque.ruta.relative_to(self.ctx.datos.carpeta).as_posix()}")
 
+    def _numero(self, n: int) -> int:
+        """El número que se ve del apartado de clave `n` en el grado del ciclo (ADR-023)."""
+        from pccf import apartados as aps
+
+        try:
+            return aps.numero(self.ctx.grado, n)
+        except KeyError:
+            return n
+
     def importar_bloque(self) -> None:
         """Un Word exportado desde la app vuelve a su bloque; cualquier otro Word, a un bloque nuevo del apartado
         abierto (ADR-020). Se aceptan también los bloques `.md` de la versión 0.1.0."""
@@ -263,7 +272,7 @@ class VentanaPrincipal(QMainWindow):
             return
         self._repintar_todo()
         self.izquierda.ir(b.apartado)
-        self.aviso.mostrar(f"Importado en el apartado {b.apartado}, en borrador: {b.ruta.name}")
+        self.aviso.mostrar(f"Importado en el apartado {self._numero(b.apartado)}, en borrador: {b.ruta.name}")
 
     def _word_a_bloque_nuevo(self, origen: Path):
         """Un Word cualquiera: su texto va a un bloque nuevo del apartado abierto (se pide el tipo y la autoría)."""
@@ -281,10 +290,10 @@ class VentanaPrincipal(QMainWindow):
             return None
         tipos = [t for t in self.ctx.estado.de(n).apartado.tipos if t != "derivado"]
         if not tipos:
-            QMessageBox.information(self, "Importar Word", f"El apartado {n} se calcula: no lleva textos del equipo")
+            QMessageBox.information(self, "Importar Word", f"El apartado {self._numero(n)} se calcula: no lleva textos del equipo")
             return None
         d = DialogoNuevoBloque(self.ctx, n, tipos, self, nombre=origen.stem,
-                               explicacion=f"Apartado {n}. El texto de «{origen.name}» entra en un bloque nuevo, en "
+                               explicacion=f"Apartado {self._numero(n)}. El texto de «{origen.name}» entra en un bloque nuevo, en "
                                            "borrador." + ("".join(f" {a}." for a in imp.avisos)))
         if not d.exec():
             return None
@@ -308,7 +317,7 @@ class VentanaPrincipal(QMainWindow):
     def acerca_de(self) -> None:
         QMessageBox.about(self, f"Acerca de {NOMBRE_APP}",
                           f"<b>{NOMBRE_APP} {__version__}</b> · catálogo {self.ctx.cat.version}<br>Proyecto curricular de ciclo formativo (Decreto "
-                          "114/2025, art. 8.4, y guía práctica de la DGFP).<br><br>Catálogo: "
+                          "114/2025 y Decreto 117/2025, art. 8.4, y guía práctica de la DGFP).<br><br>Catálogo: "
                           f"{self.ctx.cat.carpeta}<br>Carpeta de datos: {self.ctx.datos.carpeta}")
 
     # -- actualizaciones y catálogo publicado ------------------------------------------------------------------------

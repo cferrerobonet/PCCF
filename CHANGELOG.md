@@ -4,6 +4,9 @@ Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones 
 
 ## [Sin publicar]
 
+- 2026-11-09 · Todos los ciclos del centro, también los de grado básico, con sus apartados (sin el de Digitalización y Sostenibilidad, y el Proyecto intermodular de aprendizaje colaborativo) y su decreto (ADR-023).
+- 2026-11-09 · La lista de apartados distingue de un vistazo los completos, que solo esperan que el equipo los confirme, de los que aún hay que alimentar, con lo que les falta; barra de avance y filtros «Todos · Completar · Aprobar» (ADR-024).
+
 ## [0.3.0] - 2026-11-09
 
 Portada más clara y Ajustes nuevos.

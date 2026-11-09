@@ -1,5 +1,5 @@
-"""Zona izquierda (280 px, maqueta v0): el ciclo (los 15 del centro, por familia y grado, con buscador), el curso y los
-apartados de su grado con su número, título corto, chips de tipo e icono de estado."""
+"""Zona izquierda (280 px, maqueta v0): el ciclo (los 15 del centro, por familia y grado, con buscador), el resumen del
+avance con su barra y sus filtros, y los apartados de su grado con su número y lo que les falta o si están listos (ADR-024)."""
 from __future__ import annotations
 
 import unicodedata
@@ -13,6 +13,7 @@ from PyQt6.QtWidgets import (
     QLineEdit,
     QListWidget,
     QListWidgetItem,
+    QPushButton,
     QSizePolicy,
     QVBoxLayout,
     QWidget,
@@ -21,7 +22,7 @@ from PyQt6.QtWidgets import (
 from pccf import estado as estado_mod
 
 from . import estilo
-from .componentes import boton, chip_tipo, etiqueta
+from .componentes import boton, etiqueta
 
 GRADOS = {"GB": "Grado básico", "GM": "Grado medio", "GS": "Grado superior"}
 
@@ -118,51 +119,107 @@ class ListaApartados(QListWidget):
 
 
 class FilaApartado(QWidget):
-    """Número en su cuadro dorado, título (cortado al ancho, entero en la ayuda), chips de tipo y el icono del
-    estado."""
+    """Una fila de la lista (ADR-024): franja de color a la izquierda y número en su cuadro según el avance (ámbar con
+    borde discontinuo si hay que seguir alimentándolo; verde claro si está listo para aprobar; verde lleno si está
+    confirmado; rojo si lo pide el vigía), el título (cortado al ancho, entero en la ayuda) y, debajo, lo que le falta o
+    que está listo."""
 
     def __init__(self, ea: estado_mod.EstadoApartado, ancho_texto: int):
         super().__init__()
         self._texto = ea.apartado.titulo
+        self.avance = ea.avance
+        self.setObjectName("fila")
+        self.setProperty("avance", ea.avance)
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         fila = QHBoxLayout(self)
-        fila.setContentsMargins(6, 5, 8, 5)
-        fila.setSpacing(9)
-        num = QLabel(str(ea.n))
-        num.setProperty("rol", "numero")
-        num.setFixedSize(26, 26)
+        fila.setContentsMargins(10, 6, 8, 6)
+        fila.setSpacing(10)
+        num = QLabel(str(ea.numero))
+        num.setObjectName("numero-avance")
+        num.setProperty("avance", ea.avance)
+        num.setFixedSize(30, 30)
         num.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        num.setFont(estilo.fuente(16, QFont.Weight.ExtraBold, estilo.TITULAR))
+        num.setFont(estilo.fuente(17, QFont.Weight.ExtraBold, estilo.TITULAR))
         fila.addWidget(num, 0, Qt.AlignmentFlag.AlignTop)
         textos = QVBoxLayout()
-        textos.setSpacing(2)
+        textos.setSpacing(1)
         titulo = QLabel()
         titulo.setFont(estilo.fuente(14, QFont.Weight.DemiBold))
         titulo.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred)
         self.titulo = titulo
         self._poner_titulo(ancho_texto)
-        titulo.setToolTip(f"{ea.n}. {ea.apartado.titulo}\n{ea.motivo}")
+        lista = "\n".join(f"· {x}" for x in ea.faltan[:8]) + ("\n· …" if len(ea.faltan) > 8 else "")
+        titulo.setToolTip(f"{ea.numero}. {ea.apartado.titulo}\n{ea.motivo}" + (f"\n\nFalta:\n{lista}" if lista else ""))
         textos.addWidget(titulo)
-        chips = QHBoxLayout()
-        chips.setSpacing(4)
-        for t in ea.apartado.tipos:
-            chips.addWidget(chip_tipo(t))
-        chips.addStretch(1)
-        textos.addLayout(chips)
+        linea = QHBoxLayout()
+        linea.setSpacing(6)
+        self.estado = QLabel(texto_avance(ea))
+        self.estado.setObjectName("avance")
+        self.estado.setProperty("avance", ea.avance)
+        linea.addWidget(self.estado)
+        if ea.normas:
+            vigia = QLabel("⚠ vigía")
+            vigia.setObjectName("avance")
+            vigia.setProperty("avance", "revisar")
+            vigia.setToolTip(f"Ha cambiado una norma en la que se apoya: {', '.join(ea.normas)}. Revísalo.")
+            linea.addWidget(vigia)
+        linea.addStretch(1)
+        textos.addLayout(linea)
         fila.addLayout(textos, 1)
-        icono = QLabel()
-        icono.setPixmap(estilo.icono_estado(ea.estado, 14))
-        icono.setToolTip(estado_mod.NOMBRES[ea.estado])
-        icono.setAccessibleName(estado_mod.NOMBRES[ea.estado])
-        fila.addWidget(icono, 0, Qt.AlignmentFlag.AlignVCenter)
 
     def _poner_titulo(self, ancho: int) -> None:
         self.titulo.setText(QFontMetrics(self.titulo.font()).elidedText(self._texto, Qt.TextElideMode.ElideRight,
                                                                         max(60, ancho)))
 
     def ajustar(self, ancho: int) -> None:
-        """Ancho de la fila: el del título es lo que queda tras el número, el icono y los márgenes."""
+        """Ancho de la fila: el del título es lo que queda tras la franja, el número y los márgenes."""
         self.setFixedWidth(ancho)
-        self._poner_titulo(ancho - 6 - 26 - 9 - 9 - 14 - 8 - 2)
+        self._poner_titulo(ancho - 10 - 30 - 10 - 8 - 4)
+
+
+def texto_avance(ea: estado_mod.EstadoApartado) -> str:
+    if ea.avance == "vivo":
+        if len(ea.faltan) == 1 and ea.faltan[0].startswith("Sin texto"):
+            return "● Sin contenido"
+        n = len(ea.faltan)
+        return f"● Faltan {n} cosa{'s' if n != 1 else ''}" if n else "● Por completar"
+    if ea.avance == "listo":
+        return "◆ Listo · falta confirmarlo"
+    return "✓ Confirmado"
+
+
+class BarraAvance(QWidget):
+    """Barra en tres colores (confirmado, listo, por completar) con su recuento, como un resumen de un vistazo."""
+
+    def __init__(self):
+        super().__init__()
+        self.setFixedHeight(8)
+        self.partes: dict[str, int] = {}
+
+    def poner(self, partes: dict[str, int]) -> None:
+        self.partes = partes
+        self.update()
+
+    def paintEvent(self, _e):  # noqa: N802
+        from PyQt6.QtGui import QColor, QPainter
+
+        total = sum(self.partes.values())
+        pintor = QPainter(self)
+        pintor.setRenderHint(QPainter.RenderHint.Antialiasing)
+        pintor.setPen(Qt.PenStyle.NoPen)
+        pintor.setBrush(QColor(estilo.T["line"]))
+        pintor.drawRoundedRect(self.rect(), 4, 4)
+        if not total:
+            return
+        x = 0.0
+        colores = {"confirmado": estilo.T["accent"], "listo": estilo.T["accent_soft_fuerte"], "vivo": estilo.T["warn"]}
+        for clave in ("confirmado", "listo", "vivo"):
+            ancho = self.width() * self.partes.get(clave, 0) / total
+            if ancho:
+                pintor.setBrush(QColor(colores[clave]))
+                pintor.drawRect(int(x), 0, int(round(x + ancho)) - int(x), self.height())
+            x += ancho
+        pintor.end()
 
 
 class ZonaApartados(QWidget):
@@ -182,6 +239,27 @@ class ZonaApartados(QWidget):
         capa.addWidget(self.boton_ciclo)
         self.resumen = etiqueta("", "pequeno", envolver=True)
         capa.addWidget(self.resumen)
+        self.barra = BarraAvance()
+        self.barra.setToolTip("Confirmado · listo para aprobar · por completar")
+        capa.addWidget(self.barra)
+        filtros = QHBoxLayout()
+        filtros.setSpacing(4)
+        self.filtros: dict[str, QPushButton] = {}
+        for clave, texto_f, ayuda in (("todos", "Todos", "Todos los apartados"),
+                                      ("vivo", "Completar", "Los que hay que seguir alimentando"),
+                                      ("listo", "Aprobar", "Los completos: solo falta que el equipo los confirme (o ya "
+                                                           "lo están)")):
+            b_ = boton(texto_f, chip=True)
+            b_.setCheckable(True)
+            b_.setProperty("filtro", clave)
+            b_.setToolTip(ayuda)
+            b_.clicked.connect(lambda _c, k=clave: self.filtrar(k))
+            filtros.addWidget(b_)
+            self.filtros[clave] = b_
+        filtros.addStretch(1)
+        capa.addLayout(filtros)
+        self.filtro = "todos"
+        self.filtros["todos"].setChecked(True)
         self.lista = ListaApartados()
         self.lista.setObjectName("apartados")
         self.lista.setAccessibleName("Apartados del proyecto curricular")
@@ -215,19 +293,30 @@ class ZonaApartados(QWidget):
                                  "de apartados de este grado aún no está en la app")
             self.lista.blockSignals(False)
             return
-        norma = sum(1 for a in e.apartados if a.apartado.origen == "norma")
-        self.resumen.setText(f"{n} ciclos en el catálogo · {len(e.apartados)} apartados en {c['grado']} "
-                             f"({norma} del art. 8.4 y {len(e.apartados) - norma} de la guía)")
+        cuenta = {k: len(e.con_avance(k)) for k in estado_mod.AVANCES}
+        listos = cuenta["listo"] + cuenta["confirmado"]
+        revisar = len(e.con("revisar"))
+        self.resumen.setText(f"{len(e.apartados)} apartados en {c['grado']} · <b style='color:{estilo.T['accent']}'>"
+                             f"{listos} completos</b> · <b style='color:{estilo.T['warn']}'>{cuenta['vivo']} por "
+                             "completar</b>" + (f" · <span style='color:{estilo.T['danger']}'>⚠ {revisar} con aviso "
+                                                "del vigía</span>" if revisar else ""))
+        self.resumen.setToolTip(f"{n} ciclos en el catálogo. Completos: {cuenta['confirmado']} confirmados y "
+                                f"{cuenta['listo']} listos para aprobar.")
+        self.barra.poner(cuenta)
+        self.filtros["todos"].setText(f"Todos {len(e.apartados)}")
+        self.filtros["vivo"].setText(f"Completar {cuenta['vivo']}")
+        self.filtros["listo"].setText(f"Aprobar {listos}")
         for ea in e.apartados:
             it = QListWidgetItem()
             it.setData(Qt.ItemDataRole.UserRole, ea.n)
             it.setData(Qt.ItemDataRole.AccessibleTextRole,
-                       f"{ea.n}. {ea.apartado.titulo}. {estado_mod.NOMBRES[ea.estado]}")
+                       f"{ea.numero}. {ea.apartado.titulo}. {texto_avance(ea)}")
             w = FilaApartado(ea, 170)
             it.setSizeHint(QSize(240, w.sizeHint().height()))
             self.lista.addItem(it)
             self.lista.setItemWidget(it, w)
         self.lista.ajustar()
+        self._aplicar_filtro()
         if emitir:
             self.lista.blockSignals(False)
             self.ir(actual or 1, emitir=True)
@@ -235,9 +324,24 @@ class ZonaApartados(QWidget):
             self.ir(actual or 1)
             self.lista.blockSignals(False)
 
+    def filtrar(self, clave: str) -> None:
+        """Enseña todos, solo los que hay que completar (y los que pide revisar el vigía) o solo los completos."""
+        self.filtro = clave
+        for k, b_ in self.filtros.items():
+            b_.setChecked(k == clave)
+        self._aplicar_filtro()
+
+    def _aplicar_filtro(self) -> None:
+        quiero = {"todos": None, "vivo": {"vivo"}, "listo": {"listo", "confirmado"}}[self.filtro]
+        for i in range(self.lista.count()):
+            w = self.lista.itemWidget(self.lista.item(i))
+            self.lista.item(i).setHidden(quiero is not None and getattr(w, "avance", None) not in quiero)
+
     def ir(self, n: int, emitir: bool = False) -> None:
         for i in range(self.lista.count()):
             if self.lista.item(i).data(Qt.ItemDataRole.UserRole) == n:
+                if self.lista.item(i).isHidden():   # el que se pide no está en el filtro: se enseñan todos
+                    self.filtrar("todos")
                 if emitir and self.lista.currentRow() == i:
                     self.pedir_apartado.emit(n)
                 self.lista.setCurrentRow(i)

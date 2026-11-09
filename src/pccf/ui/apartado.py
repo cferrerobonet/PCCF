@@ -323,13 +323,21 @@ class TarjetaBloque(QFrame):
             return
         self.confirmado.emit()
 
+    def _numero(self) -> int:
+        from pccf import apartados as aps
+
+        try:
+            return aps.numero(self.ctx.grado, self.b.apartado)
+        except KeyError:
+            return self.b.apartado
+
     def exportar(self) -> None:
         self.guardar()
-        nombre = f"PCCF {self.ctx.sigla} {self.ctx.curso} - apartado {self.b.apartado} - {_humano(self.b.ruta.name)}.docx"
+        nombre = f"PCCF {self.ctx.sigla} {self.ctx.curso} - apartado {self._numero()} - {_humano(self.b.ruta.name)}.docx"
         ruta, _ = QFileDialog.getSaveFileName(self, "Exportar a Word", str(Path.home() / nombre), "Word (*.docx)")
         if not ruta:
             return
-        titulo = f"PCCF {self.ctx.sigla} {self.ctx.curso} · apartado {self.b.apartado} · {_humano(self.b.ruta.name)}"
+        titulo = f"PCCF {self.ctx.sigla} {self.ctx.curso} · apartado {self._numero()} · {_humano(self.b.ruta.name)}"
         try:
             Path(ruta).write_bytes(bloques.a_word(self.b, titulo))
         except OSError as e:
@@ -418,12 +426,12 @@ class VistaApartado(QWidget):
         fila = QHBoxLayout(w)
         fila.setContentsMargins(0, 0, 0, 0)
         fila.setSpacing(16)
-        num = QLabel(f"{ea.n}")
+        num = QLabel(f"{ea.numero}")
         num.setProperty("rol", "numero")
         num.setFixedSize(64, 64)
         num.setAlignment(Qt.AlignmentFlag.AlignCenter)
         num.setFont(estilo.fuente(36, QFont.Weight.ExtraBold, estilo.TITULAR))
-        num.setToolTip(f"Apartado {ea.n} de {total}")
+        num.setToolTip(f"Apartado {ea.numero} de {total}")
         caja_num = QVBoxLayout()
         caja_num.setSpacing(0)
         caja_num.addWidget(num)
@@ -444,7 +452,7 @@ class VistaApartado(QWidget):
         chips = FlujoLayout(fila_chips, 6)
         for tipo in ea.apartado.tipos:
             chips.addWidget(chip_tipo(tipo))
-        base = ("Decreto 114/2025, art. 8.4" if ea.apartado.origen == "norma" else "Lo añade la guía de la DGFP")
+        base = (f"{ea.apartado.decreto}, art. 8.4" if ea.apartado.origen == "norma" else "Lo añade la guía de la DGFP")
         chips.addWidget(etiqueta(f"{base} · Guía {ea.apartado.guia}", "muted"))
         est = etiqueta(estado.NOMBRES[ea.estado], f"estado-{ea.estado}")
         est.setToolTip(ea.motivo)
@@ -648,7 +656,7 @@ class VistaApartado(QWidget):
             t = tabla(["Norma", "Id", "Vigía", "Usos"], filas, estirar=0, mono=(1,), derecha=(3,))
             for i, n in enumerate(marco[ambito]):
                 usos = idx.usos.get(n.id, [])
-                t.item(i, 3).setToolTip("\n".join(f"{u.apartado or '—'} · {u.titulo} · {u.detalle}" for u in usos))
+                t.item(i, 3).setToolTip("\n".join(f"{u.numero or '—'} · {u.titulo} · {u.detalle}" for u in usos))
                 t.item(i, 0).setToolTip(f"{n.titulo}\n{n.enlace}")
                 if n.id in cambiadas:
                     t.item(i, 2).setToolTip("\n".join(cambiadas[n.id].que))

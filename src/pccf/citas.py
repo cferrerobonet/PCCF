@@ -29,6 +29,7 @@ class Uso:
     detalle: str            # el bloque («centro/atencion-diversidad.md») o lo que se calcula («real decreto del título»)
     articulo: str = ""
     estado: str = ""        # el del bloque: «borrador» o «confirmado»
+    numero: int | None = None   # el número que se ve del apartado (en GB, distinto de la clave: ADR-023)
 
 
 @dataclass
@@ -73,12 +74,14 @@ def indice(cat: Catalogo, datos: CarpetaDatos, sigla: str, curso: str) -> Indice
     ciclo = cat.ciclo(sigla)
     grado = ciclo["grado"]
     titulos = {a.n: a.titulo for a in apartados.apartados(grado)}
+    numeros = {a.n: a.numero for a in apartados.apartados(grado)}
     idx = Indice()
 
     def calculado(ident: str | None, n: int | None, detalle: str) -> None:
         if not ident:
             return
-        uso = Uso(apartado=n, titulo=titulos.get(n, "Estructura del PCCF"), origen="calculado", detalle=detalle)
+        uso = Uso(apartado=n, titulo=titulos.get(n, "Estructura del PCCF"), origen="calculado", detalle=detalle,
+                  numero=numeros.get(n) if n is not None else None)
         if ident in cat.normas:
             idx.anadir(ident, uso)
         else:
@@ -102,7 +105,8 @@ def indice(cat: Catalogo, datos: CarpetaDatos, sigla: str, curso: str) -> Indice
         except ValueError:
             ruta = b.ruta.name
         for c in b.citas:
-            uso = Uso(apartado=b.apartado, titulo=titulos.get(b.apartado, f"Apartado {b.apartado}"), origen="bloque",
+            uso = Uso(apartado=b.apartado, numero=numeros.get(b.apartado, b.apartado),
+                      titulo=titulos.get(b.apartado, f"Apartado {b.apartado}"), origen="bloque",
                       detalle=ruta, articulo=str(c.get("articulo", "")), estado=b.estado)
             norma = resolver(cat, c["norma"])
             if norma:

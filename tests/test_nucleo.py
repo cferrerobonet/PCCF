@@ -23,9 +23,20 @@ def test_apartados_gm_gs_son_los_18_del_art_8_4_y_los_2_de_la_guia():
     assert apartados.apartado("GS", 16).tipos == ("centro",)
 
 
-def test_grado_basico_aun_no_tiene_lista():
+def test_grado_basico_sin_digitalizacion_y_con_su_numero():
+    gb = apartados.apartados("GB")
+    gm = {a.n: a for a in apartados.apartados("GM")}
+    assert len(gb) == 19 and 11 not in [a.n for a in gb]
+    assert [a.numero for a in gb] == list(range(1, 20))            # se ve seguido
+    assert apartados.numero("GB", 12) == 11 and apartados.numero("GB", 20) == 19
+    assert apartados.numero("GM", 12) == 12
+    assert apartados.apartado("GB", 18).titulo.endswith("Proyecto intermodular de aprendizaje colaborativo")
+    for a in gb:   # mismos títulos que GM y GS, salvo el del proyecto
+        if a.n != 18:
+            assert a.titulo == gm[a.n].titulo
+    assert apartados.norma("GB") == "DOGV-C-2025-32763"
     with pytest.raises(KeyError):
-        apartados.apartados("GB")
+        apartados.apartados("XX")
 
 
 # -- carpeta de datos -----------------------------------------------------------------------------------------------

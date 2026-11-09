@@ -2,6 +2,19 @@
 
 Registro fechado de decisiones (ADR). Lo más reciente, arriba. El estado actual está en `PRD.md`, `ARCHITECTURE.md` y `DESIGN.md`.
 
+## ADR-024 · La barra lateral distingue lo completo de lo que falta (2026-11-09)
+
+- **Contexto.** CarlosFB quiere ver «mucho más visual» qué apartados están rellenos del todo y solo requieren aprobación y cuáles son «apartados vivos que necesitan alimentarse todavía». La lista solo enseñaba el estado de confirmación con un icono pequeño.
+- **Decisión:** cada apartado sabe **qué le falta** (`estado.faltan`): no tener contenido, el equipo docente o el departamento del apartado 1, y las notas internas de sus bloques que empiezan por «Pendiente» o «Para el equipo» (las demás, como «Nota de redacción» o «Grado básico», informan y no cuentan). Su **avance** es «por completar» si falta algo, «listo para aprobar» si está completo y sin confirmar, y «confirmado». La lista lo pinta con franja, número y frase de color (ámbar con borde discontinuo; verde claro; verde lleno), con una barra de avance y filtros «Todos · Completar · Aprobar» encima. El aviso del vigía va aparte («⚠ vigía»): antes, «revisar» tapaba el resto.
+- **Consecuencias.** Para que un apartado pase a «listo», basta con resolver sus notas: quitarlas del bloque una vez atendidas. El panel de la derecha cuenta los completos. Pruebas: `test_avance_lo_que_falta_y_listo_para_aprobar` y `test_barra_lateral_separa_lo_completo_de_lo_que_falta`.
+
+## ADR-023 · Grado básico: sus apartados con su número y la clave de GM y GS (2026-11-09)
+
+- **Contexto.** CarlosFB pide preparar la app para todos los ciclos del centro. Los cuatro de Grado Básico (EE, IC, MV y SA) no tenían lista de apartados. El Decreto 117/2025, art. 8.4 (texto comprobado en el DOGV), tiene los mismos que el 114/2025 en el mismo orden, sin el de Digitalización y Sostenibilidad y con el «Proyecto intermodular de aprendizaje colaborativo»; con los dos de la guía, 19.
+- **Decisión:** `recursos/apartados/gb.yaml`. Cada apartado tiene su **clave** (`n`, la numeración de GM y GS), con la que lo citan los bloques, el vigía y los datos, y su **número** (`numero`), el que se ve en la app y en el documento: en GB corre seguido (la tutoría, clave 12, es el 11). Cada lista declara su decreto (`decreto`), que sale en la base de cada apartado, en el índice y en el pie de la portada (marca `{{decreto_pie}}` de la plantilla).
+- **Descartado:** numerar GB con los números de GM y GS (el documento iría del 10 al 12) y renumerar también las claves (los bloques de centro, comunes a los tres grados, caerían en el apartado equivocado).
+- **Consecuencias.** Los 15 ciclos del catálogo generan su PCCF. Los textos de centro no citan apartados por su número. Prueba: `test_grado_basico_sin_digitalizacion_y_con_su_numero`.
+
 ## ADR-022 · Ajustes como en Programaciones y Partes de salida, con «Buscar actualizaciones» (2026-11-09)
 
 - **Contexto.** CarlosFB: el diálogo de Ajustes «deja un poco que desear» en diseño y echa de menos «Buscar actualizaciones» (solo estaba en el menú Ayuda). Era un formulario con cuatro campos y «Guardar».

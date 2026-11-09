@@ -549,7 +549,7 @@ def control(e: Escritor, ident: derivados.Identificacion, borrador: bool, fecha:
 # Apartados
 # ---------------------------------------------------------------------------------------------------------------------
 def base(a: apartados.Apartado, origen: str | None = None) -> list[str]:
-    b = ([f"Decreto 114/2025 · art. {'8.4'}"] if a.origen == "norma" else []) + [f"{GUIA} · {a.guia}"]
+    b = ([f"{a.decreto} · art. 8.4"] if a.origen == "norma" else []) + [f"{GUIA} · {a.guia}"]
     return b + ([origen] if origen else [])
 
 
@@ -708,7 +708,7 @@ def apartado_7(e: Escritor, a: apartados.Apartado, ident: derivados.Identificaci
 
 def apartado_20(e: Escritor, ident: derivados.Identificacion) -> list:
     out = [e.parrafo("Cada módulo tiene su programación didáctica, que se elabora teniendo en cuenta este proyecto "
-                     "curricular (Decreto 114/2025, art. 8.3) y forma parte de la Programación General Anual. Lo "
+                     f"curricular ({apartados.decreto(ident.grado)}, art. 8.3) y forma parte de la Programación General Anual. Lo "
                      "acordado aquí no se repite en ellas.")]
     resto = e.ancho - e.sangria
     filas = [[e.celda("Código", "TablaCabecera"), e.celda("Módulo profesional", "TablaCabecera"),
@@ -818,16 +818,16 @@ def _instr(texto: str):
     return r
 
 
-GRUPOS = {"norma": "Apartados del Decreto 114/2025, art. 8.4", "guia": "Apartados que añade la guía de la DGFP",
+GRUPOS = {"norma": "Apartados del {decreto}, art. 8.4", "guia": "Apartados que añade la guía de la DGFP",
           "anexo": "Anexos"}
 
 
-def contenido(e: Escritor) -> list:
+def contenido(e: Escritor, decreto: str = "Decreto 114/2025") -> list:
     """Entradas del contenido: número en la columna de margen, título enlazado, «pendiente» y página (PAGEREF)."""
     out, grupo = [], None
     for numero, titulo, marca, pendiente, g in e.entradas:
         if g != grupo:
-            out.append(e.parrafo(GRUPOS[g], "IndiceGrupo"))
+            out.append(e.parrafo(GRUPOS[g].format(decreto=decreto), "IndiceGrupo"))
             grupo = g
         p = e.parrafo((), "IndiceEntrada")
         _e("tab", _e("r", p))
@@ -926,13 +926,13 @@ def generar(cat: Catalogo, datos: CarpetaDatos, sigla: str, curso: str, opciones
             # sección apaisada solo para la matriz; el 4.1 vuelve a la vertical
             cuerpo.append(e.fin_seccion(encabezados=primera))
             primera = False
-            cuerpo += e.apertura(str(a.n), a.titulo, base(a, "Se calcula del real decreto del título"),
+            cuerpo += e.apertura(str(a.numero), a.titulo, base(a, "Se calcula del real decreto del título"),
                                  ancho=ANCHO_APAISADA, grupo=grupo)
             cuerpo += apartado_4(e, k, cat)
             cuerpo.append(e.fin_seccion(apaisada=True))
             cuerpo += competencias_4_1(e, k)
             subtitulos.append(1)
-            cuerpo += bloques_de(e, propios, a.n, avisos, subtitulos)
+            cuerpo += bloques_de(e, propios, a.numero, avisos, subtitulos)
             continue
         origen = {1: "Catálogo y carpeta de datos", 2: "Catálogo de normativa · vigía", 7: "Catálogo curricular",
                   20: "Catálogo curricular"}.get(a.n)
@@ -941,7 +941,7 @@ def generar(cat: Catalogo, datos: CarpetaDatos, sigla: str, curso: str, opciones
             origen = f"Bloque de {'centro' if tipos == {'centro'} else 'ciclo' if tipos == {'ciclo'} else 'equipo'}"
             if any(not b.confirmado for b in propios):
                 origen += " · borrador"
-        cuerpo += e.apertura(str(a.n), a.titulo, base(a, origen), pendiente=pendiente, grupo=grupo)
+        cuerpo += e.apertura(str(a.numero), a.titulo, base(a, origen), pendiente=pendiente, grupo=grupo)
         if a.n == 1:
             cuerpo += apartado_1(e, ident, avisos)
             subtitulos.append(1)
@@ -958,8 +958,8 @@ def generar(cat: Catalogo, datos: CarpetaDatos, sigla: str, curso: str, opciones
             cuerpo += apartado_20(e, ident)
         elif pendiente:
             cuerpo += e.pendiente(a.pide)
-            avisos.append(f"Apartado {a.n}: pendiente")
-        cuerpo += bloques_de(e, propios, a.n, avisos, subtitulos)
+            avisos.append(f"Apartado {a.numero}: pendiente")
+        cuerpo += bloques_de(e, propios, a.numero, avisos, subtitulos)
         cuerpo.append(e.separador(300))
     cuerpo += anexo_a(e, ident.curso)
     cuerpo += anexo_b(e, ident)
@@ -969,11 +969,12 @@ def generar(cat: Catalogo, datos: CarpetaDatos, sigla: str, curso: str, opciones
     for j, x in enumerate(cuerpo):
         padre.insert(i + j, x)
     padre, i = marca_indice.getparent(), marca_indice.getparent().index(marca_indice)
-    for j, x in enumerate(contenido(e)):
+    for j, x in enumerate(contenido(e, apartados.decreto(ident.grado))):
         padre.insert(i + j, x)
 
     valores = {"sigla": ident.sigla, "curso": ident.curso, "borrador": "Borrador" if borrador else "",
-               "correo_pie": f" · {opciones.correo_pie}" if opciones.correo_pie else ""}
+               "correo_pie": f" · {opciones.correo_pie}" if opciones.correo_pie else "",
+               "decreto_pie": apartados.decreto(ident.grado)}
     for n in sorted(pq.partes):
         if re.fullmatch(r"word/(document|header\d+|footer\d+)\.xml", n):
             rellenar_marcas(pq.xml(n), valores)

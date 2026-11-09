@@ -27,14 +27,14 @@ MONO = "JetBrains Mono"
 CLARO = {
     "bg": "#f3f5f1", "surface": "#ffffff", "surface2": "#eef2ec", "line": "#d9e0d5",
     "fg": "#1d2a20", "muted": "#5d6b60", "accent": "#2c7a3a", "accent_ink": "#ffffff",
-    "accent_soft": "#e2f0e3", "gold": "#b97a12", "gold_soft": "#fbf0d9",
+    "accent_soft": "#e2f0e3", "accent_soft_fuerte": "#9fd0a6", "gold": "#b97a12", "gold_soft": "#fbf0d9",
     "warn": "#9a5b00", "warn_soft": "#fff3dc", "danger": "#a32d2d",
     "azul": "#2f5d8a", "azul_soft": "#e4edf6",
 }
 OSCURO = {
     "bg": "#121713", "surface": "#1a211c", "surface2": "#222b24", "line": "#323d35",
     "fg": "#e4ebe5", "muted": "#9aa89d", "accent": "#5fbf6e", "accent_ink": "#0d1a10",
-    "accent_soft": "#1f3524", "gold": "#e3a94a", "gold_soft": "#3a2e17",
+    "accent_soft": "#1f3524", "accent_soft_fuerte": "#3f7a4a", "gold": "#e3a94a", "gold_soft": "#3a2e17",
     "warn": "#f0b45a", "warn_soft": "#3a2c14", "danger": "#f08a8a",
     "azul": "#8fb6de", "azul_soft": "#1c2a38",
 }
@@ -188,6 +188,20 @@ QPushButton[formato="true"]:checked {{ background: {t['accent']}; border-color: 
 QPlainTextEdit#editor, QTextEdit#editor {{ background: {t['surface']}; border: 1px solid {t['line']}; border-radius: 8px; padding: 8px 10px;
   font-size: 14px; }}
 QListWidget#apartados {{ background: transparent; border: 0; outline: 0; }}
+QWidget#fila {{ background: transparent; border-left: 4px solid transparent; border-radius: 0; }}
+QWidget#fila[avance="vivo"] {{ border-left-color: {t['warn']}; }}
+QWidget#fila[avance="listo"] {{ border-left-color: {t['accent_soft_fuerte']}; }}
+QWidget#fila[avance="confirmado"] {{ border-left-color: {t['accent']}; }}
+QWidget#fila[avance="revisar"] {{ border-left-color: {t['danger']}; }}
+QLabel#numero-avance {{ border-radius: 7px; }}
+QLabel#numero-avance[avance="vivo"] {{ background: {t['warn_soft']}; color: {t['warn']}; border: 2px dashed {t['warn']}; }}
+QLabel#numero-avance[avance="listo"] {{ background: {t['accent_soft']}; color: {t['accent']}; border: 2px solid {t['accent_soft_fuerte']}; }}
+QLabel#numero-avance[avance="confirmado"] {{ background: {t['accent']}; color: {t['accent_ink']}; border: 2px solid {t['accent']}; }}
+QLabel#numero-avance[avance="revisar"] {{ background: {t['danger']}; color: {t['accent_ink']}; border: 2px solid {t['danger']}; }}
+QLabel#avance {{ font-size: 12px; font-weight: 600; }}
+QLabel#avance[avance="vivo"] {{ color: {t['warn']}; }}
+QLabel#avance[avance="listo"], QLabel#avance[avance="confirmado"] {{ color: {t['accent']}; }}
+QLabel#avance[avance="revisar"] {{ color: {t['danger']}; }}
 QListWidget#apartados::item {{ border-radius: 8px; margin: 1px 0; }}
 QListWidget#apartados::item:selected {{ background: {t['accent_soft']}; color: {t['fg']}; }}
 QListWidget#apartados::item:hover {{ background: {t['surface2']}; }}

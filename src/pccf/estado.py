@@ -7,12 +7,17 @@ bloques o sale «pendiente». Un apartado está:
 - **borrador**: tiene algo en borrador;
 - **confirmado**: todo lo suyo está confirmado o se calcula;
 - **revisar**: el vigía ha visto cambiar una norma en la que se apoya (manda sobre los demás: hay que mirarlo).
+
+Aparte, cada apartado sabe **qué le falta** (`faltan`, ADR-024): no tener contenido, un dato del apartado 1 o las notas
+internas «Pendiente…» y «Para el equipo…» de sus bloques. Su **avance** es «vivo» si le falta algo (hay que seguir
+alimentándolo), «listo» si está completo y solo espera que el equipo lo confirme y «confirmado» si además lo está. El
+aviso del vigía («revisar») va aparte: no tapa el avance.
 """
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from pccf import apartados, derivados, vigia
+from pccf import apartados, derivados, texto, vigia
 from pccf.bloques import Bloque
 from pccf.catalogo import Catalogo
 from pccf.datos import CarpetaDatos
@@ -20,6 +25,9 @@ from pccf.datos import CarpetaDatos
 CALCULADOS = (1, 2, 4, 20)
 #: De peor a mejor: el estado de un apartado es el peor de lo que tiene.
 ORDEN = ("revisar", "pendiente", "heredado", "borrador", "confirmado")
+#: Notas internas de un bloque que dicen que falta algo (las demás, «Nota de redacción», «Grado básico»…, informan)
+NOTAS_QUE_FALTAN = ("pendiente", "para el equipo")
+AVANCES = {"vivo": "Por completar", "listo": "Listo para aprobar", "confirmado": "Confirmado"}
 NOMBRES = {"revisar": "Revisar", "pendiente": "Pendiente", "heredado": "Heredado", "borrador": "En borrador",
            "confirmado": "Confirmado"}
 
@@ -45,10 +53,22 @@ class EstadoApartado:
     motivo: str                                   # una frase: por qué está así
     bloques: list[Bloque] = field(default_factory=list)
     normas: list[str] = field(default_factory=list)   # normas cambiadas que lo afectan (citas)
+    faltan: list[str] = field(default_factory=list)   # lo que falta para completarlo, una frase cada cosa
+    estado_base: str = ""   # el estado sin el aviso del vigía (con él, `estado` es «revisar»)
+
+    @property
+    def avance(self) -> str:
+        if self.faltan or self.estado == "pendiente" or self.estado_base == "pendiente":
+            return "vivo"
+        return "confirmado" if self.estado_base == "confirmado" else "listo"
 
     @property
     def n(self) -> int:
         return self.apartado.n
+
+    @property
+    def numero(self) -> int:
+        return self.apartado.numero
 
 
 @dataclass
@@ -65,6 +85,18 @@ class Estado:
 
     def con(self, estado: str) -> list[EstadoApartado]:
         return [a for a in self.apartados if a.estado == estado]
+
+    def con_avance(self, avance: str) -> list[EstadoApartado]:
+        return [a for a in self.apartados if a.avance == avance]
+
+
+def notas_que_faltan(b: Bloque) -> list[str]:
+    """Las notas internas del bloque que piden algo (empiezan por «Pendiente» o «Para el equipo»)."""
+    out = []
+    for p in texto.de_markdown(b.cuerpo):
+        if p.clase == "nota" and texto.sin_marcas(p.texto).lower().startswith(NOTAS_QUE_FALTAN):
+            out.append(texto.sin_marcas(p.texto))
+    return out
 
 
 def afectados(inf: vigia.Informe | None) -> dict[int, list[str]]:
@@ -88,16 +120,19 @@ def calcular(cat: Catalogo, datos: CarpetaDatos, sigla: str, curso: str,
         propios = sorted((b for b in todos if b.apartado == a.n),
                          key=lambda b: (b.orden if b.orden is not None else 999, b.ruta.name))
         estados = [de_bloque(b) for b in propios]
+        faltan = [nota for b in propios for nota in notas_que_faltan(b)]
         if a.n == 1:
             if not any(m.docentes for m in ident.modulos):
                 estados.append("pendiente")
                 motivo = f"Falta el equipo docente de {curso}"
+                faltan.insert(0, motivo)
             elif not ident.equipo_confirmado:
                 estados.append("heredado" if heredado(ident.equipo_origen) else "borrador")
                 motivo = f"Equipo docente {ident.equipo_origen or 'en borrador'}: sin confirmar"
             elif ident.departamento is None or ident.tutorias is None:
                 estados.append("pendiente")
                 motivo = "Falta el departamento o las tutorías"
+                faltan.insert(0, motivo)
             else:
                 estados.append("confirmado")
                 motivo = "Se calcula del catálogo y del equipo docente"
@@ -108,12 +143,15 @@ def calcular(cat: Catalogo, datos: CarpetaDatos, sigla: str, curso: str,
             motivo = f"{len(propios)} bloque{'s' if len(propios) > 1 else ''}"
         else:
             motivo = "Sin texto: sale «pendiente» con lo que pide la guía"
+            faltan.insert(0, f"Sin texto. La guía pide: {a.pide}")
         e = peor(estados)
         if propios and a.n not in CALCULADOS and e != "confirmado":
             motivo += f" · {NOMBRES[e].lower()}"
+        base = e
         normas = cambiados.get(a.n, [])
         if normas:
             e = "revisar"
             motivo = f"El vigía ha visto cambiar: {', '.join(normas)}"
-        out.append(EstadoApartado(apartado=a, estado=e, motivo=motivo, bloques=propios, normas=normas))
+        out.append(EstadoApartado(apartado=a, estado=e, motivo=motivo, bloques=propios, normas=normas, faltan=faltan,
+                                  estado_base=base))
     return Estado(apartados=out, informe=informe)

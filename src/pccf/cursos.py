@@ -209,6 +209,7 @@ def contenido(cat: Catalogo, datos: CarpetaDatos, sigla: str, curso: str) -> dic
 class DifApartado:
     n: int
     titulo: str
+    numero: int = 0         # el que se ve (ADR-023)
     anadidas: list[str] = field(default_factory=list)
     quitadas: list[str] = field(default_factory=list)
 
@@ -250,7 +251,7 @@ def comparar(cat: Catalogo, datos: CarpetaDatos, sigla: str, a: str, b: str) -> 
     difs = []
     for ap in apartados.apartados(cat.ciclo(sigla)["grado"]):
         anadidas, quitadas = diferencia(lados[0].get(ap.n, []), lados[1].get(ap.n, []))
-        difs.append(DifApartado(n=ap.n, titulo=ap.titulo, anadidas=anadidas, quitadas=quitadas))
+        difs.append(DifApartado(n=ap.n, titulo=ap.titulo, anadidas=anadidas, quitadas=quitadas, numero=ap.numero))
     return Comparacion(sigla=sigla, a=nombre_lado(ca, ea), b=nombre_lado(cb, eb), apartados=difs, avisos=avisos)
 
 
@@ -262,14 +263,14 @@ def markdown(c: Comparacion) -> str:
     cambian = [d for d in c.apartados if d.cambia]
     if cambian:
         md += ["| Apartado | Añadido | Quitado |", "| --- | --- | --- |"]
-        md += [f"| {d.n} · {d.titulo} | {f'+{len(d.anadidas)}' if d.anadidas else ''} | "
+        md += [f"| {d.numero or d.n} · {d.titulo} | {f'+{len(d.anadidas)}' if d.anadidas else ''} | "
                f"{f'−{len(d.quitadas)}' if d.quitadas else ''} |" for d in cambian]
         md.append("")
-    iguales = [str(d.n) for d in c.apartados if not d.cambia]
+    iguales = [str(d.numero or d.n) for d in c.apartados if not d.cambia]
     md += [f"Sin cambios: {'ninguno' if not iguales else 'todos' if not cambian else ', '.join(iguales)}.", ""]
     for d in c.apartados:
         if d.cambia:
-            md += [f"## {d.n} · {d.titulo}", "", "```diff", *[f"- {x}" for x in d.quitadas],
+            md += [f"## {d.numero or d.n} · {d.titulo}", "", "```diff", *[f"- {x}" for x in d.quitadas],
                    *[f"+ {x}" for x in d.anadidas], "```", ""]
     if c.avisos:
         md += ["## Avisos", "", *[f"- {x}" for x in c.avisos], ""]

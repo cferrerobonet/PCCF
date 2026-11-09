@@ -203,7 +203,7 @@ def escribir_estado(p: Path, sigla: str, curso: str, estado: dict) -> None:
 # Informe en Markdown
 # ---------------------------------------------------------------------------------------------------------------------
 def _uso(u: citas.Uso) -> str:
-    sitio = "Estructura del PCCF" if u.apartado is None else f"Apartado {u.apartado} ({u.titulo})"
+    sitio = "Estructura del PCCF" if u.apartado is None else f"Apartado {u.numero or u.apartado} ({u.titulo})"
     if u.origen == "calculado":
         return f"{sitio}: se calcula del catálogo ({u.detalle}); se rehace al generar el Word, que hay que repasar"
     art = "" if not u.articulo else f", art. {u.articulo}" if u.articulo[0].isdigit() else f", artículo {u.articulo}"

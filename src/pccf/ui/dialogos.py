@@ -145,7 +145,7 @@ class DialogoVigia(QDialog):
             f.layout().addWidget(etiqueta(f"Dónde se usa ({len(c.usos)})", "etiqueta"))
             for u in c.usos:
                 art = f" · art. {u.articulo}" if u.articulo else ""
-                f.layout().addWidget(etiqueta(f"• {u.apartado or '—'} · {u.titulo} · {u.detalle}{art}",
+                f.layout().addWidget(etiqueta(f"• {u.numero or '—'} · {u.titulo} · {u.detalle}{art}",
                                               envolver=True))
         return f
 
@@ -311,7 +311,7 @@ class DialogoNuevoCurso(QDialog):
         c = self._comparacion
         self.tabla.setRowCount(len(c.apartados))
         for i, d in enumerate(c.apartados):
-            self.tabla.setItem(i, 0, QTableWidgetItem(f"{d.n} · {d.titulo}"))
+            self.tabla.setItem(i, 0, QTableWidgetItem(f"{d.numero or d.n} · {d.titulo}"))
             texto = f"+{len(d.anadidas)}  −{len(d.quitadas)}" if d.cambia else "sin cambios"
             it = QTableWidgetItem(texto)
             if d.cambia:
@@ -346,6 +346,16 @@ LUGAR = {"centro": "común a todos los ciclos del centro", "ciclo": "del ciclo, 
          "normativo": "del ciclo, para todos los cursos", "anual": "solo de este curso"}
 
 
+def _numero(ctx, n: int) -> int:
+    """El número que se ve del apartado de clave `n` en el grado del ciclo (ADR-023)."""
+    from pccf import apartados as aps
+
+    try:
+        return aps.numero(ctx.grado, n)
+    except KeyError:
+        return n
+
+
 class DialogoNuevoBloque(QDialog):
     def __init__(self, ctx, n: int, tipos: list[str], padre=None, nombre: str = "", explicacion: str = ""):
         super().__init__(padre)
@@ -353,7 +363,7 @@ class DialogoNuevoBloque(QDialog):
         self.n = n
         self.bloque = None
         capa = _base(self, "Añadir bloque", 520, 300)
-        capa.addWidget(etiqueta(explicacion or f"Apartado {n}. El bloque empieza vacío y en borrador.", "muted",
+        capa.addWidget(etiqueta(explicacion or f"Apartado {_numero(ctx, n)}. El bloque empieza vacío y en borrador.", "muted",
                                 envolver=True))
         form = QFormLayout()
         self.tipo = QComboBox()

@@ -4,6 +4,15 @@ Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones 
 
 ## [Sin publicar]
 
+## [0.5.1] - 2026-11-10
+
+Las barras laterales, más anchas para leer mejor.
+
+- La lista de apartados y el panel de estado son más anchos y crecen con la ventana, que se abre más grande.
+- La tabla de competencias del apartado 4 ya no se corta.
+
+### Cambiado
+
 - 2026-11-10 · Las dos barras laterales, más anchas (crecen con la ventana) para leer mejor los apartados; la ventana se abre más grande. La tabla de competencias del apartado 4 ya no se corta (ADR-026).
 
 ## [0.5.0] - 2026-11-09

@@ -10,7 +10,7 @@ import logging
 import tempfile
 from pathlib import Path
 
-from PyQt6.QtCore import QSize, QUrl
+from PyQt6.QtCore import QSize, Qt, QUrl
 from PyQt6.QtGui import QAction, QDesktopServices, QFont, QImage, QKeySequence, QPixmap
 from PyQt6.QtPdf import QPdfDocument
 from PyQt6.QtWidgets import QFileDialog, QHBoxLayout, QLabel, QMainWindow, QMenu, QMessageBox, QVBoxLayout, QWidget
@@ -55,6 +55,9 @@ class VentanaPrincipal(QMainWindow):
         pantalla = self.screen().availableGeometry() if self.screen() else None
         ancho = min(1440, pantalla.width() - 40) if pantalla else 1440
         self.resize(max(ANCHO_MINIMO, ancho), min(900, pantalla.height() - 40) if pantalla else 880)
+        # Solo el botón de cerrar: ni maximizar ni minimizar; la ventana ocupa la pantalla (ADR-027)
+        self.setWindowFlags(Qt.WindowType.Window | Qt.WindowType.CustomizeWindowHint | Qt.WindowType.WindowTitleHint
+                            | Qt.WindowType.WindowCloseButtonHint)
         raiz = QWidget()
         raiz.setObjectName("raiz")
         self.setCentralWidget(raiz)
@@ -128,6 +131,10 @@ class VentanaPrincipal(QMainWindow):
         aj = boton("Ajustes", pequeno=True)
         aj.clicked.connect(self.abrir_ajustes)
         fila.addWidget(aj)
+        self.boton_salir = boton("Salir", pequeno=True, salir=True)
+        self.boton_salir.setToolTip("Guarda y cierra la aplicación")
+        self.boton_salir.clicked.connect(self.close)
+        fila.addWidget(self.boton_salir)
         return barra
 
     def _menu(self) -> None:
@@ -492,8 +499,15 @@ class VentanaPrincipal(QMainWindow):
         self.centro.guardar_pendiente()
         super().closeEvent(e)
 
+    def ocupar_pantalla(self) -> None:
+        """Pantalla completa (ADR-027), como Programaciones: la del botón verde de macOS, sin la barra de menús ni el
+        Dock a la vista; en Windows y Linux, sin la barra de tareas ni la del título. Se sale con «Salir» (o ⌘Q /
+        Alt+F4)."""
+        self.showFullScreen()
+
     def mostrar_al_frente(self) -> None:
-        self.showNormal()
+        self.setWindowState(self.windowState() & ~Qt.WindowState.WindowMinimized)
+        self.ocupar_pantalla()
         self.raise_()
         self.activateWindow()
 

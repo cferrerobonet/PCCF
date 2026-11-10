@@ -2,6 +2,12 @@
 
 Registro fechado de decisiones (ADR). Lo más reciente, arriba. El estado actual está en `PRD.md`, `ARCHITECTURE.md` y `DESIGN.md`.
 
+## ADR-027 · Pantalla completa al abrir, solo con cerrar, y botón «Salir» (2026-11-10)
+
+- **Contexto.** CarlosFB quiere que la app, «al igual que está en la app de programaciones», se abra a pantalla completa.
+- **Decisión:** lo mismo que Programaciones (su ADR-050 con su corrección de la 0.22): al mostrarse, **pantalla completa** (`showFullScreen`, la del botón verde de macOS) en los tres sistemas; la ventana sin los botones de maximizar ni minimizar (`CustomizeWindowHint` con título y cerrar), y un botón **«Salir»** rojo (fondo `danger`) a la derecha de «Ajustes», que cierra como la X: guarda lo pendiente (`closeEvent`). También se sale con ⌘Q o Alt+F4. Si se abre otra vez la app estando abierta, la ventana vuelve al frente a pantalla completa.
+- **Consecuencias.** En la pantalla del Mac de CarlosFB, las dos laterales llegan a su máximo de 400 px (ADR-026). Prueba: `test_pantalla_completa_solo_con_cerrar_y_salir_en_rojo`.
+
 ## ADR-026 · Zonas laterales más anchas, que crecen con la ventana (2026-11-10)
 
 - **Contexto.** CarlosFB quiere las dos barras laterales «un poco más anchas para leer mejor su contenido»: con 280 y 290 px fijos, los títulos de los apartados y el nombre del ciclo salían cortados.

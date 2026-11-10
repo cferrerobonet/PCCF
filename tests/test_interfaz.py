@@ -253,3 +253,21 @@ def test_barras_laterales_mas_anchas_y_que_crecen(ventana, qtbot):
     ventana.resize(1800, 900)
     qtbot.wait(10)
     assert ventana.izquierda.width() == 400 and ventana.derecha.width() == 400
+
+
+def test_pantalla_completa_solo_con_cerrar_y_salir_en_rojo(ventana, qtbot):
+    """ADR-027, como Programaciones: la app, en pantalla completa y sin botones de maximizar ni minimizar; «Salir»,
+    rojo, a la derecha de «Ajustes», guarda y cierra."""
+    from PyQt6.QtCore import Qt
+    from PyQt6.QtWidgets import QPushButton
+
+    flags = ventana.windowFlags()
+    assert flags & Qt.WindowType.WindowCloseButtonHint
+    assert not flags & Qt.WindowType.WindowMaximizeButtonHint and not flags & Qt.WindowType.WindowMinimizeButtonHint
+    ventana.mostrar_al_frente()
+    assert ventana.windowState() & Qt.WindowState.WindowFullScreen, "pantalla completa, como el botón verde de macOS"
+    botones = [b for b in ventana.findChildren(QPushButton) if b.text() in ("Ajustes", "Salir")]
+    ajustes, salir = sorted(botones, key=lambda b: b.mapTo(ventana, b.rect().topLeft()).x())
+    assert (ajustes.text(), salir.text()) == ("Ajustes", "Salir") and salir.property("salir") is True
+    qtbot.mouseClick(salir, Qt.MouseButton.LeftButton)
+    assert not ventana.isVisible()

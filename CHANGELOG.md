@@ -4,6 +4,17 @@ Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones 
 
 ## [Sin publicar]
 
+## [0.5.2] - 2026-11-10
+
+La app se abre a pantalla completa, como Programaciones.
+
+- Ocupa toda la pantalla al abrirse, solo con el botón de cerrar.
+- Para salir, el botón rojo «Salir», junto a «Ajustes» (o ⌘Q / Alt+F4); guarda antes de cerrar.
+
+### Cambiado
+
+- 2026-11-10 · La app se abre a pantalla completa, como Programaciones, solo con el botón de cerrar; para salir, el botón rojo «Salir» junto a «Ajustes» (o ⌘Q / Alt+F4), que guarda antes de cerrar (ADR-027).
+
 ## [0.5.1] - 2026-11-10
 
 Las barras laterales, más anchas para leer mejor.

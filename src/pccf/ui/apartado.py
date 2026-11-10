@@ -718,8 +718,8 @@ class VistaApartado(QWidget):
         t.setFont(estilo.fuente(15, QFont.Weight.Bold))
         cab.addWidget(t)
         cab.addStretch(1)
-        cab.addWidget(etiqueta("ninguno · la tabla sale tal cual del real decreto", "pequeno", envolver=True))
         capa.addLayout(cab)
+        capa.addWidget(etiqueta("Ninguno: la tabla sale tal cual del real decreto.", "pequeno", envolver=True))
         capa.addWidget(etiqueta("Si el equipo decide que un módulo aporta más o menos a una competencia, se anotará "
                                 "con su motivo en ajustes.yaml del ciclo (llega con el resto de apartados de SEA).",
                                 "muted", envolver=True))

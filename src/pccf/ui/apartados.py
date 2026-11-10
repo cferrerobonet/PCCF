@@ -228,7 +228,7 @@ class ZonaApartados(QWidget):
     def __init__(self, ctx):
         super().__init__()
         self.ctx = ctx
-        self.setFixedWidth(280)
+        self.setMinimumWidth(330)   # el ancho lo pone la ventana (ADR-026)
         capa = QVBoxLayout(self)
         capa.setContentsMargins(12, 12, 8, 8)
         capa.setSpacing(8)
@@ -269,6 +269,19 @@ class ZonaApartados(QWidget):
         capa.addWidget(self.lista, 1)
         self._selector: SelectorCiclo | None = None
 
+    def _pintar_boton_ciclo(self) -> None:
+        c = getattr(self, "_ciclo", None)
+        if not c:
+            return
+        fm = QFontMetrics(estilo.fuente(14, QFont.Weight.Bold))
+        nombre = fm.elidedText(f"{c['sigla']} · {c['nombre']}", Qt.TextElideMode.ElideRight,
+                               max(160, self.width() - 60))
+        self.boton_ciclo.setText(f"{c['familia']} · {c['grado']}\n{nombre}")
+
+    def resizeEvent(self, e) -> None:  # noqa: N802
+        super().resizeEvent(e)
+        self._pintar_boton_ciclo()
+
     def abrir_selector(self) -> None:
         self._selector = SelectorCiclo(self.ctx.ciclos(), self.ctx.sigla, self)
         self._selector.elegido.connect(lambda s: self.ctx.elegir(s))
@@ -278,9 +291,8 @@ class ZonaApartados(QWidget):
     def recargar(self, actual: int | None = None, emitir: bool = True) -> None:
         """Rehace la lista; con `emitir`, el centro enseña el apartado (sin él, solo se repintan los estados)."""
         c = self.ctx.ciclo()
-        fm = QFontMetrics(estilo.fuente(14, QFont.Weight.Bold))
-        nombre = fm.elidedText(f"{c['sigla']} · {c['nombre']}", Qt.TextElideMode.ElideRight, 220)
-        self.boton_ciclo.setText(f"{c['familia']} · {c['grado']}\n{nombre}")
+        self._ciclo = c
+        self._pintar_boton_ciclo()
         self.boton_ciclo.setToolTip(f"{c['sigla']} · {c['nombre']} ({GRADOS.get(c['grado'], c['grado'])})\n"
                                     "Pulsa para elegir otro ciclo")
         n = len(self.ctx.ciclos())

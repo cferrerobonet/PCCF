@@ -37,6 +37,30 @@ def etiqueta(texto: str = "", rol: str | None = None, envolver: bool = False) ->
     return e
 
 
+class EtiquetaCortada(QLabel):
+    """Una línea que se corta con «…» al ancho que tenga (el texto entero va en la ayuda)."""
+
+    def __init__(self, texto: str = "", rol: str | None = None):
+        super().__init__()
+        if rol:
+            self.setProperty("rol", rol)
+        self.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred)
+        self.poner(texto)
+
+    def poner(self, texto: str) -> None:
+        self._completo = texto
+        self.setToolTip(texto)
+        self._cortar()
+
+    def _cortar(self) -> None:
+        super().setText(self.fontMetrics().elidedText(self._completo, Qt.TextElideMode.ElideRight,
+                                                      max(40, self.width())))
+
+    def resizeEvent(self, e) -> None:  # noqa: N802
+        super().resizeEvent(e)
+        self._cortar()
+
+
 def atajo(tecla: str) -> str:
     """Cómo se escribe un atajo en los botones: «⌘E» en macOS y «Ctrl+E» en Windows."""
     return f"⌘{tecla}" if sys.platform == "darwin" else f"Ctrl+{tecla}"
@@ -285,6 +309,8 @@ def desplazable(contenido: QWidget, horizontal: bool = False) -> QScrollArea:
     zona.setFrameShape(QFrame.Shape.NoFrame)
     if not horizontal:
         zona.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+    if contenido.layout() is not None:   # el contenido nunca más bajo de lo que necesita: si no cabe, se desplaza
+        contenido.layout().setSizeConstraint(QLayout.SizeConstraint.SetMinimumSize)
     zona.setWidget(contenido)
     zona.viewport().setAutoFillBackground(False)
     contenido.setAutoFillBackground(False)  # setWidget lo activa

@@ -33,6 +33,16 @@ logger = logging.getLogger(__name__)
 NOMBRE_APP = "PCCF"
 
 
+#: Las dos zonas laterales: una cuarta parte de la ventana cada una, entre 330 y 400 px (ADR-026). Con la ventana
+#: mínima, el centro conserva los 530 px de la maqueta v0 (la tabla de 19 competencias del apartado 4).
+LATERAL = (330, 400)
+ANCHO_MINIMO = 1240
+
+
+def ancho_lateral(ancho_ventana: int) -> int:
+    return max(LATERAL[0], min(LATERAL[1], ancho_ventana // 4))
+
+
 class VentanaPrincipal(QMainWindow):
     def __init__(self, ctx):
         super().__init__()
@@ -41,8 +51,10 @@ class VentanaPrincipal(QMainWindow):
         self._tarea: Tarea | None = None
         self._espera: DialogoEspera | None = None
         self.setWindowTitle(NOMBRE_APP)
-        self.resize(1100, 700)
-        self.setMinimumSize(1000, 620)
+        self.setMinimumSize(ANCHO_MINIMO, 660)
+        pantalla = self.screen().availableGeometry() if self.screen() else None
+        ancho = min(1440, pantalla.width() - 40) if pantalla else 1440
+        self.resize(max(ANCHO_MINIMO, ancho), min(900, pantalla.height() - 40) if pantalla else 880)
         raiz = QWidget()
         raiz.setObjectName("raiz")
         self.setCentralWidget(raiz)
@@ -298,6 +310,12 @@ class VentanaPrincipal(QMainWindow):
         if not d.exec():
             return None
         return bloques.escribir_de_word(d.bloque.ruta, bloques.cabecera(d.bloque), imp.parrafos, self.ctx.hoy())
+
+    def resizeEvent(self, e) -> None:  # noqa: N802
+        super().resizeEvent(e)
+        lateral = ancho_lateral(self.width())
+        self.izquierda.setFixedWidth(lateral)
+        self.derecha.setFixedWidth(lateral)
 
     def abrir_ajustes(self, apartado: str | None = None) -> None:
         self.centro.guardar_pendiente()

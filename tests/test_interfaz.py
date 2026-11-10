@@ -28,7 +28,7 @@ def ventana(qtbot, cat, datos, tmp_path, monkeypatch):
     estilo.aplicar(QApplication.instance())
     ctx = contexto.Contexto(cat, datos)
     v = ventana.VentanaPrincipal(ctx)
-    v.resize(1100, 700)
+    v.resize(1240, 760)
     qtbot.addWidget(v)
     v.show()
     return v
@@ -240,3 +240,16 @@ def test_error_aviso_consejo_y_por_completar_se_distinguen():
         for regla in hoja.splitlines():
             if "aviso" in regla or 'avance="vivo"' in regla or "error" in regla:
                 assert estilo.CLARO["gold"] not in regla, regla
+
+
+def test_barras_laterales_mas_anchas_y_que_crecen(ventana, qtbot):
+    """ADR-026: cada zona lateral, una cuarta parte de la ventana entre 330 y 400 px; el centro sigue cabiendo."""
+    from pccf.ui.ventana import ancho_lateral
+
+    assert ancho_lateral(1240) == 330 and ancho_lateral(1440) == 360 and ancho_lateral(2000) == 400
+    ventana.resize(1240, 760)
+    qtbot.wait(10)
+    assert ventana.izquierda.width() == 330 and ventana.derecha.width() == 330
+    ventana.resize(1800, 900)
+    qtbot.wait(10)
+    assert ventana.izquierda.width() == 400 and ventana.derecha.width() == 400

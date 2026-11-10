@@ -2,6 +2,13 @@
 
 Registro fechado de decisiones (ADR). Lo más reciente, arriba. El estado actual está en `PRD.md`, `ARCHITECTURE.md` y `DESIGN.md`.
 
+## ADR-026 · Zonas laterales más anchas, que crecen con la ventana (2026-11-10)
+
+- **Contexto.** CarlosFB quiere las dos barras laterales «un poco más anchas para leer mejor su contenido»: con 280 y 290 px fijos, los títulos de los apartados y el nombre del ciclo salían cortados.
+- **Decisión:** cada zona lateral mide una cuarta parte de la ventana, entre 330 y 400 px (como en Programaciones, su ADR-053, que deja crecer las laterales con la ventana). La ventana se abre a 1440 × 900 o a lo que quepa en la pantalla y no baja de 1240 px de ancho, así el centro nunca tiene menos de los 530 px de la maqueta. Los textos que se cortan (nombre del ciclo, apartados del panel de estado) lo hacen al ancho que haya, no a una cifra fija (`EtiquetaCortada`).
+- **De paso:** el centro se encogía al alto de la ventana en lugar de desplazarse y la nota del apartado 4 se montaba sobre la matriz (ya pasaba antes); el contenido de una zona desplazable ya no baja de lo que necesita. «Ajustes del equipo docente» deja su explicación en su propia línea.
+- **Consecuencias.** Prueba: `test_barras_laterales_mas_anchas_y_que_crecen`.
+
 ## ADR-025 · Un color por significado: error, aviso, consejo, por completar, completo y marca (2026-11-09)
 
 - **Contexto.** CarlosFB: la app usaba el mismo naranja para avisos, errores y otras cosas. El ámbar (`warn`) y el oro (`gold`) marcaban a la vez errores (carpeta ilegible, dato no válido), avisos (vigía, heredado), lo que falta por completar (barra lateral, notas internas), consejos (lo que pide la guía) y la marca (número del apartado).

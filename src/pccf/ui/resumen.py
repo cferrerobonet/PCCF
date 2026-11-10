@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import QFrame, QHBoxLayout, QLabel, QProgressBar, QVBoxLayo
 from pccf import estado as estado_mod
 
 from . import estilo
-from .componentes import atajo, boton, etiqueta, limpiar
+from .componentes import EtiquetaCortada, atajo, boton, etiqueta, limpiar
 
 
 class ZonaResumen(QWidget):
@@ -21,7 +21,7 @@ class ZonaResumen(QWidget):
     def __init__(self, ctx):
         super().__init__()
         self.ctx = ctx
-        self.setFixedWidth(290)
+        self.setMinimumWidth(330)   # el ancho lo pone la ventana (ADR-026)
         capa = QVBoxLayout(self)
         capa.setContentsMargins(14, 16, 14, 14)
         capa.setSpacing(8)
@@ -151,9 +151,7 @@ class ZonaResumen(QWidget):
         icono = QLabel()
         icono.setPixmap(estilo.icono_estado(a.estado, 12))
         fila.addWidget(icono)
-        t = etiqueta(f"{a.numero} · {a.apartado.titulo}")
-        t.setMaximumWidth(170)
-        t.setText(t.fontMetrics().elidedText(t.text(), Qt.TextElideMode.ElideRight, 170))
+        t = EtiquetaCortada(f"{a.numero} · {a.apartado.titulo}")
         fila.addWidget(t, 1)
         fila.addWidget(etiqueta(estado_mod.NOMBRES[a.estado], f"estado-{a.estado}"))
         w.setMinimumHeight(24)

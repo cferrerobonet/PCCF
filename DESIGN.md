@@ -2,7 +2,7 @@
 
 **Regla madre de la interfaz:** es **idéntica en diseño a Partes de salida y Programaciones** (familia de apps de CarlosFB): mismos tokens de color (verde EPLA y dorado, neutros verdosos, claro y oscuro), tipografías (Barlow Condensed, Barlow, JetBrains Mono), barra superior, ventanas modales, campos, botones, chips, avisos y listados. Referencia: `DESIGN.md` de Programaciones (`../../PROGRAMACIONES/PROGRAMACIONES - CÓDIGO FUENTE/DESIGN.md`) y su `ui/estilo.py`. Aquí solo va lo propio del PCCF.
 
-**Maqueta:** `../Maqueta v0 (2026-10-28)/` (HTML con siete pantallas —apartados 1, 2, 4 y 16, vigía, nuevo curso y el selector con los 15 ciclos del centro—, una captura de cada una y su generador en `_generador/`, con los datos reales de SEA del catálogo), **aprobada por CarlosFB el 2026-11-03 sin cambios**: es la referencia de la interfaz. Las zonas miden 280 · flexible · 290 px en la ventana de 1100 × 700, para que la tabla de 19 competencias quepa en el centro.
+**Maqueta:** `../Maqueta v0 (2026-10-28)/` (HTML con siete pantallas —apartados 1, 2, 4 y 16, vigía, nuevo curso y el selector con los 15 ciclos del centro—, una captura de cada una y su generador en `_generador/`, con los datos reales de SEA del catálogo), **aprobada por CarlosFB el 2026-11-03 sin cambios**: es la referencia de la interfaz. Las zonas medían 280 · flexible · 290 px en la ventana de 1100 × 700; desde el ADR-026, las laterales miden una cuarta parte de la ventana, entre 330 y 400 px, la ventana se abre a 1440 px (o lo que quepa en la pantalla) y no baja de 1240, y el centro conserva al menos sus 530 px para la tabla de 19 competencias.
 
 ## Norte
 

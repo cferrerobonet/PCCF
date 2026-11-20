@@ -4,6 +4,14 @@ Formato: [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones 
 
 ## [Sin publicar]
 
+## [0.5.3] - 2026-11-20
+
+Mantenimiento: sin cambios que se noten al usar la app.
+
+### Seguridad
+
+- 2026-11-20 · Dependencias actualizadas por un aviso de seguridad: `certifi` 2026.10.23, que valida la conexión de las actualizaciones.
+
 ## [0.5.2] - 2026-11-10
 
 La app se abre a pantalla completa, como Programaciones.
